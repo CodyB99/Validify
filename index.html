@@ -154,6 +154,39 @@
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
+                .feed-list {
+            margin-top: 10px;
+            max-height: 260px;
+            overflow-y: auto;
+            padding-right: 6px;
+        }
+        .feed-item {
+            background: rgba(0, 0, 0, 0.35);
+            border: 1px solid rgba(0, 255, 136, 0.35);
+            border-radius: 10px;
+            padding: 12px;
+            margin: 8px 0;
+        }
+        .feed-title {
+            color: #00d4ff;
+            font-size: 0.98em;
+            margin-bottom: 6px;
+        }
+        .feed-meta {
+            color: #bbb;
+            font-size: 0.82em;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .feed-link {
+            color: #00ff88;
+            text-decoration: none;
+            font-size: 0.85em;
+        }
+        .feed-link:hover {
+            text-decoration: underline;
+        }
         @media (max-width: 1024px) { .grid { grid-template-columns: 1fr; } }
     </style>
 </head>
@@ -198,7 +231,7 @@
                         <div class="stat-value" style="font-size: 1.5em;" id="vlfyBal">0</div>
                     </div>
                     <div class="stat-box">
-                        <div class="stat-label">Services</div>
+                        <div class="stat-label">Activity (24h)</div>
                         <div class="stat-value" style="font-size: 1.5em;" id="services">0</div>
                     </div>
                 </div>
@@ -295,19 +328,48 @@
                 </div>
 
                 <div class="panel" style="margin-top: 20px;">
-                    <h2>📊 Your Subscription</h2>
+                    <h2>📊 Security Status</h2>
+
+                    <div class="stat-box">
+                        <div class="stat-label">Protection Engine</div>
+                        <div class="stat-value" style="font-size: 1.3em;" id="engineStatus">Inactive</div>
+                    </div>
+                
                     <div class="stat-box">
                         <div class="stat-label">Active Tier</div>
-                        <div class="stat-value" style="font-size: 1.5em;" id="tier">None</div>
+                        <div class="stat-value" style="font-size: 1.5em;" id="tierName">None</div>
                     </div>
+                
                     <div class="stat-box">
                         <div class="stat-label">Days Remaining</div>
-                        <div class="stat-value" id="days">--</div>
+                        <div class="stat-value" id="daysRemaining">--</div>
                     </div>
-                    <div class="stat-box">
-                        <div class="stat-label">Status</div>
-                        <div class="stat-value" style="font-size: 1.3em;" id="status">Inactive</div>
+                
+                    <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px;">
+                        <div class="stat-box">
+                            <div class="stat-label">Links Flagged (24h)</div>
+                            <div class="stat-value" style="font-size: 1.3em;" id="linksFlagged">0</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-label">Role Alerts (24h)</div>
+                            <div class="stat-value" style="font-size: 1.3em;" id="roleAlerts">0</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-label">Bot Alerts (24h)</div>
+                            <div class="stat-value" style="font-size: 1.3em;" id="botAlerts">0</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-label">Webhook Alerts (24h)</div>
+                            <div class="stat-value" style="font-size: 1.3em;" id="webhookAlerts">0</div>
+                        </div>
                     </div>
+                
+                    <p style="color:#888; font-size:0.85em; margin-top: 10px;">
+                        Prototype feed — sample events until the bot is connected.
+                    </p>
+                
+                    <div class="feed-list" id="feedList"></div>
+                
                     <button class="btn" onclick="loadData()" style="margin-top: 15px;">🔄 Refresh Status</button>
                 </div>
             </div>
@@ -335,6 +397,102 @@
         ];
 
         let state = { provider: null, signer: null, address: null, tokenContract: null, serviceContract: null };
+            const DEMO_MODE = true;
+    
+            function getDemoMetrics(isActive, tierIndex) {
+                if (!isActive) {
+                    return { links: 0, roles: 0, bots: 0, webhooks: 0 };
+                }
+    
+                // Lightly scale demo numbers by tier
+                const scale = Math.max(1, tierIndex);
+                return {
+                    links: 3 * scale,
+                    roles: 1 * scale,
+                    bots: 1 * scale,
+                    webhooks: 1 * scale
+                };
+            }
+        function getDemoEvents(isActive, tierName) {
+            if (!isActive) return [];
+            
+            return [
+                {
+                    category: "Link",
+                    title: "Suspicious domain flagged in #announcements",
+                    confidence: 0.86,
+                    time: "Recent",
+                    evidenceLabel: "View evidence",
+                    evidenceHref: "#"
+                },
+                {
+                    category: "Roles",
+                    title: "High-privilege role permission change detected",
+                    confidence: 0.78,
+                    time: "Recent",
+                    evidenceLabel: "Audit details",
+                    evidenceHref: "#"
+                },
+                {
+                    category: "Bots",
+                    title: "New bot added with elevated permissions",
+                    confidence: 0.74,
+                    time: "Recent",
+                    evidenceLabel: "Review event",
+                    evidenceHref: "#"
+                },
+                {
+                    category: "Webhooks",
+                    title: "New webhook created in a public channel",
+                    confidence: 0.81,
+                    time: "Recent",
+                    evidenceLabel: "Inspect log",
+                    evidenceHref: "#"
+                }
+            ];
+        }
+
+        function renderFeed(events) {
+            const feed = document.getElementById("feedList");
+            if (!feed) return;
+
+            if (!events.length) {
+                feed.innerHTML = `<div class="feed-item">
+                    <div class="feed-title">No recent events</div>
+                    <div class="feed-meta">Connect the bot to enable live monitoring.</div>
+                </div>`;
+                return;
+            }
+
+            feed.innerHTML = "";
+
+            events.forEach(ev => {
+                const item = document.createElement("div");
+                item.className = "feed-item";
+
+                item.innerHTML = `
+                    <div class="feed-title">${ev.title}</div>
+                    <div class="feed-meta">
+                        <span>Category: ${ev.category}</span>
+                        <span>Confidence: ${(ev.confidence * 100).toFixed(0)}%</span>
+                        <span>Time: ${ev.time}</span>
+                        <span>Tier: ${tierNameSafe()}</span>
+                    </div>
+                    <div style="margin-top: 6px;">
+                        <a class="feed-link" href="${ev.evidenceHref}" target="_blank" rel="noopener noreferrer">
+                            ${ev.evidenceLabel} →
+                        </a>
+                    </div>
+                `;
+
+                feed.appendChild(item);
+            });
+
+            function tierNameSafe() {
+                return document.getElementById("tierName")?.textContent || "Unknown";
+            }
+        }
+
 
         async function connectWallet() {
             try {
@@ -388,24 +546,48 @@
             }
 
             try {
-                const ethBal = await state.provider.getBalance(state.address);
-                document.getElementById('ethBal').textContent = parseFloat(ethers.utils.formatEther(ethBal)).toFixed(3);
-
-                const vlfyBal = await state.tokenContract.balanceOf(state.address);
-                document.getElementById('vlfyBal').textContent = ethers.utils.formatEther(vlfyBal).split('.')[0];
-
-                const canClaim = await state.tokenContract.canClaimFaucet(state.address);
-                document.getElementById('faucetStatus').textContent = canClaim ? 'Ready!' : 'Wait 24h';
-                document.getElementById('faucetBtn').disabled = !canClaim;
-
-                const sub = await state.serviceContract.getSubscription(state.address);
-                const tierNames = ['None', 'Basic', 'Advanced', 'Enterprise'];
-                document.getElementById('tier').textContent = tierNames[sub[0]];
-                document.getElementById('days').textContent = sub[4].toString();
-                document.getElementById('status').textContent = sub[3] ? 'Active' : 'Inactive';
-                document.getElementById('services').textContent = sub[3] ? '1' : '0';
-            } catch (e) {
-                console.error('Load error:', e);
+                    const sub = await state.serviceContract.getSubscription(state.address);
+                    const tierNames = ['None', 'Basic', 'Advanced', 'Enterprise'];
+    
+                    const tierIndex = Number(sub[0]);
+                    const tierName = tierNames[tierIndex] || "None";
+                    const isActive = Boolean(sub[3]);
+                    const daysRemaining = sub[4].toString();
+    
+                    // New Security Status panel fields
+                    const engineEl = document.getElementById('engineStatus');
+                    if (engineEl) engineEl.textContent = isActive ? 'Active' : 'Inactive';
+    
+                    const tierEl = document.getElementById('tierName');
+                    if (tierEl) tierEl.textContent = tierName;
+    
+                    const daysEl = document.getElementById('daysRemaining');
+                    if (daysEl) daysEl.textContent = daysRemaining;
+    
+                    // Header mini-stat (kept same id for simplicity)
+                    const servicesEl = document.getElementById('services');
+                    if (servicesEl) servicesEl.textContent = isActive ? '1' : '0';
+    
+                    // Demo telemetry for prototype stage
+                    if (DEMO_MODE) {
+                        const m = getDemoMetrics(isActive, tierIndex);
+    
+                        const lf = document.getElementById('linksFlagged');
+                        if (lf) lf.textContent = m.links;
+    
+                        const ra = document.getElementById('roleAlerts');
+                        if (ra) ra.textContent = m.roles;
+    
+                        const ba = document.getElementById('botAlerts');
+                        if (ba) ba.textContent = m.bots;
+    
+                        const wa = document.getElementById('webhookAlerts');
+                        if (wa) wa.textContent = m.webhooks;
+    
+                        renderFeed(getDemoEvents(isActive, tierName));
+                    }
+                } catch (e) {
+                    console.error('Load error:', e);
             }
         }
 
