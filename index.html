@@ -3,41 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Validify: Web3 Discord Security Protocol</title>
+    <title>Validify: Web3 Discord Security Protocol - LIVE</title>
     <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: #ffffff;
-            overflow-x: hidden;
+            min-height: 100vh;
         }
-
-        .matrix-bg {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            opacity: 0.1;
-            z-index: 0;
-        }
-
-        .container {
-            position: relative;
-            z-index: 1;
-            max-width: 1600px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-
+        .container { max-width: 1400px; margin: 0 auto; padding: 20px; }
         header {
             text-align: center;
             padding: 30px;
@@ -45,39 +21,23 @@
             border-radius: 20px;
             margin-bottom: 30px;
             border: 3px solid #00ff88;
-            box-shadow: 0 0 40px rgba(0, 255, 136, 0.3);
         }
-
         h1 {
-            font-size: 3.5em;
+            font-size: 3em;
             background: linear-gradient(45deg, #00ff88, #00d4ff);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            background-clip: text;
             margin-bottom: 10px;
         }
-
-        .tagline {
-            font-size: 1.3em;
-            color: #00d4ff;
-            margin-bottom: 5px;
+        .badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            padding: 8px 16px;
+            border-radius: 20px;
+            margin: 5px;
+            font-size: 0.85em;
+            border: 1px solid #00ff88;
         }
-
-        .subtitle {
-            color: #aaa;
-            font-size: 0.95em;
-            margin-bottom: 15px;
-        }
-
-        .wallet-section {
-            display: flex;
-            gap: 15px;
-            justify-content: center;
-            align-items: center;
-            margin-top: 20px;
-            flex-wrap: wrap;
-        }
-
         .wallet-btn {
             background: linear-gradient(135deg, #00ff88, #00d4ff);
             color: #000;
@@ -87,312 +47,66 @@
             font-weight: bold;
             font-size: 1.1em;
             cursor: pointer;
-            transition: all 0.3s;
+            margin-top: 20px;
         }
-
-        .wallet-btn:hover {
-            transform: scale(1.05);
-            box-shadow: 0 0 30px rgba(0, 255, 136, 0.7);
-        }
-
-        .wallet-btn:disabled {
-            background: #555;
-            cursor: not-allowed;
-            opacity: 0.5;
-        }
-
+        .wallet-btn:hover { transform: scale(1.05); }
         .wallet-info {
             background: rgba(0, 0, 0, 0.8);
-            padding: 15px 25px;
+            padding: 20px;
             border-radius: 10px;
             border: 2px solid #00ff88;
+            margin-top: 20px;
             display: none;
         }
-
-        .wallet-info.connected {
-            display: block;
-        }
-
-        .wallet-address {
-            color: #00ff88;
-            font-family: 'Courier New', monospace;
-            font-size: 1.1em;
-        }
-
-        .balance-display {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 15px;
-            margin-top: 15px;
-        }
-
-        .balance-item {
-            background: rgba(0, 255, 136, 0.1);
-            padding: 10px;
-            border-radius: 8px;
-            text-align: center;
-        }
-
-        .balance-label {
-            font-size: 0.85em;
-            color: #00d4ff;
-            margin-bottom: 5px;
-        }
-
-        .balance-value {
-            font-size: 1.5em;
-            font-weight: bold;
-            color: #00ff88;
-        }
-
-        .feature-badge {
-            display: inline-block;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            padding: 8px 16px;
-            border-radius: 20px;
-            margin: 5px;
-            font-size: 0.85em;
-            border: 1px solid #00ff88;
-        }
-
-        .service-grid {
-            display: grid;
-            grid-template-columns: 2fr 1fr;
-            gap: 20px;
-            margin-bottom: 20px;
-        }
-
+        .wallet-info.show { display: block; }
+        .grid { display: grid; grid-template-columns: 2fr 1fr; gap: 20px; }
         .panel {
             background: rgba(0, 0, 0, 0.7);
             border: 2px solid #00ff88;
             border-radius: 15px;
             padding: 25px;
-            box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
         }
-
-        .panel h2 {
-            color: #00ff88;
-            margin-bottom: 20px;
-            font-size: 1.8em;
-            border-bottom: 2px solid #00ff88;
-            padding-bottom: 10px;
-        }
-
-        .service-grid-items {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 20px;
-            margin-top: 20px;
-        }
-
+        .panel h2 { color: #00ff88; margin-bottom: 20px; border-bottom: 2px solid #00ff88; padding-bottom: 10px; }
         .service-card {
             background: linear-gradient(135deg, rgba(102, 126, 234, 0.3), rgba(118, 75, 162, 0.3));
             border: 3px solid #667eea;
             border-radius: 15px;
             padding: 20px;
-            cursor: pointer;
-            transition: all 0.3s;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .service-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.5);
-            border-color: #00ff88;
-        }
-
-        .service-card.active {
-            border-color: #00ff88;
-            box-shadow: 0 0 30px rgba(0, 255, 136, 0.3);
-        }
-
-        .service-tier {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background: #00ff88;
-            color: #000;
-            padding: 5px 10px;
-            border-radius: 5px;
-            font-size: 0.75em;
-            font-weight: bold;
-        }
-
-        .service-icon {
-            width: 100%;
-            height: 120px;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            border-radius: 10px;
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 3em;
-        }
-
-        .service-title {
-            color: #00d4ff;
-            font-weight: bold;
-            font-size: 1.2em;
-            margin-bottom: 10px;
-        }
-
-        .service-description {
-            color: #ccc;
-            font-size: 0.9em;
-            margin-bottom: 15px;
-            line-height: 1.4;
-        }
-
-        .service-features {
             margin: 15px 0;
         }
-
-        .service-feature {
-            color: #00ff88;
-            font-size: 0.85em;
-            margin: 5px 0;
-            padding-left: 15px;
-            position: relative;
-        }
-
-        .service-feature:before {
-            content: '✓';
-            position: absolute;
-            left: 0;
-            color: #00ff88;
-        }
-
-        .service-pricing {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: 15px;
-            padding-top: 15px;
-            border-top: 1px solid rgba(255, 255, 255, 0.2);
-        }
-
-        .price-token {
-            font-size: 1.3em;
-            font-weight: bold;
-            color: #00ff88;
-        }
-
-        .activate-btn {
+        .btn {
             background: linear-gradient(135deg, #00ff88, #00d4ff);
             color: #000;
             border: none;
-            padding: 10px 20px;
+            padding: 12px 24px;
             border-radius: 8px;
             font-weight: bold;
             cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .activate-btn:hover {
-            transform: scale(1.05);
-            box-shadow: 0 0 20px rgba(0, 255, 136, 0.7);
-        }
-
-        .activate-btn:disabled {
-            background: #555;
-            cursor: not-allowed;
-        }
-
-        .transaction-modal {
-            position: fixed;
-            top: 0;
-            left: 0;
             width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.9);
-            display: none;
-            align-items: center;
-            justify-content: center;
-            z-index: 1000;
+            margin: 10px 0;
         }
-
-        .transaction-modal.show {
-            display: flex;
-        }
-
-        .modal-content {
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            padding: 40px;
-            border-radius: 20px;
-            border: 3px solid #00ff88;
-            max-width: 500px;
-            text-align: center;
-        }
-
-        .spinner {
-            border: 5px solid rgba(255, 255, 255, 0.3);
-            border-top: 5px solid #00ff88;
-            border-radius: 50%;
-            width: 60px;
-            height: 60px;
-            animation: spin 1s linear infinite;
-            margin: 20px auto;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 15px;
-            margin-bottom: 20px;
-        }
-
+        .btn:hover:not(:disabled) { transform: scale(1.02); }
+        .btn:disabled { background: #555; cursor: not-allowed; opacity: 0.5; }
         .stat-box {
-            background: linear-gradient(135deg, rgba(0, 255, 136, 0.2), rgba(0, 212, 255, 0.2));
+            background: rgba(0, 255, 136, 0.1);
             border: 2px solid #00ff88;
             border-radius: 10px;
             padding: 15px;
             text-align: center;
+            margin: 10px 0;
         }
-
-        .stat-label {
-            font-size: 0.9em;
-            color: #00d4ff;
-            margin-bottom: 5px;
+        .stat-label { font-size: 0.9em; color: #00d4ff; }
+        .stat-value { font-size: 2em; font-weight: bold; color: #00ff88; margin-top: 5px; }
+        .contract-address {
+            background: rgba(0, 0, 0, 0.6);
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85em;
+            word-break: break-all;
+            margin: 10px 0;
+            border: 1px solid #00ff88;
         }
-
-        .stat-value {
-            font-size: 2.5em;
-            font-weight: bold;
-            color: #00ff88;
-        }
-
-        .action-btn {
-            background: linear-gradient(135deg, #00ff88, #00d4ff);
-            color: #000;
-            border: none;
-            padding: 15px 30px;
-            border-radius: 10px;
-            font-weight: bold;
-            font-size: 1em;
-            cursor: pointer;
-            transition: all 0.3s;
-            width: 100%;
-            margin: 5px 0;
-        }
-
-        .action-btn:hover {
-            transform: scale(1.02);
-            box-shadow: 0 0 25px rgba(0, 255, 136, 0.7);
-        }
-
-        .action-btn:disabled {
-            background: #555;
-            cursor: not-allowed;
-            opacity: 0.5;
-        }
-
         .toast {
             position: fixed;
             top: 20px;
@@ -403,766 +117,307 @@
             border-radius: 10px;
             font-weight: bold;
             display: none;
-            z-index: 1001;
-            animation: slideInRight 0.3s;
-            max-width: 300px;
+            z-index: 1000;
         }
-
-        .toast.show {
-            display: block;
-        }
-
-        .toast.error {
-            background: rgba(255, 68, 68, 0.95);
-            color: white;
-        }
-
-        @keyframes slideInRight {
-            from {
-                transform: translateX(400px);
-                opacity: 0;
-            }
-            to {
-                transform: translateX(0);
-                opacity: 1;
-            }
-        }
-
-        .token-panel {
-            background: rgba(0, 0, 0, 0.5);
-            border: 2px solid #00d4ff;
-            border-radius: 10px;
-            padding: 20px;
-            margin-top: 20px;
-        }
-
-        .network-indicator {
-            display: inline-block;
-            padding: 5px 15px;
-            border-radius: 20px;
-            font-size: 0.85em;
-            margin: 5px;
-        }
-
-        .network-mainnet {
-            background: #00ff88;
-            color: #000;
-        }
-
-        .network-testnet {
-            background: #ffaa00;
-            color: #000;
-        }
-
-        .contract-info {
-            background: rgba(0, 0, 0, 0.6);
-            border: 1px solid #00ff88;
-            border-radius: 8px;
-            padding: 15px;
-            margin: 10px 0;
-            font-family: 'Courier New', monospace;
-            font-size: 0.85em;
-        }
-
-        .contract-address {
-            color: #00d4ff;
-            word-break: break-all;
-        }
-
-        .tab-buttons {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-
-        .tab-btn {
-            flex: 1;
-            background: rgba(0, 0, 0, 0.5);
-            border: 2px solid #00ff88;
-            color: white;
-            padding: 12px;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .tab-btn:hover {
-            background: rgba(0, 255, 136, 0.2);
-        }
-
-        .tab-btn.active {
-            background: rgba(0, 255, 136, 0.3);
-            border-width: 3px;
-        }
-
-        .tab-content {
+        .toast.show { display: block; }
+        .toast.error { background: rgba(255, 68, 68, 0.95); color: white; }
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
             display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 999;
         }
-
-        .tab-content.active {
-            display: block;
+        .modal.show { display: flex; }
+        .modal-content {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            padding: 40px;
+            border-radius: 20px;
+            border: 3px solid #00ff88;
+            text-align: center;
         }
-
-        .info-box {
-            background: rgba(0, 255, 136, 0.1);
-            border-left: 4px solid #00ff88;
-            padding: 15px;
-            margin: 15px 0;
-            border-radius: 5px;
+        .spinner {
+            border: 5px solid rgba(255, 255, 255, 0.3);
+            border-top: 5px solid #00ff88;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
         }
-
-        .info-box h3 {
-            color: #00ff88;
-            margin-bottom: 10px;
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
-
-        .info-box ul {
-            color: #ccc;
-            font-size: 0.9em;
-            line-height: 1.8;
-            list-style-position: inside;
-        }
-
-        @media (max-width: 1024px) {
-            .service-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .service-grid-items {
-                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            }
-        }
+        @media (max-width: 1024px) { .grid { grid-template-columns: 1fr; } }
     </style>
 </head>
 <body>
-    <canvas class="matrix-bg" id="matrix"></canvas>
     <div class="toast" id="toast"></div>
-
-    <div class="transaction-modal" id="txModal">
+    <div class="modal" id="modal">
         <div class="modal-content">
-            <h2 style="color: #00ff88; margin-bottom: 20px;">Processing Transaction</h2>
+            <h2 style="color: #00ff88;">Processing Transaction</h2>
             <div class="spinner"></div>
-            <p id="txStatus">Waiting for confirmation...</p>
-            <p style="margin-top: 15px; font-size: 0.9em; color: #ccc;" id="txHash"></p>
+            <p id="modalText">Please wait...</p>
         </div>
     </div>
-    
+
     <div class="container">
         <header>
             <h1>🛡️ VALIDIFY</h1>
-            <p class="tagline">Enterprise Discord Security Protocol for Web3 Projects</p>
-            <p class="subtitle">Blockchain-Powered Bot Protection & Community Verification System</p>
-            
+            <p style="font-size: 1.2em; color: #00d4ff; margin: 10px 0;">Enterprise Discord Security Protocol</p>
             <div>
-                <span class="feature-badge">🔗 Blockchain Verification</span>
-                <span class="feature-badge">🎨 NFT-Gated Access</span>
-                <span class="feature-badge">⚡ Real-Time Threat Detection</span>
-                <span class="feature-badge">💰 Token-Based Security</span>
+                <span class="badge">🔥 LIVE on Sepolia</span>
+                <span class="badge">✅ Real Contracts</span>
+                <span class="badge">💎 VLFY Token Active</span>
             </div>
-
-            <div class="wallet-section">
-                <button class="wallet-btn" id="connectBtn" onclick="connectWallet()">
-                    🦊 Connect MetaMask
-                </button>
-                <div class="wallet-info" id="walletInfo">
-                    <div class="wallet-address" id="walletAddress"></div>
-                    <span class="network-indicator" id="networkIndicator"></span>
-                    <div class="balance-display">
-                        <div class="balance-item">
-                            <div class="balance-label">ETH Balance</div>
-                            <div class="balance-value" id="ethBalance">0.00</div>
-                        </div>
-                        <div class="balance-item">
-                            <div class="balance-label">VLFY Tokens</div>
-                            <div class="balance-value" id="tokenBalance">0</div>
-                        </div>
-                        <div class="balance-item">
-                            <div class="balance-label">Active Services</div>
-                            <div class="balance-value" id="serviceCount">0</div>
-                        </div>
+            <button class="wallet-btn" id="connectBtn" onclick="connectWallet()">🦊 Connect MetaMask</button>
+            
+            <div class="wallet-info" id="walletInfo">
+                <div style="color: #00ff88; font-family: monospace; font-size: 1.1em; margin-bottom: 15px;" id="address"></div>
+                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;">
+                    <div class="stat-box">
+                        <div class="stat-label">ETH</div>
+                        <div class="stat-value" style="font-size: 1.5em;" id="ethBal">0</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-label">VLFY</div>
+                        <div class="stat-value" style="font-size: 1.5em;" id="vlfyBal">0</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-label">Services</div>
+                        <div class="stat-value" style="font-size: 1.5em;" id="services">0</div>
                     </div>
                 </div>
             </div>
         </header>
 
-        <div class="service-grid">
+        <div class="grid">
             <div>
                 <div class="panel">
-                    <h2>🔐 Security Service Tiers</h2>
+                    <h2>🔐 Security Services</h2>
                     
-                    <div class="tab-buttons">
-                        <button class="tab-btn active" onclick="switchTab('essential')">Essential Protection</button>
-                        <button class="tab-btn" onclick="switchTab('professional')">Professional Suite</button>
-                        <button class="tab-btn" onclick="switchTab('active')">Active Services</button>
+                    <div class="service-card">
+                        <h3 style="color: #00d4ff; margin-bottom: 10px;">⚡ BASIC - 500 VLFY/month</h3>
+                        <p style="color: #ccc; margin-bottom: 15px;">Essential bot protection and monitoring</p>
+                        <button class="btn" onclick="activateService(1)" id="btn1">Activate Basic</button>
                     </div>
 
-                    <div class="tab-content active" id="essentialTab">
-                        <div class="service-grid-items">
-                            <div class="service-card" id="service-basic">
-                                <div class="service-tier">BASIC</div>
-                                <div class="service-icon">🛡️</div>
-                                <div class="service-title">Basic Shield Protection</div>
-                                <div class="service-description">Foundational security for Discord servers with automated bot verification and spam detection.</div>
-                                <div class="service-features">
-                                    <div class="service-feature">24/7 Bot Monitoring</div>
-                                    <div class="service-feature">Spam Detection</div>
-                                    <div class="service-feature">Basic Role Verification</div>
-                                    <div class="service-feature">Weekly Security Reports</div>
-                                    <div class="service-feature">Community Support</div>
-                                </div>
-                                <div class="service-pricing">
-                                    <span class="price-token">500 VLFY/mo</span>
-                                    <button class="activate-btn" onclick="activateService('basic', 500)">Activate</button>
-                                </div>
-                            </div>
-
-                            <div class="service-card" id="service-advanced">
-                                <div class="service-tier">ADVANCED</div>
-                                <div class="service-icon">⚔️</div>
-                                <div class="service-title">Advanced Defense System</div>
-                                <div class="service-description">Enhanced protection with wallet verification, NFT-gating, and real-time threat response.</div>
-                                <div class="service-features">
-                                    <div class="service-feature">Wallet Verification</div>
-                                    <div class="service-feature">NFT-Gated Channels</div>
-                                    <div class="service-feature">Real-Time Alerts</div>
-                                    <div class="service-feature">Custom Security Rules</div>
-                                    <div class="service-feature">Priority Support</div>
-                                </div>
-                                <div class="service-pricing">
-                                    <span class="price-token">1,500 VLFY/mo</span>
-                                    <button class="activate-btn" onclick="activateService('advanced', 1500)">Activate</button>
-                                </div>
-                            </div>
-                        </div>
+                    <div class="service-card">
+                        <h3 style="color: #00d4ff; margin-bottom: 10px;">🚀 ADVANCED - 1,500 VLFY/month</h3>
+                        <p style="color: #ccc; margin-bottom: 15px;">Enhanced security with wallet verification</p>
+                        <button class="btn" onclick="activateService(2)" id="btn2">Activate Advanced</button>
                     </div>
 
-                    <div class="tab-content" id="professionalTab">
-                        <div class="service-grid-items">
-                            <div class="service-card" id="service-enterprise">
-                                <div class="service-tier">ENTERPRISE</div>
-                                <div class="service-icon">💎</div>
-                                <div class="service-title">Enterprise Protection Suite</div>
-                                <div class="service-description">Complete security solution with advanced analytics, custom integrations, and dedicated support.</div>
-                                <div class="service-features">
-                                    <div class="service-feature">Advanced Analytics Dashboard</div>
-                                    <div class="service-feature">Custom Bot Integration</div>
-                                    <div class="service-feature">Multi-Server Management</div>
-                                    <div class="service-feature">Dedicated Security Team</div>
-                                    <div class="service-feature">Compliance Reporting</div>
-                                </div>
-                                <div class="service-pricing">
-                                    <span class="price-token">5,000 VLFY/mo</span>
-                                    <button class="activate-btn" onclick="activateService('enterprise', 5000)">Activate</button>
-                                </div>
-                            </div>
-
-                            <div class="service-card" id="service-custom">
-                                <div class="service-tier">CUSTOM</div>
-                                <div class="service-icon">🎯</div>
-                                <div class="service-title">Custom Security Protocol</div>
-                                <div class="service-description">Tailored security solutions designed specifically for your project's unique requirements.</div>
-                                <div class="service-features">
-                                    <div class="service-feature">Bespoke Security Architecture</div>
-                                    <div class="service-feature">White-Label Integration</div>
-                                    <div class="service-feature">API Access</div>
-                                    <div class="service-feature">Custom Development</div>
-                                    <div class="service-feature">24/7 VIP Support</div>
-                                </div>
-                                <div class="service-pricing">
-                                    <span class="price-token">Contact Us</span>
-                                    <button class="activate-btn" onclick="contactSales()">Get Quote</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="tab-content" id="activeTab">
-                        <div class="service-grid-items" id="activeServices">
-                            <div style="text-align: center; padding: 40px; color: #888;">
-                                <p style="font-size: 3em; margin-bottom: 15px;">📦</p>
-                                <p>No active services</p>
-                                <p style="font-size: 0.9em; margin-top: 10px;">Activate a security tier to protect your Discord server!</p>
-                            </div>
-                        </div>
+                    <div class="service-card">
+                        <h3 style="color: #00d4ff; margin-bottom: 10px;">💎 ENTERPRISE - 5,000 VLFY/month</h3>
+                        <p style="color: #ccc; margin-bottom: 15px;">Complete protection suite with analytics</p>
+                        <button class="btn" onclick="activateService(3)" id="btn3">Activate Enterprise</button>
                     </div>
                 </div>
 
                 <div class="panel" style="margin-top: 20px;">
-                    <h2>📋 Protocol Information</h2>
-                    <div class="contract-info">
-                        <strong style="color: #00ff88;">VLFY Token Contract:</strong><br>
-                        <span class="contract-address" id="tokenContract">0x813986e8908560FDD2Eda4DE2aF10623ae845b2f</span>
+                    <h2>📋 Smart Contracts</h2>
+                    <div class="contract-address">
+                        <strong style="color: #00ff88;">VLFY Token:</strong><br>
+                        0x813986e8908560FDD2Eda4DE2aF10623ae845b2f
+                        <br><a href="https://sepolia.etherscan.io/address/0x813986e8908560FDD2Eda4DE2aF10623ae845b2f" target="_blank" style="color: #00d4ff;">View on Etherscan →</a>
                     </div>
-                    <div class="contract-info">
-                        <strong style="color: #00ff88;">Security Protocol Contract:</strong><br>
-                        <span class="contract-address" id="protocolContract">0x976b419eA3aB69F643F9Bba82007D58dA275f966</span>
-                    </div>    
-                    
-                    <button class="action-btn" onclick="addTokenToWallet()">
-                        ➕ Add VLFY Token to MetaMask
-                    </button>
-                    
-                    <div class="info-box" style="margin-top: 20px;">
-                        <h3>How It Works</h3>
-                        <ul>
-                            <li>Connect your wallet to access the dashboard</li>
-                            <li>Acquire VLFY tokens to purchase security services</li>
-                            <li>Activate protection tier for your Discord server</li>
-                            <li>Configure security rules via bot commands</li>
-                            <li>Monitor threats in real-time through analytics</li>
-                        </ul>
+                    <div class="contract-address">
+                        <strong style="color: #00ff88;">Service Manager:</strong><br>
+                        0x976b419eA3aB69F643F9Bba82007D58dA275f966
+                        <br><a href="https://sepolia.etherscan.io/address/0x976b419eA3aB69F643F9Bba82007D58dA275f966" target="_blank" style="color: #00d4ff;">View on Etherscan →</a>
                     </div>
+                    <button class="btn" onclick="addToken()">➕ Add VLFY to MetaMask</button>
                 </div>
             </div>
 
             <div>
                 <div class="panel">
-                    <h2>💰 Token Management</h2>
-                    
-                    <div class="stats-grid">
-                        <div class="stat-box">
-                            <div class="stat-label">Your VLFY</div>
-                            <div class="stat-value" id="userTokens">0</div>
-                        </div>
-                        <div class="stat-box">
-                            <div class="stat-label">Monthly Cost</div>
-                            <div class="stat-value" id="monthlyCost">0</div>
-                        </div>
-                        <div class="stat-box">
-                            <div class="stat-label">Next Renewal</div>
-                            <div class="stat-value" style="font-size: 1.2em;" id="nextRenewal">--</div>
-                        </div>
+                    <h2>💰 Get VLFY Tokens</h2>
+                    <div class="stat-box">
+                        <div class="stat-label">Faucet Status</div>
+                        <div class="stat-value" style="font-size: 1.3em;" id="faucetStatus">Check wallet</div>
                     </div>
-
-                    <div class="token-panel">
-                        <h3 style="color: #00d4ff; margin-bottom: 15px;">Acquire VLFY Tokens</h3>
-                        <p style="color: #888; font-size: 0.9em; margin-bottom: 15px;">Get VLFY tokens to activate security services</p>
-                        
-                        <button class="action-btn" onclick="earnTokens('faucet')">
-                            💧 Testnet Faucet (Get 10,000 VLFY)
-                        </button>
-                        
-                        <button class="action-btn" onclick="purchaseTokens()">
-                            💳 Purchase VLFY Tokens
-                        </button>
-                        
-                        <button class="action-btn" onclick="earnTokens('referral')">
-                            👥 Referral Program (Earn VLFY)
-                        </button>
-                    </div>
-
-                    <div class="info-box" style="margin-top: 20px;">
-                        <h3>VLFY Token Utility</h3>
-                        <ul>
-                            <li>Pay for security service subscriptions</li>
-                            <li>Access premium bot features</li>
-                            <li>Unlock advanced analytics tools</li>
-                            <li>Participate in governance decisions</li>
-                            <li>Receive priority support access</li>
-                        </ul>
-                    </div>
+                    <button class="btn" onclick="claimFaucet()" id="faucetBtn">💧 Claim 10,000 VLFY</button>
+                    <p style="color: #888; font-size: 0.9em; margin-top: 10px; text-align: center;">
+                        ℹ️ Claim once every 24 hours
+                    </p>
                 </div>
 
                 <div class="panel" style="margin-top: 20px;">
-                    <h2>📊 Security Dashboard</h2>
-                    <div class="stats-grid">
-                        <div class="stat-box">
-                            <div class="stat-label">Threats Blocked</div>
-                            <div class="stat-value" id="threatsBlocked">0</div>
-                        </div>
-                        <div class="stat-box">
-                            <div class="stat-label">Servers Protected</div>
-                            <div class="stat-value" id="serversProtected">0</div>
-                        </div>
-                        <div class="stat-box">
-                            <div class="stat-label">Uptime</div>
-                            <div class="stat-value" style="font-size: 1.5em;">99.9%</div>
-                        </div>
+                    <h2>📊 Your Subscription</h2>
+                    <div class="stat-box">
+                        <div class="stat-label">Active Tier</div>
+                        <div class="stat-value" style="font-size: 1.5em;" id="tier">None</div>
                     </div>
-
-                    <button class="action-btn" onclick="viewAnalytics()">
-                        📈 View Detailed Analytics
-                    </button>
-                    
-                    <button class="action-btn" onclick="setupBot()">
-                        🤖 Setup Discord Bot
-                    </button>
-                    
-                    <button class="action-btn" onclick="viewDocs()">
-                        📖 Documentation & API
-                    </button>
+                    <div class="stat-box">
+                        <div class="stat-label">Days Remaining</div>
+                        <div class="stat-value" id="days">--</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-label">Status</div>
+                        <div class="stat-value" style="font-size: 1.3em;" id="status">Inactive</div>
+                    </div>
+                    <button class="btn" onclick="loadData()" style="margin-top: 15px;">🔄 Refresh Status</button>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
-        // Web3 State
-        let web3State = {
-            provider: null,
-            signer: null,
-            address: null,
-            chainId: null,
-            connected: false,
-            tokenBalance: 0,
-            ethBalance: 0,
-            activeServices: [],
-            monthlyCost: 0
-        };
-
         const CONTRACTS = {
             token: '0x813986e8908560FDD2Eda4DE2aF10623ae845b2f',
-            protocol: '0x976b419eA3aB69F643F9Bba82007D58dA275f966'
+            service: '0x976b419eA3aB69F643F9Bba82007D58dA275f966'
         };
 
-        // Matrix background
-        const canvas = document.getElementById('matrix');
-        const ctx = canvas.getContext('2d');
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
+        const TOKEN_ABI = [
+            "function balanceOf(address) view returns (uint256)",
+            "function claimFaucet()",
+            "function canClaimFaucet(address) view returns (bool)",
+            "function approve(address,uint256) returns (bool)"
+        ];
 
-        const matrix = "VALIDIFY01";
-        const fontSize = 16;
-        const columns = canvas.width / fontSize;
-        const drops = [];
+        const SERVICE_ABI = [
+            "function activateService(uint8)",
+            "function getSubscription(address) view returns (uint8,uint256,uint256,bool,uint256)",
+            "function hasActiveSubscription(address) view returns (bool)"
+        ];
 
-        for (let i = 0; i < columns; i++) {
-            drops[i] = 1;
-        }
+        let state = { provider: null, signer: null, address: null, tokenContract: null, serviceContract: null };
 
-        function drawMatrix() {
-            ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-            ctx.fillStyle = '#00ff88';
-            ctx.font = fontSize + 'px monospace';
-
-            for (let i = 0; i < drops.length; i++) {
-                const text = matrix[Math.floor(Math.random() * matrix.length)];
-                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
-
-                if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
-                    drops[i] = 0;
-                }
-                drops[i]++;
-            }
-        }
-
-        setInterval(drawMatrix, 35);
-
-        // Comprehensive diagnostic function
-        function runDiagnostics() {
-            console.log('=== MetaMask Diagnostics ===');
-            console.log('1. window.ethereum:', window.ethereum);
-            console.log('2. typeof window.ethereum:', typeof window.ethereum);
-            console.log('3. window.web3:', window.web3);
-            console.log('4. Navigator:', navigator.userAgent);
-            console.log('5. All window properties containing "eth":', 
-                Object.keys(window).filter(key => key.toLowerCase().includes('eth'))
-            );
-            console.log('6. Document readyState:', document.readyState);
-            console.log('===========================');
-        }
-
-        // Detect MetaMask with multiple methods
-        function detectMetaMask() {
-            runDiagnostics();
-            
-            // Method 1: Check window.ethereum
-            if (window.ethereum) {
-                console.log('✓ window.ethereum detected');
-                return window.ethereum;
-            }
-            
-            // Method 2: Check for ethereum in window (some browsers)
-            if (typeof window.ethereum !== 'undefined') {
-                console.log('✓ ethereum in window detected');
-                return window.ethereum;
-            }
-            
-            // Method 3: Check web3 provider
-            if (window.web3 && window.web3.currentProvider) {
-                console.log('✓ web3.currentProvider detected');
-                return window.web3.currentProvider;
-            }
-            
-            // Method 4: Check if ethereum is being injected
-            if (document.documentElement.getAttribute('data-ethereum-provider')) {
-                console.log('⚠ Ethereum provider attribute found, but not injected yet');
-            }
-            
-            console.log('✗ No Ethereum provider detected');
-            return null;
-        }
-
-        // Connect Wallet
         async function connectWallet() {
             try {
-                // Comprehensive MetaMask detection
-                const ethereum = detectMetaMask();
-                
-                if (!ethereum) {
-                    showToast('MetaMask not detected. Checking installation...', true);
-                    
-                    // Give it a moment in case MetaMask is still loading
-                    await new Promise(resolve => setTimeout(resolve, 1000));
-                    
-                    const ethereumRetry = detectMetaMask();
-                    
-                    if (!ethereumRetry) {
-                        showToast('Please install MetaMask browser extension to continue.', true);
-                        setTimeout(() => {
-                            if (confirm('MetaMask is required. Would you like to install it now?')) {
-                                window.open('https://metamask.io/download/', '_blank');
-                            }
-                        }, 1500);
-                        return;
-                    }
+                if (!window.ethereum) {
+                    showToast('Install MetaMask!', true);
+                    return;
                 }
 
-                // Use the detected provider
-                const provider = ethereum || window.ethereum;
+                const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+                state.provider = new ethers.providers.Web3Provider(window.ethereum);
+                state.signer = state.provider.getSigner();
+                state.address = accounts[0];
 
-                // Request account access
-                try {
-                    const accounts = await provider.request({ 
-                        method: 'eth_requestAccounts' 
-                    });
-
-                    if (!accounts || accounts.length === 0) {
-                        showToast('No accounts found. Please create or unlock MetaMask.', true);
-                        return;
-                    }
-
-                    // Initialize ethers provider
-                    web3State.provider = new ethers.providers.Web3Provider(provider);
-                    web3State.signer = web3State.provider.getSigner();
-                    web3State.address = accounts[0];
-
-                    // Get network info
-                    const network = await web3State.provider.getNetwork();
-                    web3State.chainId = network.chainId;
-
-                    web3State.connected = true;
-                    updateWalletUI();
-                    
-                    await loadBalances();
-
-                    showToast('✓ Wallet connected successfully!');
-
-                    // Setup event listeners (remove old ones first)
-                    if (provider.removeAllListeners) {
-                        provider.removeAllListeners('accountsChanged');
-                        provider.removeAllListeners('chainChanged');
-                    }
-
-                    provider.on('accountsChanged', (accounts) => {
-                        if (accounts.length === 0) {
-                            disconnectWallet();
-                        } else {
-                            web3State.address = accounts[0];
-                            updateWalletUI();
-                            loadBalances();
-                        }
-                    });
-
-                    provider.on('chainChanged', () => {
+                const network = await state.provider.getNetwork();
+                if (network.chainId !== 11155111) {
+                    showToast('Switch to Sepolia Testnet!', true);
+                    try {
+                        await window.ethereum.request({
+                            method: 'wallet_switchEthereumChain',
+                            params: [{ chainId: '0xaa36a7' }]
+                        });
                         window.location.reload();
-                    });
-
-                } catch (requestError) {
-                    if (requestError.code === 4001) {
-                        showToast('Connection rejected. Please approve the connection in MetaMask.', true);
-                    } else if (requestError.code === -32002) {
-                        showToast('Connection request pending. Please check MetaMask.', true);
-                    } else {
-                        throw requestError;
+                    } catch (e) {
+                        showToast('Please switch to Sepolia manually', true);
                     }
+                    return;
                 }
 
-            } catch (error) {
-                console.error('Error connecting wallet:', error);
-                showToast('Connection error: ' + (error.message || 'Unknown error'), true);
+                state.tokenContract = new ethers.Contract(CONTRACTS.token, TOKEN_ABI, state.signer);
+                state.serviceContract = new ethers.Contract(CONTRACTS.service, SERVICE_ABI, state.signer);
+
+                document.getElementById('connectBtn').textContent = '✅ Connected';
+                document.getElementById('connectBtn').disabled = true;
+                document.getElementById('address').textContent = state.address.slice(0,6) + '...' + state.address.slice(-4);
+                document.getElementById('walletInfo').classList.add('show');
+
+                showToast('Connected successfully!');
+                loadData();
+
+                window.ethereum.on('accountsChanged', () => window.location.reload());
+                window.ethereum.on('chainChanged', () => window.location.reload());
+            } catch (e) {
+                showToast('Connection failed: ' + e.message, true);
             }
         }
 
-        function disconnectWallet() {
-            web3State = {
-                provider: null,
-                signer: null,
-                address: null,
-                chainId: null,
-                connected: false,
-                tokenBalance: 0,
-                ethBalance: 0,
-                activeServices: [],
-                monthlyCost: 0
-            };
-            updateWalletUI();
-            showToast('Wallet disconnected');
+        async function loadData() {
+            if (!state.address) {
+                showToast('Connect wallet first!', true);
+                return;
+            }
+
+            try {
+                const ethBal = await state.provider.getBalance(state.address);
+                document.getElementById('ethBal').textContent = parseFloat(ethers.utils.formatEther(ethBal)).toFixed(3);
+
+                const vlfyBal = await state.tokenContract.balanceOf(state.address);
+                document.getElementById('vlfyBal').textContent = ethers.utils.formatEther(vlfyBal).split('.')[0];
+
+                const canClaim = await state.tokenContract.canClaimFaucet(state.address);
+                document.getElementById('faucetStatus').textContent = canClaim ? 'Ready!' : 'Wait 24h';
+                document.getElementById('faucetBtn').disabled = !canClaim;
+
+                const sub = await state.serviceContract.getSubscription(state.address);
+                const tierNames = ['None', 'Basic', 'Advanced', 'Enterprise'];
+                document.getElementById('tier').textContent = tierNames[sub[0]];
+                document.getElementById('days').textContent = sub[4].toString();
+                document.getElementById('status').textContent = sub[3] ? 'Active' : 'Inactive';
+                document.getElementById('services').textContent = sub[3] ? '1' : '0';
+            } catch (e) {
+                console.error('Load error:', e);
+            }
         }
 
-        function updateWalletUI() {
-            const connectBtn = document.getElementById('connectBtn');
-            const walletInfo = document.getElementById('walletInfo');
-            const addressEl = document.getElementById('walletAddress');
-            const networkEl = document.getElementById('networkIndicator');
+        async function claimFaucet() {
+            if (!state.tokenContract) {
+                showToast('Connect wallet first!', true);
+                return;
+            }
 
-            if (web3State.connected) {
-                connectBtn.textContent = '✅ Connected';
-                connectBtn.style.background = '#00ff88';
-                connectBtn.onclick = disconnectWallet;
+            try {
+                showModal('Claiming 10,000 VLFY...');
+                const tx = await state.tokenContract.claimFaucet();
+                updateModal('Waiting for confirmation...');
+                await tx.wait();
+                hideModal();
+                showToast('Successfully claimed 10,000 VLFY!');
+                loadData();
+            } catch (e) {
+                hideModal();
+                showToast('Claim failed: ' + e.message, true);
+            }
+        }
+
+        async function activateService(tier) {
+            if (!state.serviceContract) {
+                showToast('Connect wallet first!', true);
+                return;
+            }
+
+            const prices = [0, 500, 1500, 5000];
+            const price = ethers.utils.parseEther(prices[tier].toString());
+
+            try {
+                showModal('Checking allowance...');
                 
-                walletInfo.classList.add('connected');
-                addressEl.textContent = `${web3State.address.slice(0, 6)}...${web3State.address.slice(-4)}`;
-                
-                if (web3State.chainId === 1) {
-                    networkEl.textContent = '🟢 Ethereum Mainnet';
-                    networkEl.className = 'network-indicator network-mainnet';
-                } else if (web3State.chainId === 11155111) {
-                    networkEl.textContent = '🟡 Sepolia Testnet';
-                    networkEl.className = 'network-indicator network-testnet';
-                } else {
-                    networkEl.textContent = `🟡 Network ${web3State.chainId}`;
-                    networkEl.className = 'network-indicator network-testnet';
+                const allowance = await state.tokenContract.allowance(state.address, CONTRACTS.service);
+                if (allowance.lt(price)) {
+                    updateModal('Approving VLFY tokens...');
+                    const approveTx = await state.tokenContract.approve(CONTRACTS.service, price);
+                    await approveTx.wait();
                 }
-            } else {
-                connectBtn.textContent = '🦊 Connect MetaMask';
-                connectBtn.style.background = 'linear-gradient(135deg, #00ff88, #00d4ff)';
-                connectBtn.onclick = connectWallet;
-                walletInfo.classList.remove('connected');
-            }
-        }
 
-        async function loadBalances() {
-            try {
-                const ethBalance = await web3State.provider.getBalance(web3State.address);
-                web3State.ethBalance = parseFloat(ethers.utils.formatEther(ethBalance)).toFixed(4);
-                document.getElementById('ethBalance').textContent = web3State.ethBalance;
-
-                const storedBalance = localStorage.getItem(`vlfy_balance_${web3State.address}`) || '0';
-                web3State.tokenBalance = parseInt(storedBalance);
-                document.getElementById('tokenBalance').textContent = web3State.tokenBalance.toLocaleString();
-                document.getElementById('userTokens').textContent = web3State.tokenBalance.toLocaleString();
-
-                const services = JSON.parse(localStorage.getItem(`active_services_${web3State.address}`) || '[]');
-                web3State.activeServices = services;
-                document.getElementById('serviceCount').textContent = services.length;
-
-                const totalCost = services.reduce((sum, s) => sum + s.cost, 0);
-                web3State.monthlyCost = totalCost;
-                document.getElementById('monthlyCost').textContent = totalCost.toLocaleString();
-
-                updateActiveServices();
-
-                const stats = JSON.parse(localStorage.getItem(`security_stats_${web3State.address}`) || '{"threats":0,"servers":0}');
-                document.getElementById('threatsBlocked').textContent = stats.threats.toLocaleString();
-                document.getElementById('serversProtected').textContent = stats.servers;
-
-            } catch (error) {
-                console.error('Error loading balances:', error);
-            }
-        }
-
-        async function activateService(tier, cost) {
-            if (!web3State.connected) {
-                showToast('Please connect your wallet first!', true);
-                return;
-            }
-
-            if (web3State.tokenBalance < cost) {
-                showToast('Insufficient VLFY tokens! Please acquire more tokens.', true);
-                return;
-            }
-
-            try {
-                showTxModal('Activating security service...');
+                updateModal('Activating service...');
+                const tx = await state.serviceContract.activateService(tier);
+                updateModal('Waiting for confirmation...');
+                await tx.wait();
                 
-                await new Promise(resolve => setTimeout(resolve, 2000));
-
-                const service = {
-                    tier,
-                    cost,
-                    activatedAt: Date.now(),
-                    expiresAt: Date.now() + (30 * 24 * 60 * 60 * 1000)
-                };
-
-                web3State.activeServices.push(service);
-                web3State.tokenBalance -= cost;
-
-                localStorage.setItem(`active_services_${web3State.address}`, JSON.stringify(web3State.activeServices));
-                localStorage.setItem(`vlfy_balance_${web3State.address}`, web3State.tokenBalance);
-
-                document.getElementById(`service-${tier}`).classList.add('active');
-
-                await loadBalances();
-                
-                hideTxModal();
-                showToast(`${tier.toUpperCase()} security service activated! 🎉`);
-
-            } catch (error) {
-                hideTxModal();
-                showToast('Activation failed: ' + error.message, true);
+                hideModal();
+                showToast('Service activated successfully! 🎉');
+                loadData();
+            } catch (e) {
+                hideModal();
+                showToast('Activation failed: ' + (e.reason || e.message), true);
             }
         }
 
-        async function earnTokens(action) {
-            if (!web3State.connected) {
-                showToast('Please connect your wallet first!', true);
-                return;
-            }
-
-            const amounts = {
-                faucet: 10000,
-                referral: 5000
-            };
-
-            const amount = amounts[action];
-
-            try {
-                showTxModal(`Acquiring ${amount.toLocaleString()} VLFY tokens...`);
-                
-                await new Promise(resolve => setTimeout(resolve, 1500));
-
-                web3State.tokenBalance += amount;
-                localStorage.setItem(`vlfy_balance_${web3State.address}`, web3State.tokenBalance);
-
-                await loadBalances();
-                
-                hideTxModal();
-                showToast(`+${amount.toLocaleString()} VLFY tokens received! 🎉`);
-
-            } catch (error) {
-                hideTxModal();
-                showToast('Failed to acquire tokens: ' + error.message, true);
-            }
-        }
-
-        function purchaseTokens() {
-            showToast('Token purchase interface coming soon! Use faucet for now.');
-        }
-
-        function contactSales() {
-            showToast('Contact enterprise@validify.io for custom solutions');
-        }
-
-        function viewAnalytics() {
-            showToast('Advanced analytics dashboard launching soon!');
-        }
-
-        function setupBot() {
-            showToast('Bot setup wizard coming soon! Check documentation.');
-        }
-
-        function viewDocs() {
-            showToast('Documentation: docs.validify.io');
-        }
-
-        async function addTokenToWallet() {
-            if (!web3State.connected) {
-                showToast('Please connect your wallet first!', true);
-                return;
-            }
-
+        async function addToken() {
             try {
                 await window.ethereum.request({
                     method: 'wallet_watchAsset',
@@ -1171,119 +426,35 @@
                         options: {
                             address: CONTRACTS.token,
                             symbol: 'VLFY',
-                            decimals: 18,
-                            image: 'https://validify.io/token-logo.png'
+                            decimals: 18
                         }
                     }
                 });
-                showToast('VLFY token added to MetaMask!');
-            } catch (error) {
-                console.error('Error adding token:', error);
+                showToast('VLFY added to MetaMask!');
+            } catch (e) {
                 showToast('Failed to add token', true);
             }
         }
 
-        function updateActiveServices() {
-            const container = document.getElementById('activeServices');
-            
-            if (web3State.activeServices.length === 0) {
-                container.innerHTML = `
-                    <div style="text-align: center; padding: 40px; color: #888;">
-                        <p style="font-size: 3em; margin-bottom: 15px;">📦</p>
-                        <p>No active services</p>
-                        <p style="font-size: 0.9em; margin-top: 10px;">Activate a security tier to protect your Discord server!</p>
-                    </div>
-                `;
-                document.getElementById('nextRenewal').textContent = '--';
-                return;
-            }
-
-            container.innerHTML = web3State.activeServices.map(service => {
-                const daysLeft = Math.ceil((service.expiresAt - Date.now()) / (24 * 60 * 60 * 1000));
-                return `
-                    <div class="service-card active">
-                        <div class="service-tier">${service.tier.toUpperCase()}</div>
-                        <div class="service-icon">🛡️</div>
-                        <div class="service-title">${service.tier.charAt(0).toUpperCase() + service.tier.slice(1)} Protection</div>
-                        <div class="service-description">Expires in ${daysLeft} days</div>
-                        <button class="activate-btn" style="width: 100%; margin-top: 15px;">Manage Service</button>
-                    </div>
-                `;
-            }).join('');
-
-            const nextExpiry = Math.min(...web3State.activeServices.map(s => s.expiresAt));
-            const daysUntilRenewal = Math.ceil((nextExpiry - Date.now()) / (24 * 60 * 60 * 1000));
-            document.getElementById('nextRenewal').textContent = `${daysUntilRenewal}d`;
-        }
-
-        function switchTab(tab) {
-            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-            event.target.classList.add('active');
-
-            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
-            document.getElementById(tab + 'Tab').classList.add('active');
-        }
-
-        function showTxModal(message) {
-            document.getElementById('txStatus').textContent = message;
-            document.getElementById('txHash').textContent = '';
-            document.getElementById('txModal').classList.add('show');
-        }
-
-        function hideTxModal() {
-            document.getElementById('txModal').classList.remove('show');
-        }
-
-        function showToast(message, isError = false) {
+        function showToast(msg, error = false) {
             const toast = document.getElementById('toast');
-            toast.textContent = message;
-            toast.className = 'toast show' + (isError ? ' error' : '');
-            setTimeout(() => {
-                toast.classList.remove('show');
-            }, 3000);
+            toast.textContent = msg;
+            toast.className = 'toast show' + (error ? ' error' : '');
+            setTimeout(() => toast.classList.remove('show'), 3000);
         }
 
-        window.addEventListener('load', async () => {
-            console.log('Page loaded. Checking for MetaMask...');
-            
-            // Wait longer for MetaMask to inject itself (some browsers need more time)
-            await new Promise(resolve => setTimeout(resolve, 1500));
-            
-            const ethereum = detectMetaMask();
-            
-            if (ethereum) {
-                console.log('✓ MetaMask is installed!');
-                console.log('Provider details:', {
-                    isMetaMask: ethereum.isMetaMask,
-                    chainId: ethereum.chainId,
-                    selectedAddress: ethereum.selectedAddress
-                });
-                
-                // Check if already connected
-                try {
-                    const accounts = await ethereum.request({ 
-                        method: 'eth_accounts' 
-                    });
-                    
-                    if (accounts && accounts.length > 0) {
-                        console.log('Auto-connecting to existing session...');
-                        await connectWallet();
-                    } else {
-                        console.log('No connected accounts found. User needs to connect manually.');
-                        showToast('Click "Connect MetaMask" to link your wallet', false);
-                    }
-                } catch (error) {
-                    console.error('Error checking existing connection:', error);
-                }
-            } else {
-                console.log('✗ MetaMask not detected in browser');
-                console.log('');
-                console.log('⚠️ IMPORTANT: Claude.ai artifacts run in a sandboxed iframe which may block MetaMask injection.');
-                console.log('📝 SOLUTION: Copy this HTML file and run it locally or host it on your own domain.');
-                console.log('');
-                showToast('⚠️ MetaMask cannot inject into Claude artifacts. Please download and host this file.', true);
-            }
-        });
+        function showModal(text) {
+            document.getElementById('modalText').textContent = text;
+            document.getElementById('modal').classList.add('show');
+        }
+
+        function updateModal(text) {
+            document.getElementById('modalText').textContent = text;
+        }
+
+        function hideModal() {
+            document.getElementById('modal').classList.remove('show');
+        }
     </script>
 </body>
 </html>
