@@ -209,22 +209,58 @@
             <div>
                 <div class="panel">
                     <h2>🔐 Security Services</h2>
+
+                    <p style="color:#ccc; margin-bottom: 15px;">
+                        Validify is testing an on-chain subscription layer that will unlock off-chain Discord protections
+                        delivered by a bot and monitoring system. This is an early prototype on Sepolia.
+                    </p>
+
                     
                     <div class="service-card">
-                        <h3 style="color: #00d4ff; margin-bottom: 10px;">⚡ BASIC - 500 VLFY (test cycle)</h3>
-                        <p style="color: #ccc; margin-bottom: 15px;">Essential bot protection and monitoring</p>
+                        <h3 style="color: #00d4ff; margin-bottom: 10px;">⚡ BASIC - 500 VLFY/month</h3>
+                        <p style="color:#aaa; font-size:0.9em; margin-top: 10px;">
+                            Safety note: Validify will never ask for your seed phrase. Wallet verification uses signature-only flows.
+                        </p>
+                        
+                        <ul style="color:#ccc; margin-bottom: 15px; padding-left: 18px;">
+                            <li>Role/permission change alerts</li>
+                            <li>Bot add/remove alerts</li>
+                            <li>New webhook alerts</li>
+                            <li>Suspicious link warnings</li>
+                        </ul>
+
                         <button class="btn" onclick="activateService(1)" id="btn1">Activate Basic</button>
                     </div>
 
                     <div class="service-card">
                         <h3 style="color: #00d4ff; margin-bottom: 10px;">🚀 ADVANCED - 1,500 VLFY (test cycle)</h3>
-                        <p style="color: #ccc; margin-bottom: 15px;">Enhanced security with wallet verification</p>
+                        <p style="color:#aaa; font-size:0.9em; margin-top: 10px;">
+                            Safety note: Validify will never ask for your seed phrase. Wallet verification uses signature-only flows.
+                        </p>
+                        
+                       <ul style="color:#ccc; margin-bottom: 15px; padding-left: 18px;">
+                            <li>Wallet verification via signature (no seed phrases)</li>
+                            <li>Verified domain and link warning banners</li>
+                            <li>Mod impersonation heuristic alerts</li>
+                            <li>Priority suspicious activity notifications</li>
+                       </ul>
+
                         <button class="btn" onclick="activateService(2)" id="btn2">Activate Advanced</button>
                     </div>
 
                     <div class="service-card">
-                        <h3 style="color: #00d4ff; margin-bottom: 10px;">💎 ENTERPRISE - 5,000 VLFY (test cycle)</h3>
-                        <p style="color: #ccc; margin-bottom: 15px;">Complete protection suite with analytics</p>
+                        <h3 style="color: #00d4ff; margin-bottom: 10px;">💎 PRO - 5,000 VLFY (test cycle)</h3>
+                        <p style="color:#aaa; font-size:0.9em; margin-top: 10px;">
+                            Safety note: Validify will never ask for your seed phrase. Wallet verification uses signature-only flows.
+                        </p>
+
+                        <ul style="color:#ccc; margin-bottom: 15px; padding-left: 18px;">
+                            <li>Multi-server monitoring dashboard</li>
+                            <li>Anomaly detection for high-risk events</li>
+                            <li>Incident timeline and exportable logs</li>
+                            <li>Optional response playbooks (roadmap)</li>
+                        </ul>
+
                         <button class="btn" onclick="activateService(3)" id="btn3">Activate Enterprise</button>
                     </div>
                 </div>
@@ -288,6 +324,7 @@
             "function balanceOf(address) view returns (uint256)",
             "function claimFaucet()",
             "function canClaimFaucet(address) view returns (bool)",
+            "function allowance(address owner, address spender) view returns (uint256)",
             "function approve(address,uint256) returns (bool)"
         ];
 
@@ -399,17 +436,24 @@
             }
 
             const prices = [0, 500, 1500, 5000];
-            const price = ethers.utils.parseEther(prices[tier].toString());
+            const priceLabel = prices[tier];
+            const price = ethers.utils.parseEther(priceLabel.toString());
 
             try {
                 showModal('Checking allowance...');
                 
-                "function allowance(address owner, address spender) view returns (uint256)"
+                
                 if (allowance.lt(price)) {
-                    updateModal('Approving VLFY tokens...');
+                    updateModal(
+                        `Approval needed: Allow Service Manager to spend ${prices[tier]} VLFY ` +
+                        `to activate your selected tier.`
+                    );
+
                     const approveTx = await state.tokenContract.approve(CONTRACTS.service, price);
+                    updateModal('Waiting for approval confirmation...');
                     await approveTx.wait();
                 }
+
 
                 updateModal('Activating service...');
                 const tx = await state.serviceContract.activateService(tier);
