@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Documentation - Validify</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #ffffff;
+            min-height: 100vh;
+        }
+
+        .container { max-width: 1100px; margin: 0 auto; padding: 20px; }
+
+        header {
+            text-align: center;
+            padding: 26px;
+            background: rgba(0, 0, 0, 0.6);
+            border-radius: 20px;
+            margin-bottom: 22px;
+            border: 3px solid #00ff88;
+        }
+
+        h1 {
+            font-size: 2.4em;
+            background: linear-gradient(45deg, #00ff88, #00d4ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 8px;
+        }
+
+        .badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            padding: 8px 14px;
+            border-radius: 20px;
+            margin: 6px 4px 0 4px;
+            font-size: 0.85em;
+            border: 1px solid #00ff88;
+        }
+
+        .panel {
+            background: rgba(0, 0, 0, 0.7);
+            border: 2px solid #00ff88;
+            border-radius: 15px;
+            padding: 24px;
+            margin-bottom: 16px;
+        }
+
+        .panel h2 {
+            color: #00ff88;
+            margin-bottom: 14px;
+            border-bottom: 2px solid #00ff88;
+            padding-bottom: 8px;
+            font-size: 1.3em;
+        }
+
+        .panel h3 {
+            color: #00d4ff;
+            margin-top: 20px;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+
+        .muted { color: #cfcfcf; line-height: 1.6; }
+
+        .list { padding-left: 18px; }
+        .list li { margin: 7px 0; }
+
+        .code-block {
+            background: rgba(0, 0, 0, 0.6);
+            border: 1px solid #00ff88;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 10px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            overflow-x: auto;
+        }
+
+        .btn {
+            display: inline-block;
+            background: linear-gradient(135deg, #00ff88, #00d4ff);
+            color: #000;
+            border: none;
+            padding: 12px 18px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            text-decoration: none;
+            margin: 5px;
+        }
+
+        .btn.secondary {
+            background: rgba(255, 255, 255, 0.08);
+            color: #fff;
+            border: 1px solid rgba(0, 255, 136, 0.5);
+        }
+
+        .step {
+            background: rgba(0, 255, 136, 0.1);
+            border-left: 4px solid #00ff88;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+
+        .step-number {
+            color: #00ff88;
+            font-weight: bold;
+            font-size: 1.2em;
+            margin-bottom: 8px;
+        }
+
+        footer {
+            background: rgba(0, 0, 0, 0.6);
+            border: 2px solid #00ff88;
+            border-radius: 15px;
+            padding: 25px;
+            margin-top: 30px;
+            text-align: center;
+        }
+        footer a {
+            color: #00d4ff;
+            text-decoration: none;
+            margin: 0 15px;
+            transition: color 0.3s;
+        }
+        footer a:hover { color: #00ff88; }
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📖 VALIDIFY DOCUMENTATION</h1>
+            <div class="muted" style="color: #00d4ff;">Setup Guides & Reference</div>
+            <div>
+                <span class="badge">🧪 Beta Docs</span>
+                <span class="badge">🚧 Under Construction</span>
+            </div>
+        </header>
+
+        <div class="panel">
+            <h2>🚀 Quick Start Guide</h2>
+            
+            <div class="step">
+                <div class="step-number">Step 1: Connect Your Wallet</div>
+                <p class="muted">
+                    1. Make sure MetaMask is installed<br>
+                    2. Switch to Sepolia Testnet<br>
+                    3. Visit the <a href="index.html" style="color: #00ff88;">dashboard</a> and click "Connect MetaMask"
+                </p>
+            </div>
+
+            <div class="step">
+                <div class="step-number">Step 2: Get Sepolia ETH (Testnet)</div>
+                <p class="muted">
+                    Visit a Sepolia faucet to get free test ETH:<br>
+                    • <a href="https://sepoliafaucet.com/" target="_blank" style="color: #00ff88;">Alchemy Faucet</a><br>
+                    • <a href="https://faucet.quicknode.com/ethereum/sepolia" target="_blank" style="color: #00ff88;">QuickNode Faucet</a>
+                </p>
+            </div>
+
+            <div class="step">
+                <div class="step-number">Step 3: Claim VLFY Tokens</div>
+                <p class="muted">
+                    1. On the dashboard, click "Claim 10,000 Testnet VLFY"<br>
+                    2. Approve the transaction in MetaMask<br>
+                    3. Wait for confirmation (~30 seconds)<br>
+                    4. Can claim once every 24 hours
+                </p>
+            </div>
+
+            <div class="step">
+                <div class="step-number">Step 4: Activate a Service Tier</div>
+                <p class="muted">
+                    1. Choose a tier (Basic, Advanced, or Pro)<br>
+                    2. Click "Activate"<br>
+                    3. Approve VLFY token spending<br>
+                    4. Confirm the activation transaction<br>
+                    5. Your subscription is now active for 30 days!
+                </p>
+            </div>
+        </div>
+
+        <div class="panel">
+            <h2>🔐 Multi-Signature Link Verification (Coming Soon)</h2>
+            
+            <p class="muted">
+                This is Validify's core security feature. When the Discord bot launches, it will work like this:
+            </p>
+
+            <h3>Setup</h3>
+            <div class="code-block">
+/validify register-admin @user1 @user2 @user3
+/validify set-threshold 3/5
+            </div>
+            <p class="muted">This registers 5 admins and requires 3 to approve any link.</p>
+
+            <h3>Posting a Link</h3>
+            <div class="code-block">
+/validify post-link https://yourmint.com "Our official mint is live!"
+            </div>
+            <p class="muted">
+                The bot will:
+                <ul class="list">
+                    <li>DM all registered admins with unique codes</li>
+                    <li>Start a 30-second countdown</li>
+                    <li>Require 3/5 admins to approve with their codes</li>
+                    <li>Post the link only if threshold is met</li>
+                    <li>Record all actions on the blockchain</li>
+                </ul>
+            </p>
+
+            <h3>Approving a Link</h3>
+            <div class="code-block">
+/validify approve ABC123
+            </div>
+            <p class="muted">Each admin enters their unique code to approve.</p>
+        </div>
+
+        <div class="panel">
+            <h2>💰 Token & Smart Contract Reference</h2>
+            
+            <h3>VLFY Token Contract</h3>
+            <div class="code-block">
+Address: 0x813986e8908560FDD2Eda4DE2aF10623ae845b2f
+Network: Sepolia Testnet
+Standard: ERC-20
+Decimals: 18
+            </div>
+            <a href="https://sepolia.etherscan.io/address/0x813986e8908560FDD2Eda4DE2aF10623ae845b2f" target="_blank" class="btn">View on Etherscan</a>
+
+            <h3>Service Manager Contract</h3>
+            <div class="code-block">
+Address: 0x976b419eA3aB69F643F9Bba82007D58dA275f966
+Network: Sepolia Testnet
+Functions: activateService, getSubscription, cancelSubscription
+            </div>
+            <a href="https://sepolia.etherscan.io/address/0x976b419eA3aB69F643F9Bba82007D58dA275f966" target="_blank" class="btn">View on Etherscan</a>
+
+            <h3>Service Tiers & Pricing</h3>
+            <div class="code-block">
+Tier 1 (Basic):     500 VLFY/month
+Tier 2 (Advanced): 1,500 VLFY/month  
+Tier 3 (Pro):      5,000 VLFY/month
+            </div>
+        </div>
+
+        <div class="panel">
+            <h2>🤖 Discord Bot Commands (Preview)</h2>
+            
+            <p class="muted" style="margin-bottom: 15px;">
+                <strong>Note:</strong> Bot is currently in development. Commands below are planned functionality.
+            </p>
+
+            <h3>Setup Commands</h3>
+            <div class="code-block">
+/validify register-admin @user      - Register admin for multi-sig
+/validify remove-admin @user        - Remove admin from multi-sig
+/validify list-admins               - Show registered admins
+/validify set-threshold [X/Y]       - Set approval threshold
+            </div>
+
+            <h3>Security Commands</h3>
+            <div class="code-block">
+/validify post-link [url] [message] - Initiate multi-sig link post
+/validify approve [code]            - Approve a pending link
+/validify status                    - Check subscription status
+/validify security-report           - Get recent security events
+            </div>
+
+            <h3>Admin Commands</h3>
+            <div class="code-block">
+/validify config                    - View bot configuration
+/validify enable [feature]          - Enable optional features
+/validify disable [feature]         - Disable optional features
+/validify help                      - Show command list
+            </div>
+        </div>
+
+        <div class="panel">
+            <h2>📊 Project Audit Documentation</h2>
+            
+            <h3>Requesting an Audit</h3>
+            <p class="muted">
+                1. Visit audit.validify.io (coming soon)<br>
+                2. Submit your project information<br>
+                3. Choose audit tier (Quick, Full, or Premium)<br>
+                4. Pay audit fee in VLFY or ETH<br>
+                5. Receive audit within 2-10 days
+            </p>
+
+            <h3>Scoring Criteria</h3>
+            <div class="code-block">
+Community Health:      /20 points
+Team Transparency:     /20 points
+Technical Foundation:  /15 points
+Social Presence:       /15 points
+Innovation & Utility:  /15 points
+Market Positioning:    /15 points
+-----------------------------------
+Total:                /100 points
+            </div>
+
+            <h3>Score Interpretation</h3>
+            <div class="code-block">
+85-100: ✅ Verified Safe (Green badge)
+75-84:  ⚠️  Low Risk (Yellow badge)
+65-74:  ⚠️  Moderate Risk (Orange badge)
+50-64:  🚫 High Risk (Red badge)
+0-49:   ❌ Failed Audit (Not published)
+            </div>
+        </div>
+
+        <div class="panel">
+            <h2>🆘 Troubleshooting</h2>
+            
+            <h3>Common Issues</h3>
+            
+            <p class="muted"><strong>Q: "Transaction failed" error?</strong></p>
+            <ul class="list muted">
+                <li>Check you have enough Sepolia ETH for gas</li>
+                <li>Verify you have enough VLFY balance</li>
+                <li>Make sure you're on Sepolia network</li>
+                <li>Try increasing gas limit in MetaMask</li>
+            </ul>
+
+            <p class="muted" style="margin-top: 15px;"><strong>Q: Can't claim faucet?</strong></p>
+            <ul class="list muted">
+                <li>Must wait 24 hours between claims</li>
+                <li>Check cooldown timer on dashboard</li>
+                <li>Ensure wallet is connected</li>
+            </ul>
+
+            <p class="muted" style="margin-top: 15px;"><strong>Q: Subscription not showing as active?</strong></p>
+            <ul class="list muted">
+                <li>Click "Refresh Status" button</li>
+                <li>Wait 30-60 seconds for blockchain confirmation</li>
+                <li>Check transaction on Etherscan</li>
+            </ul>
+        </div>
+
+        <div class="panel">
+            <h2>🔗 Additional Resources</h2>
+            
+            <ul class="list muted">
+                <li><a href="trust.html" style="color: #00ff88;">Trust & Safety Guidelines</a></li>
+                <li><a href="faq.html" style="color: #00ff88;">Frequently Asked Questions</a></li>
+                <li><a href="https://github.com/YOUR-USERNAME/validify" target="_blank" style="color: #00ff88;">GitHub Repository</a> (coming soon)</li>
+                <li><a href="#" onclick="alert('Whitepaper PDF coming soon'); return false;" style="color: #00ff88;">Whitepaper (PDF)</a></li>
+                <li><a href="#" onclick="alert('Discord server coming soon'); return false;" style="color: #00ff88;">Community Discord</a></li>
+            </ul>
+        </div>
+
+        <div style="margin-top: 30px;">
+            <a href="index.html" class="btn secondary">← Back to Dashboard</a>
+        </div>
+
+        <footer>
+            <div class="footer-links">
+                <a href="index.html">Dashboard</a>
+                <span style="color: #666;">|</span>
+                <a href="trust.html">Trust & Safety</a>
+                <span style="color: #666;">|</span>
+                <a href="faq.html">FAQ</a>
+                <span style="color: #666;">|</span>
+                <a href="docs.html">Documentation</a>
+            </div>
+            <div style="color: #888; font-size: 0.9em;">
+                © 2025 Validify. Web3 Discord Security Protocol.
+            </div>
+        </footer>
+    </div>
+</body>
+</html>

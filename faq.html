@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FAQ - Validify</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #ffffff;
+            min-height: 100vh;
+        }
+
+        .container { max-width: 1000px; margin: 0 auto; padding: 20px; }
+
+        header {
+            text-align: center;
+            padding: 26px;
+            background: rgba(0, 0, 0, 0.6);
+            border-radius: 20px;
+            margin-bottom: 22px;
+            border: 3px solid #00ff88;
+        }
+
+        h1 {
+            font-size: 2.4em;
+            background: linear-gradient(45deg, #00ff88, #00d4ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 8px;
+        }
+
+        .badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            padding: 8px 14px;
+            border-radius: 20px;
+            margin: 6px 4px 0 4px;
+            font-size: 0.85em;
+            border: 1px solid #00ff88;
+        }
+
+        .panel {
+            background: rgba(0, 0, 0, 0.7);
+            border: 2px solid #00ff88;
+            border-radius: 15px;
+            padding: 24px;
+            margin-bottom: 16px;
+        }
+
+        .panel h2 {
+            color: #00ff88;
+            margin-bottom: 14px;
+            border-bottom: 2px solid #00ff88;
+            padding-bottom: 8px;
+            font-size: 1.3em;
+        }
+
+        .faq-item {
+            margin-bottom: 20px;
+            border-bottom: 1px solid rgba(0, 255, 136, 0.2);
+            padding-bottom: 20px;
+        }
+
+        .faq-item:last-child {
+            border-bottom: none;
+        }
+
+        .faq-question {
+            color: #00d4ff;
+            font-size: 1.1em;
+            font-weight: bold;
+            margin-bottom: 10px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .faq-question:hover {
+            color: #00ff88;
+        }
+
+        .faq-answer {
+            color: #cfcfcf;
+            line-height: 1.6;
+            margin-left: 10px;
+        }
+
+        .faq-answer ul, .faq-answer ol {
+            margin-left: 20px;
+            margin-top: 10px;
+        }
+
+        .faq-answer li {
+            margin: 5px 0;
+        }
+
+        .faq-answer code {
+            background: rgba(0, 0, 0, 0.4);
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            color: #00ff88;
+        }
+
+        .btn {
+            display: inline-block;
+            background: linear-gradient(135deg, #00ff88, #00d4ff);
+            color: #000;
+            border: none;
+            padding: 12px 18px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .btn.secondary {
+            background: rgba(255, 255, 255, 0.08);
+            color: #fff;
+            border: 1px solid rgba(0, 255, 136, 0.5);
+        }
+
+        footer {
+            background: rgba(0, 0, 0, 0.6);
+            border: 2px solid #00ff88;
+            border-radius: 15px;
+            padding: 25px;
+            margin-top: 30px;
+            text-align: center;
+        }
+        footer a {
+            color: #00d4ff;
+            text-decoration: none;
+            margin: 0 15px;
+            transition: color 0.3s;
+        }
+        footer a:hover { color: #00ff88; }
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🛡️ VALIDIFY FAQ</h1>
+            <div class="muted" style="color: #00d4ff;">Frequently Asked Questions</div>
+            <div>
+                <span class="badge">🧪 Testnet</span>
+                <span class="badge">📚 Knowledge Base</span>
+            </div>
+        </header>
+
+        <div class="panel">
+            <h2>🚀 Getting Started</h2>
+            
+            <div class="faq-item">
+                <div class="faq-question">
+                    Q: What is Validify?
+                </div>
+                <div class="faq-answer">
+                    A: Validify is a Web3 Discord security platform that prevents server compromises through multi-signature verification and real-time threat monitoring. We protect your community from the #1 attack vector: compromised admin accounts posting fake mint links.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    Q: How does multi-signature link verification work?
+                </div>
+                <div class="faq-answer">
+                    A: Instead of allowing any single admin to post links, Validify requires multiple admins (e.g., 3 out of 5) to approve a link within a time window (30-60 seconds). Each admin receives a unique code via DM and must approve before the link posts. This prevents a single compromised account from posting phishing links.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    Q: Is Validify free?
+                </div>
+                <div class="faq-answer">
+                    A: Currently in beta testing phase on Sepolia testnet. Pricing tiers:
+                    <ul>
+                        <li><strong>Basic:</strong> 500 VLFY/month (~$50)</li>
+                        <li><strong>Advanced:</strong> 1,500 VLFY/month (~$150)</li>
+                        <li><strong>Pro:</strong> 5,000 VLFY/month (~$500)</li>
+                    </ul>
+                    Early beta testers get discounted rates!
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    Q: What blockchain is Validify on?
+                </div>
+                <div class="faq-answer">
+                    A: Currently deployed on <strong>Sepolia Testnet</strong> (Ethereum). Mainnet deployment planned for Q2 2026 after thorough testing and security audits.
+                </div>
+            </div>
+        </div>
+
+        <div class="panel">
+            <h2>🔐 Security & Privacy</h2>
+            
+            <div class="faq-item">
+                <div class="faq-question">
+                    Q: Will Validify ever ask for my seed phrase or private keys?
+                </div>
+                <div class="faq-answer">
+                    A: <strong>NEVER.</strong> Validify only uses wallet signature verification through MetaMask. We never ask for, store, or have access to your private keys or seed phrases. If anyone claiming to be from Validify asks for this information, it's a scam.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    Q: What data does Validify collect?
+                </div>
+                <div class="faq-answer">
+                    A: We follow a <strong>minimum data collection</strong> principle:
+                    <ul>
+                        <li>Wallet addresses (for subscription verification)</li>
+                        <li>Discord server audit logs (for security monitoring)</li>
+                        <li>Security event data (flagged threats, timestamps)</li>
+                    </ul>
+                    We do NOT collect:
+                    <ul>
+                        <li>Private messages (except when users opt-in for DM scanning)</li>
+                        <li>Personal identifying information</li>
+                        <li>Private keys or passwords</li>
+                    </ul>
+                    See our <a href="trust.html" style="color: #00ff88;">Trust & Safety</a> page for full details.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    Q: Can Validify access my Discord DMs?
+                </div>
+                <div class="faq-answer">
+                    A: Only if you explicitly opt-in to DM phishing protection (Phase 2 feature). This is completely optional and requires user consent. Without opt-in, Validify has zero access to your DMs.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    Q: Is the smart contract audited?
+                </div>
+                <div class="faq-answer">
+                    A: Currently on testnet (no audit required). Before mainnet deployment, we will conduct professional security audits from firms like OpenZeppelin or Trail of Bits. Audit reports will be publicly published.
+                </div>
+            </div>
+        </div>
+
+        <div class="panel">
+            <h2>💰 VLFY Token & Payments</h2>
+            
+            <div class="faq-item">
+                <div class="faq-question">
+                    Q: What is the VLFY token?
+                </div>
+                <div class="faq-answer">
+                    A: VLFY is an ERC-20 token used to pay for Validify subscriptions and services. It provides:
+                    <ul>
+                        <li>Access to security service tiers</li>
+                        <li>Payment for project audits</li>
+                        <li>Future governance rights</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    Q: How do I get VLFY tokens?
+                </div>
+                <div class="faq-answer">
+                    A: <strong>Testnet:</strong> Use the faucet (10,000 VLFY every 24 hours)<br>
+                    <strong>Mainnet (future):</strong> Purchase with ETH on Uniswap or other DEXs
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    Q: Can I pay with ETH or USD instead of VLFY?
+                </div>
+                <div class="faq-answer">
+                    A: Currently, subscriptions are VLFY-only to test the token economics. Post-launch, we may offer ETH/USD payment options with a premium (VLFY payments get discounts).
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    Q: What happens if I run out of VLFY mid-subscription?
+                </div>
+                <div class="faq-answer">
+                    A: Your subscription expires and the bot will notify you. You'll need to acquire more VLFY and renew. No service interruption if you renew within 7 days of expiration.
+                </div>
+            </div>
+        </div>
+
+        <div class="panel">
+            <h2>🤖 Discord Bot</h2>
+            
+            <div class="faq-item">
+                <div class="faq-question">
+                    Q: When will the Discord bot be available?
+                </div>
+                <div class="faq-answer">
+                    A: <strong>Timeline:</strong>
+                    <ul>
+                        <li><strong>Q1 2026:</strong> Private beta (limited servers)</li>
+                        <li><strong>Q2 2026:</strong> Public beta launch</li>
+                        <li><strong>Q3 2026:</strong> Full production release</li>
+                    </ul>
+                    Want early access? Join our waitlist (link coming soon).
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    Q: What permissions does the bot need?
+                </div>
+                <div class="faq-answer">
+                    A: <strong>Minimum permissions approach:</strong>
+                    <ul>
+                        <li>View Audit Log (required for monitoring)</li>
+                        <li>View Channels</li>
+                        <li>Read Message History (only enabled channels)</li>
+                        <li>Send Messages (for alerts)</li>
+                    </ul>
+                    We do NOT require Administrator permission for basic features.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    Q: Can I use Validify on multiple servers?
+                </div>
+                <div class="faq-answer">
+                    A: <strong>Basic/Advanced tiers:</strong> Single server only<br>
+                    <strong>Pro tier:</strong> Multi-server dashboard<br>
+                    <strong>Enterprise:</strong> Unlimited servers with centralized management
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    Q: Does Validify work with other Discord bots?
+                </div>
+                <div class="faq-answer">
+                    A: Yes! Validify is designed to complement existing bots like MEE6, Collab.Land, etc. We focus specifically on security, not general moderation or token-gating.
+                </div>
+            </div>
+        </div>
+
+        <div class="panel">
+            <h2>📊 Project Audits</h2>
+            
+            <div class="faq-item">
+                <div class="faq-question">
+                    Q: How does the audit service work?
+                </div>
+                <div class="faq-answer">
+                    A: We evaluate your project across 6 categories:
+                    <ol>
+                        <li>Community health (20 points)</li>
+                        <li>Team transparency (20 points)</li>
+                        <li>Technical foundation (15 points)</li>
+                        <li>Social presence (15 points)</li>
+                        <li>Innovation & utility (15 points)</li>
+                        <li>Market positioning (15 points)</li>
+                    </ol>
+                    You receive a score (0-100) and detailed report with recommendations.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    Q: How long does an audit take?
+                </div>
+                <div class="faq-answer">
+                    A: <strong>Quick Audit:</strong> 48 hours ($500)<br>
+                    <strong>Full Audit:</strong> 3-5 days ($1,500)<br>
+                    <strong>Premium Audit:</strong> 7-10 days with consulting ($3,000)
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    Q: What if my project fails the audit?
+                </div>
+                <div class="faq-answer">
+                    A: Scores below 50 are not published publicly. You receive a private report with areas for improvement. You can re-apply after addressing issues (50% discount on re-audit).
+                </div>
+            </div>
+        </div>
+
+        <div class="panel">
+            <h2>🆘 Support & Troubleshooting</h2>
+            
+            <div class="faq-item">
+                <div class="faq-question">
+                    Q: MetaMask isn't connecting. What do I do?
+                </div>
+                <div class="faq-answer">
+                    A: Common fixes:
+                    <ol>
+                        <li>Make sure you're on <strong>Sepolia Testnet</strong> in MetaMask</li>
+                        <li>Refresh the page and try again</li>
+                        <li>Check browser console (F12) for errors</li>
+                        <li>Try a different browser (Chrome recommended)</li>
+                        <li>Update MetaMask extension to latest version</li>
+                    </ol>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    Q: Transaction failed. Why?
+                </div>
+                <div class="faq-answer">
+                    A: Most common reasons:
+                    <ul>
+                        <li><strong>Insufficient Sepolia ETH:</strong> Get more from a faucet</li>
+                        <li><strong>Insufficient VLFY balance:</strong> Claim from faucet first</li>
+                        <li><strong>Not approved:</strong> Click "Activate" button again, it will request approval</li>
+                        <li><strong>Network congestion:</strong> Wait and try again</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    Q: How do I get support?
+                </div>
+                <div class="faq-answer">
+                    A: <strong>Support channels (coming soon):</strong>
+                    <ul>
+                        <li>Discord support server</li>
+                        <li>Email: support@validify.io</li>
+                        <li>Documentation at docs.validify.io</li>
+                    </ul>
+                    <strong>Response time:</strong> &lt;24 hours for all tiers
+                </div>
+            </div>
+        </div>
+
+        <div style="margin-top: 30px;">
+            <a href="index.html" class="btn secondary">← Back to Dashboard</a>
+        </div>
+
+        <footer>
+            <div class="footer-links">
+                <a href="index.html">Dashboard</a>
+                <span style="color: #666;">|</span>
+                <a href="trust.html">Trust & Safety</a>
+                <span style="color: #666;">|</span>
+                <a href="faq.html">FAQ</a>
+                <span style="color: #666;">|</span>
+                <a href="docs.html">Documentation</a>
+            </div>
+            <div style="color: #888; font-size: 0.9em;">
+                © 2025 Validify. Web3 Discord Security Protocol.
+            </div>
+        </footer>
+    </div>
+</body>
+</html>
