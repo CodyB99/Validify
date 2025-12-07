@@ -540,7 +540,7 @@
                     </div>
                     <div style="margin-top: 6px;">
                         <a class="feed-link" href="${ev.evidenceHref}" target="_blank" rel="noopener noreferrer">
-                            ${ev.evidencelabel} →
+                            ${ev.evidenceLabel} →
                         </a>
                     </div>
                 `;
@@ -663,18 +663,10 @@
                     const daysEl = document.getElementById('daysRemaining');
                     if (daysEl) daysEl.textContent = daysRemaining;
             
-                    // Header mini-stat (kept same id)
-                    const servicesEl = document.getElementById('services');
-
-                    else {
-                        // Placeholder for real bot telemetry later
-                        if (servicesEl) servicesEl.textContent = isActive ? "—" : "0";
-                    }
-            
                     // 5) Demo telemetry + feed
                     if (DEMO_MODE) {
                         const m = getDemoMetrics(isActive, tierIndex);
-                        
+            
                         // Header mini-stat = total activity
                         const totalActivity = m.links + m.roles + m.bots + m.webhooks;
                         const servicesEl = document.getElementById('services');
@@ -699,7 +691,6 @@
                     console.error('Load error:', e);
                 }
             }
-
 
         async function claimFaucet() {
             if (!state.tokenContract) {
