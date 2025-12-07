@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Validify: Web3 Discord Security Protocol - LIVE</title>
+    <title>Validify: Discord Security Prototype (Testnet)</title>
     <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -154,35 +154,40 @@
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
-        @media (max-width: 1024px) { .grid { grid-template-columns: 1fr; } }
-        
-        footer {
-            background: rgba(0, 0, 0, 0.6);
-            border-top: 2px solid #00ff88;
-            border-radius: 15px;
-            padding: 25px;
-            margin-top: 40px;
-            text-align: center;
+                .feed-list {
+            margin-top: 10px;
+            max-height: 260px;
+            overflow-y: auto;
+            padding-right: 6px;
         }
-        footer a {
+        .feed-item {
+            background: rgba(0, 0, 0, 0.35);
+            border: 1px solid rgba(0, 255, 136, 0.35);
+            border-radius: 10px;
+            padding: 12px;
+            margin: 8px 0;
+        }
+        .feed-title {
             color: #00d4ff;
-            text-decoration: none;
-            margin: 0 15px;
-            transition: color 0.3s;
+            font-size: 0.98em;
+            margin-bottom: 6px;
         }
-        footer a:hover { color: #00ff88; }
-        .footer-links {
+        .feed-meta {
+            color: #bbb;
+            font-size: 0.82em;
             display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
             gap: 10px;
-            margin-bottom: 15px;
+            flex-wrap: wrap;
         }
-        .footer-social {
-            margin-top: 15px;
-            padding-top: 15px;
-            border-top: 1px solid rgba(0, 255, 136, 0.3);
+        .feed-link {
+            color: #00ff88;
+            text-decoration: none;
+            font-size: 0.85em;
         }
+        .feed-link:hover {
+            text-decoration: underline;
+        }
+        @media (max-width: 1024px) { .grid { grid-template-columns: 1fr; } }
     </style>
 </head>
 <body>
@@ -198,13 +203,24 @@
     <div class="container">
         <header>
             <h1>🛡️ VALIDIFY</h1>
-            <p style="font-size: 1.2em; color: #00d4ff; margin: 10px 0;">Enterprise Discord Security Protocol</p>
+            <p style="font-size: 1.2em; color: #00d4ff; margin: 10px 0;">
+                Discord Threat Prevention + Verification (Prototype)
+            </p>
             <div>
-                <span class="badge">🔥 LIVE on Sepolia</span>
-                <span class="badge">✅ Real Contracts</span>
-                <span class="badge">💎 VLFY Token Active</span>
+                <span class="badge">🧪 Testnet Prototype (Sepolia)</span>
+                <span class="badge">🔍 Subscription + Access Layer</span>
+                <span class="badge">🛠 Security Engine In Progress</span>
             </div>
-            <button class="wallet-btn" id="connectBtn" onclick="connectWallet()">🦊 Connect MetaMask</button>
+            <p style="color: #bbb; font-size: 0.95em; margin-top: 12px;">
+                This page is for concept testing. VLFY is a testnet access token used to validate subscription flows.
+            </p>
+            <div style="margin-top: 14px;">
+                <a class="wallet-btn" href="trust.html" style="text-decoration:none; display:inline-block;">
+                    ✅ Trust & Safety (Prototype)
+                </a>
+            </div>
+
+                <button class="wallet-btn" id="connectBtn" onclick="connectWallet()">🦊 Connect MetaMask</button>
             
             <div class="wallet-info" id="walletInfo">
                 <div style="color: #00ff88; font-family: monospace; font-size: 1.1em; margin-bottom: 15px;" id="address"></div>
@@ -218,7 +234,7 @@
                         <div class="stat-value" style="font-size: 1.5em;" id="vlfyBal">0</div>
                     </div>
                     <div class="stat-box">
-                        <div class="stat-label">Services</div>
+                        <div class="stat-label">Activity (24h)</div>
                         <div class="stat-value" style="font-size: 1.5em;" id="services">0</div>
                     </div>
                 </div>
@@ -229,28 +245,117 @@
             <div>
                 <div class="panel">
                     <h2>🔐 Security Services</h2>
+
+                    <p style="color:#ccc; margin-bottom: 15px;">
+                        Validify is testing an on-chain subscription layer that will unlock off-chain Discord protections
+                        delivered by a bot and monitoring system. This is an early prototype on Sepolia.
+                    </p>
+
                     
                     <div class="service-card">
                         <h3 style="color: #00d4ff; margin-bottom: 10px;">⚡ BASIC - 500 VLFY/month</h3>
-                        <p style="color: #ccc; margin-bottom: 15px;">Essential bot protection and monitoring</p>
+                        <p style="color:#aaa; font-size:0.9em; margin-top: 10px;">
+                            Safety note: Validify will never ask for your seed phrase. Wallet verification uses signature-only flows.
+                        </p>
+                        
+                        <ul style="color:#ccc; margin-bottom: 15px; padding-left: 18px;">
+                            <li>Role/permission change alerts</li>
+                            <li>Bot add/remove alerts</li>
+                            <li>New webhook alerts</li>
+                            <li>Suspicious link warnings</li>
+                        </ul>
+
                         <button class="btn" onclick="activateService(1)" id="btn1">Activate Basic</button>
                     </div>
 
                     <div class="service-card">
-                        <h3 style="color: #00d4ff; margin-bottom: 10px;">🚀 ADVANCED - 1,500 VLFY/month</h3>
-                        <p style="color: #ccc; margin-bottom: 15px;">Enhanced security with wallet verification</p>
+                        <h3 style="color: #00d4ff; margin-bottom: 10px;">🚀 ADVANCED - 1,500 VLFY (test cycle)</h3>
+                        <p style="color:#aaa; font-size:0.9em; margin-top: 10px;">
+                            Safety note: Validify will never ask for your seed phrase. Wallet verification uses signature-only flows.
+                        </p>
+                        
+                       <ul style="color:#ccc; margin-bottom: 15px; padding-left: 18px;">
+                            <li>Wallet verification via signature (no seed phrases)</li>
+                            <li>Verified domain and link warning banners</li>
+                            <li>Mod impersonation heuristic alerts</li>
+                            <li>Priority suspicious activity notifications</li>
+                       </ul>
+
                         <button class="btn" onclick="activateService(2)" id="btn2">Activate Advanced</button>
                     </div>
 
                     <div class="service-card">
-                        <h3 style="color: #00d4ff; margin-bottom: 10px;">💎 ENTERPRISE - 5,000 VLFY/month</h3>
-                        <p style="color: #ccc; margin-bottom: 15px;">Complete protection suite with analytics</p>
-                        <button class="btn" onclick="activateService(3)" id="btn3">Activate Enterprise</button>
+                        <h3 style="color: #00d4ff; margin-bottom: 10px;">💎 PRO - 5,000 VLFY (test cycle)</h3>
+                        <p style="color:#aaa; font-size:0.9em; margin-top: 10px;">
+                            Safety note: Validify will never ask for your seed phrase. Wallet verification uses signature-only flows.
+                        </p>
+
+                        <ul style="color:#ccc; margin-bottom: 15px; padding-left: 18px;">
+                            <li>Multi-server monitoring dashboard</li>
+                            <li>Anomaly detection for high-risk events</li>
+                            <li>Incident timeline and exportable logs</li>
+                            <li>Optional response playbooks (roadmap)</li>
+                        </ul>
+
+                        <button class="btn" onclick="activateService(3)" id="btn3">Activate PRO</button>
                     </div>
+                </div>
+                <div class="panel" style="margin-top: 20px;">
+                    <h2>🧩 Admin-Only Server Connect (Coming Soon)</h2>
+                
+                    <p style="color:#ccc; margin-bottom: 12px;">
+                        Validify’s Discord security engine will be delivered through an off-chain bot that connects to your server.
+                        This prototype is validating the trust-first workflow before the bot is publicly deployed.
+                    </p>
+                
+                    <div class="service-card">
+                        <h3 style="color: #00d4ff; margin-bottom: 10px;">What the bot will monitor (planned)</h3>
+                        <ul style="color:#ccc; margin-bottom: 10px; padding-left: 18px;">
+                            <li>Role and permission changes</li>
+                            <li>New bots added or removed</li>
+                            <li>Webhook creation and edits</li>
+                            <li>Suspicious link and domain patterns</li>
+                            <li>Admin impersonation and high-risk behavior signals</li>
+                        </ul>
+                        <p style="color:#aaa; font-size:0.9em;">
+                            Alerts will be evidence-backed and shown in your Validify dashboard.
+                        </p>
+                    </div>
+                
+                    <div class="service-card">
+                        <h3 style="color: #00d4ff; margin-bottom: 10px;">Minimum permissions approach</h3>
+                        <ul style="color:#ccc; margin-bottom: 10px; padding-left: 18px;">
+                            <li>View Audit Log (required for role/bot/webhook monitoring)</li>
+                            <li>View Channels</li>
+                            <li>Read Message History (only where the bot is enabled)</li>
+                            <li>Send Messages (for alerts)</li>
+                        </ul>
+                        <p style="color:#aaa; font-size:0.9em;">
+                            Validify aims to avoid broad permissions unless you enable optional auto-response features later.
+                        </p>
+                    </div>
+                
+                    <div class="service-card">
+                        <h3 style="color: #00d4ff; margin-bottom: 10px;">What Validify will NOT do</h3>
+                        <ul style="color:#ccc; margin-bottom: 10px; padding-left: 18px;">
+                            <li>Ask users for seed phrases or private keys</li>
+                            <li>Trigger wallet transactions inside Discord</li>
+                            <li>Require Admin permissions for basic alerting</li>
+                            <li>Auto-ban or auto-kick without explicit server opt-in</li>
+                        </ul>
+                    </div>
+                
+                    <button class="btn" onclick="showToast('Server connect is coming soon. This prototype is validating the trust-first flow.')" >
+                        🔗 Connect Discord Server (Admin Only) — Coming Soon
+                    </button>
+                
+                    <p style="color:#888; opacity: 0.85; font-size:0.85em; margin-top: 8px;">
+                        This button is a placeholder to validate the dashboard experience prior to bot release.
+                    </p>
                 </div>
 
                 <div class="panel" style="margin-top: 20px;">
-                    <h2>📋 Smart Contracts</h2>
+                    <h2>📋 Testnet Contracts</h2>
                     <div class="contract-address">
                         <strong style="color: #00ff88;">VLFY Token:</strong><br>
                         0x813986e8908560FDD2Eda4DE2aF10623ae845b2f
@@ -267,57 +372,64 @@
 
             <div>
                 <div class="panel">
-                    <h2>💰 Get VLFY Tokens</h2>
+                    <h2>💰 Testnet Access Tokens (VLFY)</h2>
                     <div class="stat-box">
                         <div class="stat-label">Faucet Status</div>
                         <div class="stat-value" style="font-size: 1.3em;" id="faucetStatus">Check wallet</div>
                     </div>
-                    <button class="btn" onclick="claimFaucet()" id="faucetBtn">💧 Claim 10,000 VLFY</button>
+                    <button class="btn" onclick="claimFaucet()" id="faucetBtn">💧 Claim 10,000 Testnet VLFY</button>
                     <p style="color: #888; font-size: 0.9em; margin-top: 10px; text-align: center;">
                         ℹ️ Claim once every 24 hours
                     </p>
                 </div>
 
                 <div class="panel" style="margin-top: 20px;">
-                    <h2>📊 Your Subscription</h2>
+                    <h2>📊 Security Status</h2>
+
+                    <div class="stat-box">
+                        <div class="stat-label">Protection Engine</div>
+                        <div class="stat-value" style="font-size: 1.3em;" id="engineStatus">Inactive</div>
+                    </div>
+                
                     <div class="stat-box">
                         <div class="stat-label">Active Tier</div>
-                        <div class="stat-value" style="font-size: 1.5em;" id="tier">None</div>
+                        <div class="stat-value" style="font-size: 1.5em;" id="tierName">None</div>
                     </div>
+                
                     <div class="stat-box">
                         <div class="stat-label">Days Remaining</div>
-                        <div class="stat-value" id="days">--</div>
+                        <div class="stat-value" id="daysRemaining">--</div>
                     </div>
-                    <div class="stat-box">
-                        <div class="stat-label">Status</div>
-                        <div class="stat-value" style="font-size: 1.3em;" id="status">Inactive</div>
+                
+                    <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px;">
+                        <div class="stat-box">
+                            <div class="stat-label">Links Flagged (24h)</div>
+                            <div class="stat-value" style="font-size: 1.3em;" id="linksFlagged">0</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-label">Role Alerts (24h)</div>
+                            <div class="stat-value" style="font-size: 1.3em;" id="roleAlerts">0</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-label">Bot Alerts (24h)</div>
+                            <div class="stat-value" style="font-size: 1.3em;" id="botAlerts">0</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-label">Webhook Alerts (24h)</div>
+                            <div class="stat-value" style="font-size: 1.3em;" id="webhookAlerts">0</div>
+                        </div>
                     </div>
+                
+                    <p style="color:#888; font-size:0.85em; margin-top: 10px;">
+                        Prototype feed — sample events until the bot is connected.
+                    </p>
+                
+                    <div class="feed-list" id="feedList"></div>
+                
                     <button class="btn" onclick="loadData()" style="margin-top: 15px;">🔄 Refresh Status</button>
                 </div>
             </div>
         </div>
-        
-        <footer>
-            <div class="footer-links">
-                <a href="trust.html">Trust & Safety</a>
-                <span style="color: #666;">|</span>
-                <a href="faq.html">FAQ</a>
-                <span style="color: #666;">|</span>
-                <a href="docs.html">Documentation</a>
-                <span style="color: #666;">|</span>
-                <a href="https://sepolia.etherscan.io/address/0x813986e8908560FDD2Eda4DE2aF10623ae845b2f" target="_blank">Token Contract</a>
-                <span style="color: #666;">|</span>
-                <a href="https://github.com/YOUR-USERNAME/validify" target="_blank">GitHub</a>
-            </div>
-            <div style="color: #888; font-size: 0.9em;">
-                © 2025 Validify. Web3 Discord Security Protocol.
-            </div>
-            <div class="footer-social">
-                <span style="color: #888; font-size: 0.9em;">Follow us: </span>
-                <a href="#" onclick="alert('Twitter coming soon'); return false;">Twitter</a>
-                <a href="#" onclick="alert('Discord server coming soon'); return false;">Discord</a>
-            </div>
-        </footer>
     </div>
 
     <script>
@@ -330,6 +442,7 @@
             "function balanceOf(address) view returns (uint256)",
             "function claimFaucet()",
             "function canClaimFaucet(address) view returns (bool)",
+            "function allowance(address owner, address spender) view returns (uint256)",
             "function approve(address,uint256) returns (bool)"
         ];
 
@@ -340,6 +453,116 @@
         ];
 
         let state = { provider: null, signer: null, address: null, tokenContract: null, serviceContract: null };
+            const DEMO_MODE = true;
+    
+            function getDemoMetrics(isActive, tierIndex) {
+                if (!isActive) {
+                    return { links: 0, roles: 0, bots: 0, webhooks: 0 };
+                }
+    
+                // Lightly scale demo numbers by tier
+                const scale = Math.max(1, tierIndex);
+                return {
+                    links: 3 * scale,
+                    roles: 1 * scale,
+                    bots: 1 * scale,
+                    webhooks: 1 * scale
+                };
+            }
+            function getDemoEvents(isActive, tierName) {
+                if (!isActive) return [];
+
+                return [
+                    {
+                        id: "link-001",
+                        category: "Link",
+                        title: "Suspicious domain flagged in #announcements",
+                        confidence: 0.86,
+                        time: "Recent",
+                        evidenceLabel: "View evidence",
+                        evidenceHref: "event.html?id=link-001"
+                    },
+                    {
+                        id: "roles-001",
+                        category: "Roles",
+                        title: "High-privilege role permission change detected",
+                        confidence: 0.78,
+                        time: "Recent",
+                        evidenceLabel: "Audit details",
+                        evidenceHref: "event.html?id=roles-001"
+                    },
+                    {
+                        id: "bots-001",
+                        category: "Bots",
+                        title: "New bot added with elevated permissions",
+                        confidence: 0.74,
+                        time: "Recent",
+                        evidenceLabel: "Review event",
+                        evidenceHref: "event.html?id=bots-001"
+                    },
+                    {
+                        id: "webhooks-001",
+                        category: "Webhooks",
+                        title: "New webhook created in a public channel",
+                        confidence: 0.81,
+                        time: "Recent",
+                        evidenceLabel: "Inspect log",
+                        evidenceHref: "event.html?id=webhooks-001"
+                    }
+                ];
+            }
+
+        function renderFeed(events) {
+            const feed = document.getElementById("feedList");
+            if (!feed) return;
+
+            if (!events.length) {
+                feed.innerHTML = `<div class="feed-item">
+                    <div class="feed-title">No recent events</div>
+                    <div class="feed-meta">Connect the bot to enable live monitoring.</div>
+                </div>`;
+                return;
+            }
+
+            feed.innerHTML = "";
+
+            events.forEach(ev => {
+                const item = document.createElement("div");
+                item.className = "feed-item";
+
+                item.innerHTML = `
+                    <div class="feed-title">${ev.title}</div>
+                    <div class="feed-meta">
+                        <span>Category: ${ev.category}</span>
+                        <span>Confidence: ${(ev.confidence * 100).toFixed(0)}%</span>
+                        <span>Time: ${ev.time}</span>
+                        <span>Tier: ${tierNameSafe()}</span>
+                    </div>
+                    <div style="margin-top: 6px;">
+                        <a class="feed-link" href="${ev.evidenceHref}" target="_blank" rel="noopener noreferrer">
+                            ${ev.evidenceLabel} →
+                        </a>
+                    </div>
+                `;
+
+                const link = item.querySelector(".feed-link");
+                if (link) {
+                    link.addEventListener("click", (e) => {
+                        if (!ev.evidenceHref || ev.evidenceHref === "#") {
+                            e.preventDefault();
+                            showToast("Evidence pages coming soon. Still in Alpha phase of testing.");
+                        }
+                    });
+                }
+                
+                feed.appendChild(item);
+            });
+
+            function tierNameSafe() {
+                return document.getElementById("tierName")?.textContent || "Unknown";
+            }
+        }
+
 
         async function connectWallet() {
             try {
@@ -386,33 +609,88 @@
             }
         }
 
-        async function loadData() {
-            if (!state.address) {
-                showToast('Connect wallet first!', true);
-                return;
+            async function loadData() {
+                if (!state.address) {
+                    showToast('Connect wallet first!', true);
+                    return;
+                }
+            
+                try {
+                    // 1) ETH balance
+                    const ethBal = await state.provider.getBalance(state.address);
+                    const ethEl = document.getElementById('ethBal');
+                    if (ethEl) {
+                        ethEl.textContent = parseFloat(ethers.utils.formatEther(ethBal)).toFixed(3);
+                    }
+            
+                    // 2) VLFY balance
+                    const vlfyBal = await state.tokenContract.balanceOf(state.address);
+                    const vlfyEl = document.getElementById('vlfyBal');
+                    if (vlfyEl) {
+                        vlfyEl.textContent = ethers.utils.formatEther(vlfyBal).split('.')[0];
+                    }
+            
+                    // 3) Faucet cooldown + button state
+                    const canClaim = await state.tokenContract.canClaimFaucet(state.address);
+                    const faucetStatusEl = document.getElementById('faucetStatus');
+                    const faucetBtnEl = document.getElementById('faucetBtn');
+            
+                    if (faucetStatusEl) {
+                        faucetStatusEl.textContent = canClaim ? 'Ready!' : 'Wait 24h';
+                    }
+                    if (faucetBtnEl) {
+                        faucetBtnEl.disabled = !canClaim;
+                    }
+            
+                    // 4) Subscription data
+                    const sub = await state.serviceContract.getSubscription(state.address);
+            
+                    // You renamed Enterprise to PRO in UI
+                    const tierNames = ['None', 'Basic', 'Advanced', 'Pro'];
+            
+                    const tierIndex = Number(sub[0]);
+                    const tierName = tierNames[tierIndex] || "None";
+                    const isActive = Boolean(sub[3]);
+                    const daysRemaining = sub[4].toString();
+            
+                    // Security Status panel fields
+                    const engineEl = document.getElementById('engineStatus');
+                    if (engineEl) engineEl.textContent = isActive ? 'Active' : 'Inactive';
+            
+                    const tierEl = document.getElementById('tierName');
+                    if (tierEl) tierEl.textContent = tierName;
+            
+                    const daysEl = document.getElementById('daysRemaining');
+                    if (daysEl) daysEl.textContent = daysRemaining;
+            
+                    // 5) Demo telemetry + feed
+                    if (DEMO_MODE) {
+                        const m = getDemoMetrics(isActive, tierIndex);
+            
+                        // Header mini-stat = total activity
+                        const totalActivity = m.links + m.roles + m.bots + m.webhooks;
+                        const servicesEl = document.getElementById('services');
+                        if (servicesEl) servicesEl.textContent = isActive ? String(totalActivity) : "0";
+            
+                        const lf = document.getElementById('linksFlagged');
+                        if (lf) lf.textContent = m.links;
+            
+                        const ra = document.getElementById('roleAlerts');
+                        if (ra) ra.textContent = m.roles;
+            
+                        const ba = document.getElementById('botAlerts');
+                        if (ba) ba.textContent = m.bots;
+            
+                        const wa = document.getElementById('webhookAlerts');
+                        if (wa) wa.textContent = m.webhooks;
+            
+                        renderFeed(getDemoEvents(isActive, tierName));
+                    }
+            
+                } catch (e) {
+                    console.error('Load error:', e);
+                }
             }
-
-            try {
-                const ethBal = await state.provider.getBalance(state.address);
-                document.getElementById('ethBal').textContent = parseFloat(ethers.utils.formatEther(ethBal)).toFixed(3);
-
-                const vlfyBal = await state.tokenContract.balanceOf(state.address);
-                document.getElementById('vlfyBal').textContent = ethers.utils.formatEther(vlfyBal).split('.')[0];
-
-                const canClaim = await state.tokenContract.canClaimFaucet(state.address);
-                document.getElementById('faucetStatus').textContent = canClaim ? 'Ready!' : 'Wait 24h';
-                document.getElementById('faucetBtn').disabled = !canClaim;
-
-                const sub = await state.serviceContract.getSubscription(state.address);
-                const tierNames = ['None', 'Basic', 'Advanced', 'Enterprise'];
-                document.getElementById('tier').textContent = tierNames[sub[0]];
-                document.getElementById('days').textContent = sub[4].toString();
-                document.getElementById('status').textContent = sub[3] ? 'Active' : 'Inactive';
-                document.getElementById('services').textContent = sub[3] ? '1' : '0';
-            } catch (e) {
-                console.error('Load error:', e);
-            }
-        }
 
         async function claimFaucet() {
             if (!state.tokenContract) {
@@ -420,14 +698,21 @@
                 return;
             }
 
-            try {
-                showModal('Claiming 10,000 VLFY...');
-                const tx = await state.tokenContract.claimFaucet();
-                updateModal('Waiting for confirmation...');
-                await tx.wait();
-                hideModal();
-                showToast('Successfully claimed 10,000 VLFY!');
-                loadData();
+           try {
+                const canClaim = await state.tokenContract.canClaimFaucet(state.address);
+                if (!canClaim) {
+                    showToast('Faucet cooldown active. Please wait 24h.', true);
+                    return;
+               }
+
+               showModal('Claiming 10,000 VLFY...');
+               const tx = await state.tokenContract.claimFaucet();
+               updateModal('Waiting for confirmation...');
+               await tx.wait();
+               
+               hideModal();
+               showToast('Successfully claimed 10,000 VLFY!');
+               loadData();
             } catch (e) {
                 hideModal();
                 showToast('Claim failed: ' + e.message, true);
@@ -441,17 +726,25 @@
             }
 
             const prices = [0, 500, 1500, 5000];
-            const price = ethers.utils.parseEther(prices[tier].toString());
+            const priceLabel = prices[tier];
+            const price = ethers.utils.parseEther(priceLabel.toString());
 
             try {
                 showModal('Checking allowance...');
-                
+
                 const allowance = await state.tokenContract.allowance(state.address, CONTRACTS.service);
+
                 if (allowance.lt(price)) {
-                    updateModal('Approving VLFY tokens...');
+                    updateModal(
+                        `Approval needed: Allow Service Manager to spend ${prices[tier]} VLFY ` +
+                        `to activate your selected tier.`
+                    );
+
                     const approveTx = await state.tokenContract.approve(CONTRACTS.service, price);
+                    updateModal('Waiting for approval confirmation...');
                     await approveTx.wait();
                 }
+
 
                 updateModal('Activating service...');
                 const tx = await state.serviceContract.activateService(tier);
