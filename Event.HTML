@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Security Event Details - Validify</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #ffffff;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container { max-width: 900px; margin: 0 auto; }
+        .panel {
+            background: rgba(0, 0, 0, 0.7);
+            border: 2px solid #00ff88;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 20px;
+        }
+        h1 {
+            font-size: 2.5em;
+            background: linear-gradient(45deg, #00ff88, #00d4ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+        .badge {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 15px;
+            font-size: 0.85em;
+            margin: 5px 5px 20px 0;
+        }
+        .badge.prototype { background: #667eea; border: 1px solid #00ff88; }
+        .badge.high { background: #ff4444; }
+        .badge.medium { background: #ffaa00; }
+        .badge.low { background: #00ff88; color: #000; }
+        .event-header {
+            border-bottom: 2px solid #00ff88;
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+        }
+        .event-title {
+            font-size: 1.8em;
+            color: #00d4ff;
+            margin-bottom: 10px;
+        }
+        .meta-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .meta-item {
+            background: rgba(0, 255, 136, 0.1);
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid rgba(0, 255, 136, 0.3);
+        }
+        .meta-label {
+            font-size: 0.85em;
+            color: #00d4ff;
+            margin-bottom: 5px;
+        }
+        .meta-value {
+            font-size: 1.1em;
+            color: #00ff88;
+            font-weight: bold;
+        }
+        .detail-section {
+            margin: 25px 0;
+        }
+        .detail-section h3 {
+            color: #00ff88;
+            margin-bottom: 12px;
+            font-size: 1.3em;
+        }
+        .detail-content {
+            background: rgba(0, 0, 0, 0.4);
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #00ff88;
+            line-height: 1.6;
+        }
+        .code-block {
+            background: rgba(0, 0, 0, 0.6);
+            padding: 12px;
+            border-radius: 6px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            overflow-x: auto;
+            margin: 10px 0;
+        }
+        .btn {
+            background: linear-gradient(135deg, #00ff88, #00d4ff);
+            color: #000;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            margin: 5px;
+        }
+        .btn:hover { transform: scale(1.02); }
+        .btn.secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            border: 1px solid #00ff88;
+        }
+        .timeline {
+            border-left: 3px solid #00ff88;
+            padding-left: 20px;
+            margin-left: 10px;
+        }
+        .timeline-item {
+            margin-bottom: 20px;
+            position: relative;
+        }
+        .timeline-item:before {
+            content: '';
+            position: absolute;
+            left: -26px;
+            top: 5px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #00ff88;
+            border: 3px solid #667eea;
+        }
+        .timeline-time {
+            color: #00d4ff;
+            font-size: 0.9em;
+            margin-bottom: 5px;
+        }
+        .alert-box {
+            background: rgba(255, 170, 0, 0.2);
+            border: 2px solid #ffaa00;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        .alert-box h4 {
+            color: #ffaa00;
+            margin-bottom: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="panel">
+            <h1>🔍 Security Event Details</h1>
+            <span class="badge prototype">🧪 Prototype Event</span>
+            <span class="badge medium" id="severityBadge">Medium Risk</span>
+            
+            <div class="event-header">
+                <div class="event-title" id="eventTitle">Loading event...</div>
+            </div>
+
+            <div class="meta-grid">
+                <div class="meta-item">
+                    <div class="meta-label">Event ID</div>
+                    <div class="meta-value" id="eventId">--</div>
+                </div>
+                <div class="meta-item">
+                    <div class="meta-label">Category</div>
+                    <div class="meta-value" id="category">--</div>
+                </div>
+                <div class="meta-item">
+                    <div class="meta-label">Confidence Score</div>
+                    <div class="meta-value" id="confidence">--</div>
+                </div>
+                <div class="meta-item">
+                    <div class="meta-label">Detected</div>
+                    <div class="meta-value" id="detectedTime">--</div>
+                </div>
+            </div>
+
+            <div class="alert-box">
+                <h4>⚠️ Prototype Notice</h4>
+                <p>This is a simulated security event for demonstration purposes. In production, this page would show real evidence from your Discord server's audit logs and monitoring systems.</p>
+            </div>
+
+            <div class="detail-section">
+                <h3>📋 Event Description</h3>
+                <div class="detail-content" id="description">
+                    Loading event details...
+                </div>
+            </div>
+
+            <div class="detail-section">
+                <h3>🔬 Evidence & Analysis</h3>
+                <div class="detail-content" id="evidence">
+                    <p>In a production environment, this section would include:</p>
+                    <ul style="margin-left: 20px; line-height: 1.8;">
+                        <li>Discord audit log entries</li>
+                        <li>User account information</li>
+                        <li>Timestamps and IP addresses (if available)</li>
+                        <li>Pattern analysis results</li>
+                        <li>Risk assessment reasoning</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="detail-section">
+                <h3>⏱️ Event Timeline</h3>
+                <div class="timeline" id="timeline">
+                    <div class="timeline-item">
+                        <div class="timeline-time">Loading timeline...</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="detail-section">
+                <h3>🛠️ Recommended Actions</h3>
+                <div class="detail-content" id="recommendations">
+                    Loading recommendations...
+                </div>
+            </div>
+
+            <div style="margin-top: 30px;">
+                <a href="index.html" class="btn secondary">← Back to Dashboard</a>
+                <button class="btn" onclick="alert('Export functionality coming soon in production version')">📥 Export Report</button>
+            </div>
+        </div>
+
+        <div class="panel">
+            <h3 style="color: #00ff88; margin-bottom: 15px;">💡 About This Page</h3>
+            <p style="color: #ccc; line-height: 1.6;">
+                This is a prototype evidence page that demonstrates how Validify will present security events to server administrators. 
+                When the Discord bot is live, this page will display real-time data from your server's monitoring systems, 
+                including detailed evidence, confidence scoring, and actionable recommendations.
+            </p>
+        </div>
+    </div>
+
+    <script>
+        // Get event ID from URL parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        const eventId = urlParams.get('id') || 'unknown';
+
+        // Demo event data
+        const eventData = {
+            'link-001': {
+                title: 'Suspicious Domain Flagged in #announcements',
+                category: 'Phishing Link',
+                confidence: 86,
+                severity: 'high',
+                detected: 'Dec 6, 2025 - 14:32 UTC',
+                description: 'A potentially malicious link was detected in the #announcements channel. The domain matches known phishing patterns and was posted by a recently created account with elevated permissions.',
+                evidence: `
+                    <strong>Detected URL:</strong><br>
+                    <div class="code-block">https://totally-not-a-scam-mint-link.xyz/mint</div>
+                    
+                    <strong>Risk Factors:</strong>
+                    <ul style="margin-left: 20px; margin-top: 10px; line-height: 1.8;">
+                        <li>Domain registered 2 days ago</li>
+                        <li>Uses misleading NFT project name</li>
+                        <li>SSL certificate from free provider</li>
+                        <li>No social media presence</li>
+                        <li>Posted by account created within last 48 hours</li>
+                    </ul>
+                `,
+                timeline: [
+                    { time: '14:30 UTC', event: 'New moderator account created' },
+                    { time: '14:31 UTC', event: 'Account granted "Mod" role' },
+                    { time: '14:32 UTC', event: 'Suspicious link posted in #announcements' },
+                    { time: '14:32 UTC', event: 'Validify alert triggered' },
+                    { time: '14:33 UTC', event: 'Link flagged and admin notified' }
+                ],
+                recommendations: `
+                    <strong>Immediate Actions:</strong>
+                    <ol style="margin-left: 20px; margin-top: 10px; line-height: 1.8;">
+                        <li>Remove the flagged message</li>
+                        <li>Verify the moderator account's identity</li>
+                        <li>Check if other admins' accounts are compromised</li>
+                        <li>Enable multi-signature link verification</li>
+                        <li>Post a warning in announcements about the phishing attempt</li>
+                    </ol>
+                `
+            },
+            'roles-001': {
+                title: 'High-Privilege Role Permission Change Detected',
+                category: 'Role Modification',
+                confidence: 78,
+                severity: 'medium',
+                detected: 'Dec 6, 2025 - 11:15 UTC',
+                description: 'The "Admin" role permissions were modified to include additional dangerous permissions. This change was made outside of normal maintenance windows.',
+                evidence: `
+                    <strong>Modified Role:</strong> Admin<br>
+                    <strong>Changed By:</strong> @ModeratorAccount#1234<br>
+                    
+                    <strong>Permission Changes:</strong>
+                    <div class="code-block">
++ Administrator (DANGEROUS)
++ Manage Server
++ Manage Webhooks
+                    </div>
+                    
+                    <strong>Risk Assessment:</strong>
+                    <ul style="margin-left: 20px; margin-top: 10px; line-height: 1.8;">
+                        <li>Change made at unusual time (3 AM server time)</li>
+                        <li>No prior announcement or approval</li>
+                        <li>Account has no history of permission changes</li>
+                    </ul>
+                `,
+                timeline: [
+                    { time: '11:10 UTC', event: 'ModeratorAccount logged in from new IP' },
+                    { time: '11:15 UTC', event: 'Admin role permissions modified' },
+                    { time: '11:15 UTC', event: 'Validify detected anomaly' },
+                    { time: '11:16 UTC', event: 'Alert sent to server owner' }
+                ],
+                recommendations: `
+                    <strong>Review Required:</strong>
+                    <ol style="margin-left: 20px; margin-top: 10px; line-height: 1.8;">
+                        <li>Verify this change was intentional with the moderator</li>
+                        <li>Review recent audit logs for other suspicious activity</li>
+                        <li>Consider revoking and re-granting permissions as needed</li>
+                        <li>Enable role change notifications for all admin roles</li>
+                    </ol>
+                `
+            },
+            'bots-001': {
+                title: 'New Bot Added with Elevated Permissions',
+                category: 'Bot Addition',
+                confidence: 74,
+                severity: 'medium',
+                detected: 'Dec 6, 2025 - 09:42 UTC',
+                description: 'A new bot was added to the server with administrator permissions. The bot is not on the approved whitelist.',
+                evidence: `
+                    <strong>Bot Name:</strong> Totally Legit Helper Bot<br>
+                    <strong>Bot ID:</strong> 123456789012345678<br>
+                    <strong>Added By:</strong> @TeamMember#5678<br>
+                    
+                    <strong>Granted Permissions:</strong>
+                    <div class="code-block">
++ Administrator
++ Manage Channels
++ Manage Roles
++ Manage Messages
+                    </div>
+                    
+                    <strong>Concerns:</strong>
+                    <ul style="margin-left: 20px; margin-top: 10px; line-height: 1.8;">
+                        <li>Bot has administrator permission (unrestricted access)</li>
+                        <li>Not on server's approved bot whitelist</li>
+                        <li>Bot account created less than 1 week ago</li>
+                        <li>No verification badge from Discord</li>
+                    </ul>
+                `,
+                timeline: [
+                    { time: '09:40 UTC', event: 'OAuth authorization initiated' },
+                    { time: '09:42 UTC', event: 'Bot added to server' },
+                    { time: '09:42 UTC', event: 'Bot granted administrator role' },
+                    { time: '09:42 UTC', event: 'Validify flagged unauthorized bot' },
+                    { time: '09:43 UTC', event: 'Alert sent to admins' }
+                ],
+                recommendations: `
+                    <strong>Security Review:</strong>
+                    <ol style="margin-left: 20px; margin-top: 10px; line-height: 1.8;">
+                        <li>Verify the bot's purpose and legitimacy</li>
+                        <li>Review bot's source/developer</li>
+                        <li>Remove administrator permission immediately</li>
+                        <li>Grant only minimum required permissions</li>
+                        <li>Add legitimate bots to approved whitelist</li>
+                    </ol>
+                `
+            },
+            'webhooks-001': {
+                title: 'New Webhook Created in Public Channel',
+                category: 'Webhook Activity',
+                confidence: 81,
+                severity: 'medium',
+                detected: 'Dec 6, 2025 - 16:20 UTC',
+                description: 'A webhook was created in the #general channel. Webhooks can be used to impersonate users or post malicious content.',
+                evidence: `
+                    <strong>Webhook Name:</strong> Community Updates<br>
+                    <strong>Channel:</strong> #general<br>
+                    <strong>Created By:</strong> @CommunityManager#9012<br>
+                    
+                    <strong>Webhook Details:</strong>
+                    <div class="code-block">
+Name: Community Updates
+Avatar: Custom image uploaded
+Channel: #general (public)
+                    </div>
+                    
+                    <strong>Risk Factors:</strong>
+                    <ul style="margin-left: 20px; margin-top: 10px; line-height: 1.8;">
+                        <li>Webhook URL could be leaked or stolen</li>
+                        <li>Can post messages appearing to be from anyone</li>
+                        <li>Created in high-traffic public channel</li>
+                        <li>No announced purpose or approval</li>
+                    </ul>
+                `,
+                timeline: [
+                    { time: '16:18 UTC', event: 'User accessed webhook creation menu' },
+                    { time: '16:20 UTC', event: 'Webhook created in #general' },
+                    { time: '16:20 UTC', event: 'Validify logged webhook creation' },
+                    { time: '16:21 UTC', event: 'Notification sent to server admins' }
+                ],
+                recommendations: `
+                    <strong>Webhook Security:</strong>
+                    <ol style="margin-left: 20px; margin-top: 10px; line-height: 1.8;">
+                        <li>Verify the webhook's intended purpose</li>
+                        <li>Ensure webhook URL is kept secure</li>
+                        <li>Consider moving to announcement-only channel</li>
+                        <li>Monitor webhook usage for suspicious activity</li>
+                        <li>Delete webhook if not actively needed</li>
+                    </ol>
+                `
+            }
+        };
+
+        // Load event data
+        const event = eventData[eventId];
+        
+        if (event) {
+            document.getElementById('eventTitle').textContent = event.title;
+            document.getElementById('eventId').textContent = eventId;
+            document.getElementById('category').textContent = event.category;
+            document.getElementById('confidence').textContent = event.confidence + '%';
+            document.getElementById('detectedTime').textContent = event.detected;
+            document.getElementById('description').innerHTML = event.description;
+            document.getElementById('evidence').innerHTML = event.evidence;
+            document.getElementById('recommendations').innerHTML = event.recommendations;
+            
+            // Set severity badge
+            const badge = document.getElementById('severityBadge');
+            badge.className = 'badge ' + event.severity;
+            badge.textContent = event.severity.charAt(0).toUpperCase() + event.severity.slice(1) + ' Risk';
+            
+            // Build timeline
+            const timelineHtml = event.timeline.map(item => `
+                <div class="timeline-item">
+                    <div class="timeline-time">${item.time}</div>
+                    <div>${item.event}</div>
+                </div>
+            `).join('');
+            document.getElementById('timeline').innerHTML = timelineHtml;
+            
+        } else {
+            document.getElementById('eventTitle').textContent = 'Event Not Found';
+            document.getElementById('description').innerHTML = `
+                <p>The event ID "${eventId}" was not found in our demo database.</p>
+                <p style="margin-top: 10px;">This is a prototype page. In production, this would query real security events from your Discord server's monitoring system.</p>
+            `;
+        }
+    </script>
+</body>
+</html>
