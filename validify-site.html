@@ -147,6 +147,9 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
+            font-size: 1.4rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
         }
 
         .nav-links {
@@ -183,7 +186,7 @@
         }
 
         .dropdown-toggle::after {
-            content: 'â–¼';
+            content: '▼';
             font-size: 0.6rem;
             transition: transform 0.3s ease;
         }
@@ -568,7 +571,7 @@
         }
 
         .service-features li::before {
-            content: 'âœ“';
+            content: '✓';
             color: var(--primary);
             font-weight: bold;
         }
@@ -734,7 +737,7 @@
         }
 
         .pricing-features li::before {
-            content: 'âœ“';
+            content: '✓';
             color: var(--primary);
             font-weight: bold;
             margin-top: 2px;
@@ -1170,21 +1173,21 @@
                     <a href="#services" class="dropdown-toggle">Services</a>
                     <div class="dropdown-menu">
                         <a href="#services">
-                            <div class="dropdown-icon">ðŸ”</div>
+                            <div class="dropdown-icon">🔐</div>
                             <div>
                                 <strong>Multi-Sig Verification</strong>
                                 <small style="display:block; color:var(--text-muted);">Prevent fake link posts</small>
                             </div>
                         </a>
                         <a href="#services">
-                            <div class="dropdown-icon">ðŸ“Š</div>
+                            <div class="dropdown-icon">📊</div>
                             <div>
                                 <strong>Security Monitoring</strong>
                                 <small style="display:block; color:var(--text-muted);">Real-time threat detection</small>
                             </div>
                         </a>
                         <a href="#services">
-                            <div class="dropdown-icon">âœ…</div>
+                            <div class="dropdown-icon">✅</div>
                             <div>
                                 <strong>Project Audits</strong>
                                 <small style="display:block; color:var(--text-muted);">Trust scoring for NFT projects</small>
@@ -1211,17 +1214,17 @@
     <section id="home" class="hero">
         <div class="hero-content">
             <div class="hero-badge">
-                <span>ðŸ§ª</span>
+                <span>🧪</span>
                 <span>Currently in Beta on Sepolia Testnet</span>
             </div>
             <h1>Protect Your Discord From <span>Compromised Admins</span></h1>
             <p class="hero-subtitle">
                 The first multi-signature link verification system for Discord. 
-                Stop fake mint links before they're posted â€” not after the damage is done.
+                Stop fake mint links before they're posted — not after the damage is done.
             </p>
             <div class="hero-buttons">
                 <a href="dashboard.html" class="btn btn-primary">
-                    ðŸš€ Launch Dashboard
+                    🚀 Launch Dashboard
                 </a>
                 <a href="#how-it-works" class="btn btn-secondary">
                     Learn How It Works
@@ -1257,23 +1260,23 @@
 
             <div class="problem-grid">
                 <div class="problem-card">
-                    <div class="problem-icon">ðŸ’€</div>
+                    <div class="problem-icon">💀</div>
                     <div class="problem-stat">$2B+</div>
                     <h3>Lost Annually</h3>
                     <p>Web3 communities lose billions each year to Discord-based phishing attacks and compromised admin accounts.</p>
                 </div>
                 <div class="problem-card">
-                    <div class="problem-icon">ðŸŽ¯</div>
+                    <div class="problem-icon">🎯</div>
                     <h3>Admin Account Takeover</h3>
                     <p>Hackers target admin accounts with phishing, SIM swaps, and malware. One compromised account = full server access.</p>
                 </div>
                 <div class="problem-card">
-                    <div class="problem-icon">âš¡</div>
+                    <div class="problem-icon">⚡</div>
                     <h3>Fake Mint Links</h3>
                     <p>Attackers post malicious mint links in announcements. By the time mods react, wallets are already drained.</p>
                 </div>
                 <div class="problem-card">
-                    <div class="problem-icon">ðŸ”“</div>
+                    <div class="problem-icon">🔓</div>
                     <h3>No Accountability</h3>
                     <p>Discord's audit logs are easily manipulated. There's no immutable proof of who posted what and when.</p>
                 </div>
@@ -1294,7 +1297,7 @@
 
             <div class="services-grid">
                 <div class="service-card">
-                    <div class="service-icon">ðŸ”</div>
+                    <div class="service-icon">🔐</div>
                     <h3>Multi-Signature Link Verification</h3>
                     <p>Require multiple admins to approve any link before it's posted. Like a multi-sig wallet, but for your Discord announcements.</p>
                     <ul class="service-features">
@@ -1306,7 +1309,7 @@
                 </div>
 
                 <div class="service-card">
-                    <div class="service-icon">ðŸ“Š</div>
+                    <div class="service-icon">📊</div>
                     <h3>Real-Time Security Monitoring</h3>
                     <p>24/7 monitoring of your Discord server for suspicious activity, with instant alerts to your admin team.</p>
                     <ul class="service-features">
@@ -1318,7 +1321,7 @@
                 </div>
 
                 <div class="service-card">
-                    <div class="service-icon">âœ…</div>
+                    <div class="service-icon">✅</div>
                     <h3>Project Trust Audits</h3>
                     <p>Comprehensive security audits for NFT projects with a 0-100 trust score that builds investor confidence.</p>
                     <ul class="service-features">
@@ -1356,7 +1359,7 @@
                     <div class="step-number">2</div>
                     <div class="step-content">
                         <h3>Add Validify Bot to Your Server</h3>
-                        <p>Invite our Discord bot with minimal permissions. We only request what's needed for security monitoring â€” no admin access required.</p>
+                        <p>Invite our Discord bot with minimal permissions. We only request what's needed for security monitoring — no admin access required.</p>
                     </div>
                 </div>
 
@@ -1464,12 +1467,12 @@
                     <h3>Why We Built Validify</h3>
                     <p>
                         We've watched too many communities get destroyed by a single compromised admin account. 
-                        Projects with months of work, thousands of members, and millions in TVL â€” wiped out in minutes 
+                        Projects with months of work, thousands of members, and millions in TVL — wiped out in minutes 
                         because of a fake mint link.
                     </p>
                     <p>
                         Existing solutions are reactive. They detect bad links after they're posted. 
-                        By then, wallets are already drained. Validify is different â€” we prevent 
+                        By then, wallets are already drained. Validify is different — we prevent 
                         malicious links from ever being posted in the first place.
                     </p>
                     <p>
@@ -1480,19 +1483,19 @@
 
                 <div class="about-values">
                     <div class="value-card">
-                        <h4>ðŸ”’ Security First</h4>
+                        <h4>🔒 Security First</h4>
                         <p>We never ask for seed phrases. Signature-only verification. Minimal permissions.</p>
                     </div>
                     <div class="value-card">
-                        <h4>ðŸŽ¯ Prevention > Detection</h4>
+                        <h4>🎯 Prevention > Detection</h4>
                         <p>Stop threats before they happen, not after the damage is done.</p>
                     </div>
                     <div class="value-card">
-                        <h4>ðŸ“œ Transparency</h4>
+                        <h4>📜 Transparency</h4>
                         <p>Blockchain-verified audit trails. Open about what data we collect.</p>
                     </div>
                     <div class="value-card">
-                        <h4>ðŸ¤ Community Driven</h4>
+                        <h4>🤝 Community Driven</h4>
                         <p>Built with feedback from real project founders and community managers.</p>
                     </div>
                 </div>
@@ -1592,26 +1595,26 @@
                     <p>
                         Whether you're a project founder looking to protect your community, 
                         an investor wanting to verify a project's security, or just curious 
-                        about how Validify works â€” we're here to help.
+                        about how Validify works — we're here to help.
                     </p>
 
                     <div class="contact-methods">
                         <a href="https://discord.gg/validify" class="contact-method" target="_blank">
-                            <div class="contact-method-icon">ðŸ’¬</div>
+                            <div class="contact-method-icon">💬</div>
                             <div>
                                 <strong>Discord</strong>
                                 <small style="display:block; color:var(--text-muted);">Join our community server</small>
                             </div>
                         </a>
                         <a href="https://twitter.com/validifyprotocol" class="contact-method" target="_blank">
-                            <div class="contact-method-icon">ðŸ¦</div>
+                            <div class="contact-method-icon">🐦</div>
                             <div>
                                 <strong>Twitter</strong>
                                 <small style="display:block; color:var(--text-muted);">@validifyprotocol</small>
                             </div>
                         </a>
                         <a href="/cdn-cgi/l/email-protection#69010c050506291f0805000d000f10470006" class="contact-method">
-                            <div class="contact-method-icon">ðŸ“§</div>
+                            <div class="contact-method-icon">📧</div>
                             <div>
                                 <strong>Email</strong>
                                 <small style="display:block; color:var(--text-muted);"><span class="__cf_email__" data-cfemail="7018151c1c1f3006111c19141916095e191f">[email&#160;protected]</span></small>
@@ -1712,11 +1715,11 @@
         </div>
 
         <div class="footer-bottom">
-            <p>Â© 2025 Validify. All rights reserved. Currently in Beta on Sepolia Testnet.</p>
+            <p>© 2025 Validify. All rights reserved. Currently in Beta on Sepolia Testnet.</p>
             <div class="footer-socials">
-                <a href="https://discord.gg/validify" target="_blank" title="Discord">ðŸ’¬</a>
-                <a href="https://twitter.com/validifyprotocol" target="_blank" title="Twitter">ðŸ¦</a>
-                <a href="https://github.com/validify" target="_blank" title="GitHub">ðŸ’»</a>
+                <a href="https://discord.gg/validify" target="_blank" title="Discord">💬</a>
+                <a href="https://twitter.com/validifyprotocol" target="_blank" title="Twitter">🐦</a>
+                <a href="https://github.com/validify" target="_blank" title="GitHub">💻</a>
             </div>
         </div>
     </footer>
