@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Validify | Web3 Discord Security Protocol</title>
+    <title>Validify | Web3 Security Protocol</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Orbitron:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
         :root {
             --primary: #00ff88;
@@ -16,66 +16,229 @@
             --accent-2: #764ba2;
             --dark: #0a0a0f;
             --dark-card: rgba(10, 10, 15, 0.85);
-            --dark-lighter: #12121a;
             --text: #ffffff;
             --text-muted: #a0a0b0;
-            --danger: #ff4757;
             --warning: #ffa502;
-            --gradient-main: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
-            --gradient-dark: linear-gradient(180deg, #0a0a0f 0%, #1a1a2e 100%);
-            --glow: 0 0 40px rgba(0, 255, 136, 0.3);
+            --danger: #ff4757;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
         html { scroll-behavior: smooth; }
+        
         body {
             font-family: 'Space Grotesk', sans-serif;
-            background: var(--gradient-dark);
+            background: #000;
             color: var(--text);
             min-height: 100vh;
             overflow-x: hidden;
+            cursor: none;
         }
 
-        /* Animated Background */
-        .bg-grid {
+        /* Custom cursor */
+        .cursor {
+            width: 20px; height: 20px;
+            border: 2px solid var(--primary);
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            transition: transform 0.1s ease, background 0.2s ease;
+            mix-blend-mode: difference;
+        }
+        .cursor-dot {
+            width: 4px; height: 4px;
+            background: var(--primary);
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+        }
+        .cursor.hover {
+            transform: scale(2);
+            background: rgba(0, 255, 136, 0.2);
+        }
+
+        /* Space Background */
+        .space-bg {
             position: fixed;
             top: 0; left: 0;
             width: 100%; height: 100%;
-            background-image: 
-                linear-gradient(rgba(0, 255, 136, 0.03) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(0, 255, 136, 0.03) 1px, transparent 1px);
-            background-size: 50px 50px;
-            pointer-events: none;
+            background: radial-gradient(ellipse at center, #0a0a1a 0%, #000 100%);
             z-index: 0;
         }
+        .deep-space {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: 
+                radial-gradient(ellipse at 20% 80%, rgba(102, 126, 234, 0.1) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 20%, rgba(118, 75, 162, 0.1) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 50%, rgba(0, 255, 136, 0.05) 0%, transparent 70%);
+            z-index: 1;
+        }
+        .stars, .stars2, .stars3 {
+            position: fixed;
+            top: 0; left: 0;
+            width: 200%; height: 200%;
+            pointer-events: none;
+        }
+        .stars {
+            background-image: 
+                radial-gradient(1px 1px at 100px 50px, #fff, transparent),
+                radial-gradient(1px 1px at 200px 150px, #fff, transparent),
+                radial-gradient(1.5px 1.5px at 300px 250px, var(--primary), transparent),
+                radial-gradient(1px 1px at 400px 350px, #fff, transparent),
+                radial-gradient(1.5px 1.5px at 500px 100px, var(--secondary), transparent),
+                radial-gradient(1px 1px at 50px 200px, #fff, transparent),
+                radial-gradient(1px 1px at 150px 300px, #fff, transparent),
+                radial-gradient(2px 2px at 250px 400px, var(--accent), transparent),
+                radial-gradient(1px 1px at 350px 50px, #fff, transparent),
+                radial-gradient(1px 1px at 450px 200px, #fff, transparent);
+            background-size: 550px 450px;
+            animation: moveStars 60s linear infinite;
+            opacity: 0.8;
+        }
+        .stars2 {
+            background-image: 
+                radial-gradient(1.5px 1.5px at 50px 100px, var(--primary), transparent),
+                radial-gradient(2px 2px at 150px 250px, var(--secondary), transparent),
+                radial-gradient(1.5px 1.5px at 300px 50px, var(--accent), transparent),
+                radial-gradient(2px 2px at 400px 300px, var(--accent-2), transparent),
+                radial-gradient(1.5px 1.5px at 200px 400px, #f093fb, transparent);
+            background-size: 450px 450px;
+            animation: moveStars 90s linear infinite reverse;
+            opacity: 0.6;
+        }
+        .stars3 {
+            background-image: 
+                radial-gradient(2px 2px at 100px 100px, #fff, transparent),
+                radial-gradient(3px 3px at 300px 300px, #fff, transparent),
+                radial-gradient(2px 2px at 500px 200px, #fff, transparent);
+            background-size: 600px 400px;
+            animation: twinkle 8s ease-in-out infinite, moveStars 120s linear infinite;
+            opacity: 0.4;
+        }
+        @keyframes moveStars {
+            from { transform: translateY(0) translateX(0); }
+            to { transform: translateY(-50%) translateX(-50%); }
+        }
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.2; }
+            50% { opacity: 0.6; }
+        }
 
-        .bg-orb {
+        /* Aurora */
+        .aurora {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 50%;
+            background: linear-gradient(180deg, transparent 0%, rgba(0, 255, 136, 0.03) 20%, rgba(0, 212, 255, 0.05) 40%, rgba(102, 126, 234, 0.03) 60%, transparent 100%);
+            filter: blur(50px);
+            animation: aurora 15s ease-in-out infinite;
+            z-index: 2;
+            pointer-events: none;
+        }
+        @keyframes aurora {
+            0%, 100% { transform: translateX(-10%) skewX(-5deg); opacity: 0.5; }
+            50% { transform: translateX(10%) skewX(5deg); opacity: 0.8; }
+        }
+
+        /* Nebulas */
+        .nebula {
             position: fixed;
             border-radius: 50%;
-            filter: blur(100px);
-            opacity: 0.4;
+            filter: blur(80px);
             pointer-events: none;
+            z-index: 1;
+        }
+        .nebula-1 {
+            width: 800px; height: 800px;
+            background: radial-gradient(circle, rgba(102, 126, 234, 0.4) 0%, transparent 70%);
+            top: -200px; right: -200px;
+            animation: nebulaPulse 12s ease-in-out infinite;
+        }
+        .nebula-2 {
+            width: 600px; height: 600px;
+            background: radial-gradient(circle, rgba(118, 75, 162, 0.35) 0%, transparent 70%);
+            bottom: 10%; left: -150px;
+            animation: nebulaPulse 15s ease-in-out infinite reverse;
+        }
+        .nebula-3 {
+            width: 500px; height: 500px;
+            background: radial-gradient(circle, rgba(0, 255, 136, 0.2) 0%, transparent 70%);
+            top: 40%; right: 10%;
+            animation: nebulaPulse 10s ease-in-out infinite 2s;
+        }
+        @keyframes nebulaPulse {
+            0%, 100% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.2); opacity: 0.8; }
+        }
+
+        /* Shooting stars */
+        .shooting-star {
+            position: fixed;
+            height: 2px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary), transparent);
+            border-radius: 50%;
+            animation: shoot 2s linear infinite;
+            opacity: 0;
+            z-index: 3;
+        }
+        .shooting-star:nth-child(1) { width: 150px; top: 10%; left: 10%; animation-delay: 0s; }
+        .shooting-star:nth-child(2) { width: 100px; top: 20%; left: 60%; animation-delay: 2s; }
+        .shooting-star:nth-child(3) { width: 120px; top: 40%; left: 20%; animation-delay: 4s; }
+        @keyframes shoot {
+            0% { transform: translateX(0) translateY(0) rotate(-45deg); opacity: 0; }
+            5% { opacity: 1; }
+            100% { transform: translateX(800px) translateY(800px) rotate(-45deg); opacity: 0; }
+        }
+
+        /* Planet */
+        .planet {
+            position: fixed;
+            width: 350px; height: 350px;
+            border-radius: 50%;
+            background: radial-gradient(circle at 30% 30%, #2a2a4e 0%, #1a1a3e 40%, #0a0a1a 100%);
+            box-shadow: inset -40px -40px 80px rgba(0,0,0,0.9), inset 20px 20px 60px rgba(102, 126, 234, 0.3), 0 0 100px rgba(102, 126, 234, 0.4);
+            bottom: -120px;
+            left: -120px;
+            z-index: 1;
+            animation: planetFloat 20s ease-in-out infinite;
+        }
+        .planet-ring {
+            position: fixed;
+            width: 500px; height: 100px;
+            border: 3px solid rgba(102, 126, 234, 0.3);
+            border-radius: 50%;
+            bottom: 20px;
+            left: -180px;
+            transform: rotateX(75deg) rotateZ(-15deg);
             z-index: 0;
         }
-
-        .bg-orb-1 {
-            width: 600px; height: 600px;
-            background: var(--accent);
-            top: -200px; right: -200px;
-            animation: float 20s ease-in-out infinite;
+        @keyframes planetFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-30px); }
         }
 
-        .bg-orb-2 {
-            width: 400px; height: 400px;
-            background: var(--accent-2);
-            bottom: -100px; left: -100px;
-            animation: float 15s ease-in-out infinite reverse;
+        /* Particles */
+        .particle {
+            position: fixed;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 5;
+            animation: particleFloat 20s infinite linear;
         }
-
-        @keyframes float {
-            0%, 100% { transform: translate(0, 0) rotate(0deg); }
-            33% { transform: translate(30px, -30px) rotate(120deg); }
-            66% { transform: translate(-20px, 20px) rotate(240deg); }
+        .particle:nth-child(1) { width: 4px; height: 4px; background: var(--primary); left: 5%; animation-duration: 25s; }
+        .particle:nth-child(2) { width: 6px; height: 6px; background: var(--secondary); left: 15%; animation-duration: 30s; animation-delay: 2s; }
+        .particle:nth-child(3) { width: 3px; height: 3px; background: var(--accent); left: 35%; animation-duration: 20s; animation-delay: 5s; }
+        .particle:nth-child(4) { width: 5px; height: 5px; background: var(--accent-2); left: 55%; animation-duration: 28s; animation-delay: 3s; }
+        .particle:nth-child(5) { width: 4px; height: 4px; background: #f093fb; left: 75%; animation-duration: 22s; animation-delay: 7s; }
+        .particle:nth-child(6) { width: 3px; height: 3px; background: var(--primary); left: 85%; animation-duration: 35s; }
+        @keyframes particleFloat {
+            0% { transform: translateY(100vh) scale(0); opacity: 0; }
+            10% { opacity: 0.8; transform: scale(1); }
+            90% { opacity: 0.8; }
+            100% { transform: translateY(-100vh) scale(0.5); opacity: 0; }
         }
 
         /* Navigation */
@@ -84,17 +247,10 @@
             top: 0; left: 0; right: 0;
             z-index: 1000;
             padding: 1rem 2rem;
-            background: rgba(10, 10, 15, 0.8);
-            backdrop-filter: blur(20px);
-            border-bottom: 1px solid rgba(0, 255, 136, 0.1);
-            transition: all 0.3s ease;
+            background: rgba(10, 10, 15, 0.7);
+            backdrop-filter: blur(30px);
+            border-bottom: 1px solid rgba(0, 255, 136, 0.2);
         }
-
-        nav.scrolled {
-            padding: 0.75rem 2rem;
-            background: rgba(10, 10, 15, 0.95);
-        }
-
         .nav-container {
             max-width: 1400px;
             margin: 0 auto;
@@ -102,43 +258,34 @@
             justify-content: space-between;
             align-items: center;
         }
-
         .logo {
             display: flex;
             align-items: center;
             gap: 0.75rem;
-            font-size: 1.5rem;
-            font-weight: 700;
             text-decoration: none;
             color: var(--text);
         }
-
-        .logo-icon {
-            width: 44px; height: 44px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .logo-icon svg { width: 100%; height: 100%; }
-
+        .logo-icon { width: 50px; height: 50px; }
         .logo-text {
-            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            font-family: 'Orbitron', sans-serif;
+            background: linear-gradient(90deg, var(--primary), var(--secondary), var(--primary));
+            background-size: 200% auto;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-            font-size: 1.4rem;
+            font-size: 1.5rem;
             font-weight: 700;
-            letter-spacing: 0.5px;
+            letter-spacing: 3px;
+            animation: textShine 3s linear infinite;
         }
-
+        @keyframes textShine {
+            to { background-position: 200% center; }
+        }
         .nav-links {
             display: flex;
-            align-items: center;
             gap: 0.5rem;
             list-style: none;
         }
-
         .nav-links a {
             color: var(--text-muted);
             text-decoration: none;
@@ -147,2381 +294,596 @@
             transition: all 0.3s ease;
             font-weight: 500;
         }
-
-        .nav-links a:hover {
+        .nav-links a:hover, .nav-links a.active {
             color: var(--text);
             background: var(--primary-dim);
         }
-
-        /* Dropdown */
-        .dropdown { position: relative; }
-
-        .dropdown-toggle {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            cursor: pointer;
-        }
-
-        .dropdown-toggle::after {
-            content: '▼';
-            font-size: 0.6rem;
-            transition: transform 0.3s ease;
-        }
-
-        .dropdown:hover .dropdown-toggle::after { transform: rotate(180deg); }
-
-        .dropdown-menu {
-            position: absolute;
-            top: 100%; left: 0;
-            min-width: 280px;
-            background: var(--dark-card);
-            border: 1px solid rgba(0, 255, 136, 0.2);
-            border-radius: 12px;
-            padding: 0.5rem;
-            opacity: 0;
-            visibility: hidden;
-            transform: translateY(10px);
-            transition: all 0.3s ease;
-            backdrop-filter: blur(20px);
-        }
-
-        .dropdown:hover .dropdown-menu {
-            opacity: 1;
-            visibility: visible;
-            transform: translateY(5px);
-        }
-
-        .dropdown-menu a {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            padding: 0.75rem 1rem;
-            border-radius: 8px;
-            color: var(--text-muted);
-        }
-
-        .dropdown-menu a:hover {
-            background: var(--primary-dim);
-            color: var(--primary);
-        }
-
-        .dropdown-icon {
-            width: 32px; height: 32px;
-            background: var(--primary-dim);
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .dropdown-icon svg {
-            width: 20px;
-            height: 20px;
-        }
-
         .nav-cta {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            background: linear-gradient(135deg, var(--primary), var(--secondary)) !important;
             color: var(--dark) !important;
             font-weight: 600 !important;
-            padding: 0.6rem 1.25rem !important;
         }
 
-        .nav-cta:hover {
-            box-shadow: var(--glow);
-            transform: translateY(-2px);
+        /* Main Content */
+        main {
+            position: relative;
+            z-index: 10;
+            padding-top: 100px;
         }
-
-        /* Mobile Menu */
-        .mobile-toggle {
-            display: none;
-            flex-direction: column;
-            gap: 5px;
-            cursor: pointer;
-            padding: 0.5rem;
-        }
-
-        .mobile-toggle span {
-            width: 25px; height: 2px;
-            background: var(--text);
-            transition: all 0.3s ease;
+        .section-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
         }
 
         /* Hero Section */
         .hero {
-            min-height: 100vh;
+            min-height: calc(100vh - 100px);
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 8rem 2rem 4rem;
-            position: relative;
-            z-index: 1;
-        }
-
-        .hero-content {
-            max-width: 900px;
             text-align: center;
+            padding: 2rem;
         }
-
+        .hero-content { max-width: 900px; }
         .hero-badge {
             display: inline-flex;
             align-items: center;
-            gap: 0.5rem;
-            background: var(--primary-dim);
+            gap: 0.75rem;
+            padding: 0.75rem 1.5rem;
+            background: rgba(0, 255, 136, 0.1);
             border: 1px solid rgba(0, 255, 136, 0.3);
-            padding: 0.5rem 1rem;
             border-radius: 50px;
-            font-size: 0.85rem;
-            color: var(--primary);
             margin-bottom: 2rem;
-            animation: pulse 2s ease-in-out infinite;
+            animation: badgePulse 4s ease-in-out infinite;
         }
-
-        @keyframes pulse {
-            0%, 100% { box-shadow: 0 0 0 0 rgba(0, 255, 136, 0.4); }
-            50% { box-shadow: 0 0 0 10px rgba(0, 255, 136, 0); }
+        @keyframes badgePulse {
+            0%, 100% { box-shadow: 0 0 20px rgba(0, 255, 136, 0.2); }
+            50% { box-shadow: 0 0 40px rgba(0, 255, 136, 0.4); }
         }
-
         .hero h1 {
-            font-size: clamp(2.5rem, 6vw, 4rem);
-            font-weight: 700;
-            line-height: 1.1;
+            font-family: 'Orbitron', sans-serif;
+            font-size: clamp(2.5rem, 7vw, 4.5rem);
+            font-weight: 900;
             margin-bottom: 1.5rem;
+            line-height: 1.1;
+            letter-spacing: 2px;
         }
-
         .hero h1 span {
-            background: linear-gradient(90deg, var(--primary), var(--secondary), var(--accent));
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
-
         .hero-subtitle {
             font-size: 1.25rem;
             color: var(--text-muted);
-            max-width: 650px;
-            margin: 0 auto 2.5rem;
+            margin-bottom: 2.5rem;
             line-height: 1.7;
         }
-
-        .hero-buttons {
+        .hero-ctas {
             display: flex;
             gap: 1rem;
             justify-content: center;
             flex-wrap: wrap;
+            margin-bottom: 3rem;
         }
-
         .btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
             padding: 1rem 2rem;
             border-radius: 12px;
             font-weight: 600;
-            font-size: 1rem;
             text-decoration: none;
             transition: all 0.3s ease;
-            cursor: pointer;
-            border: none;
-            font-family: inherit;
+            font-size: 1rem;
         }
-
         .btn-primary {
             background: linear-gradient(135deg, var(--primary), var(--secondary));
             color: var(--dark);
+            box-shadow: 0 0 30px rgba(0, 255, 136, 0.3);
         }
-
         .btn-primary:hover {
-            box-shadow: var(--glow);
             transform: translateY(-3px);
+            box-shadow: 0 0 50px rgba(0, 255, 136, 0.5);
         }
-
         .btn-secondary {
             background: transparent;
-            border: 2px solid rgba(255, 255, 255, 0.2);
             color: var(--text);
+            border: 1px solid rgba(255, 255, 255, 0.2);
         }
-
         .btn-secondary:hover {
             border-color: var(--primary);
-            background: var(--primary-dim);
+            box-shadow: 0 0 30px rgba(0, 255, 136, 0.2);
         }
 
+        /* Stats */
         .hero-stats {
             display: flex;
             justify-content: center;
             gap: 3rem;
-            margin-top: 4rem;
-            padding-top: 3rem;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            flex-wrap: wrap;
         }
-
-        .stat { text-align: center; }
-
+        .stat {
+            text-align: center;
+            padding: 1.5rem;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            min-width: 150px;
+            transition: all 0.3s ease;
+        }
+        .stat:hover {
+            border-color: var(--primary);
+            transform: translateY(-5px);
+        }
         .stat-value {
+            font-family: 'Orbitron', sans-serif;
             font-size: 2rem;
             font-weight: 700;
             color: var(--primary);
-            font-family: 'JetBrains Mono', monospace;
+            text-shadow: 0 0 20px rgba(0, 255, 136, 0.5);
         }
-
         .stat-label {
             font-size: 0.85rem;
             color: var(--text-muted);
-            margin-top: 0.25rem;
+            margin-top: 0.5rem;
+        }
+        .stat-highlight .stat-value {
+            color: var(--secondary);
+            text-shadow: 0 0 20px rgba(0, 212, 255, 0.5);
         }
 
-        /* Sections */
-        section {
-            position: relative;
-            z-index: 1;
-            padding: 6rem 2rem;
+        /* Live Now Section */
+        .live-section {
+            padding: 6rem 0;
+            background: linear-gradient(180deg, rgba(0, 255, 136, 0.03), transparent);
+            border-top: 1px solid rgba(0, 255, 136, 0.2);
         }
-
-        .section-container {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
         .section-header {
             text-align: center;
-            margin-bottom: 4rem;
+            margin-bottom: 3rem;
         }
-
         .section-label {
-            display: inline-block;
+            font-family: 'JetBrains Mono', monospace;
             font-size: 0.85rem;
-            font-weight: 600;
             color: var(--primary);
+            letter-spacing: 3px;
             text-transform: uppercase;
-            letter-spacing: 2px;
             margin-bottom: 1rem;
-            background: var(--primary-dim);
-            padding: 0.4rem 1rem;
-            border-radius: 50px;
-            border: 1px solid rgba(0, 255, 136, 0.3);
         }
-
         .section-title {
-            font-size: clamp(2rem, 4vw, 3rem);
+            font-family: 'Orbitron', sans-serif;
+            font-size: clamp(2rem, 5vw, 3rem);
             font-weight: 700;
             margin-bottom: 1rem;
         }
-
         .section-subtitle {
-            font-size: 1.1rem;
             color: var(--text-muted);
-            max-width: 700px;
+            font-size: 1.1rem;
+            max-width: 600px;
             margin: 0 auto;
-            line-height: 1.7;
+        }
+
+        /* Feature Grid */
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+        .feature-card {
+            background: rgba(20, 20, 35, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 2rem;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(135deg, rgba(0, 255, 136, 0.1), transparent);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+        .feature-card:hover::before { opacity: 1; }
+        .feature-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3), 0 0 30px rgba(0, 255, 136, 0.1);
+        }
+        .feature-card.live { border-color: var(--primary); }
+        .feature-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        .feature-card h3 {
+            font-size: 1.25rem;
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        .live-badge {
+            background: var(--primary);
+            color: var(--dark);
+            font-size: 0.65rem;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-weight: 700;
+        }
+        .testnet-badge {
+            background: var(--secondary);
+            color: var(--dark);
+            font-size: 0.65rem;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-weight: 700;
+        }
+        .feature-card p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            line-height: 1.6;
         }
 
         /* Problem Section */
-        #problem {
-            background: linear-gradient(180deg, transparent, rgba(255, 71, 87, 0.05), transparent);
+        .problem-section {
+            padding: 6rem 0;
         }
-
         .problem-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 2rem;
+            margin-top: 2rem;
         }
-
         .problem-card {
-            background: var(--dark-card);
+            background: rgba(255, 71, 87, 0.05);
             border: 1px solid rgba(255, 71, 87, 0.2);
-            border-radius: 16px;
-            padding: 2rem;
-            transition: all 0.3s ease;
-            text-align: center;
-        }
-
-        .problem-card:hover {
-            transform: translateY(-5px);
-            border-color: var(--danger);
-            box-shadow: 0 20px 40px rgba(255, 71, 87, 0.1);
-        }
-
-        .problem-icon {
-            width: 60px; height: 60px;
-            background: rgba(255, 71, 87, 0.1);
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.75rem;
-            margin: 0 auto 1.5rem;
-        }
-
-        .problem-card h3 {
-            font-size: 1.25rem;
-            margin-bottom: 0.75rem;
-        }
-
-        .problem-card p {
-            color: var(--text-muted);
-            line-height: 1.7;
-        }
-
-        .problem-stat {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 2.5rem;
-            font-weight: 700;
-            color: var(--danger);
-            margin-bottom: 0.5rem;
-        }
-
-        .problem-card.wide {
-            grid-column: span 2;
-        }
-
-        /* Protocol/Services Section */
-        #protocol {
-            background: linear-gradient(180deg, transparent, rgba(0, 255, 136, 0.03), transparent);
-        }
-
-        .protocol-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 2rem;
-        }
-
-        .protocol-card {
-            background: var(--dark-card);
-            border: 1px solid rgba(0, 255, 136, 0.15);
             border-radius: 20px;
-            padding: 2.5rem;
+            padding: 2rem;
+            text-align: center;
             transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
         }
-
-        .protocol-card::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0;
-            height: 3px;
-            background: linear-gradient(90deg, var(--primary), var(--secondary));
-            transform: scaleX(0);
-            transition: transform 0.3s ease;
-        }
-
-        .protocol-card:hover::before { transform: scaleX(1); }
-
-        .protocol-card:hover {
+        .problem-card:hover {
+            border-color: var(--danger);
             transform: translateY(-5px);
-            border-color: var(--primary);
-            box-shadow: 0 25px 50px rgba(0, 255, 136, 0.1);
         }
-
-        .protocol-icon {
-            width: 70px; height: 70px;
-            background: var(--primary-dim);
-            border-radius: 16px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .protocol-card h3 {
-            font-size: 1.4rem;
+        .problem-icon {
+            font-size: 3rem;
             margin-bottom: 1rem;
         }
-
-        .protocol-card p {
-            color: var(--text-muted);
-            line-height: 1.7;
-            margin-bottom: 1.5rem;
+        .problem-card h3 {
+            color: var(--danger);
+            margin-bottom: 0.75rem;
         }
-
-        .protocol-features {
-            list-style: none;
-        }
-
-        .protocol-features li {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            padding: 0.5rem 0;
+        .problem-card p {
             color: var(--text-muted);
             font-size: 0.95rem;
         }
 
-        .protocol-features li::before {
-            content: '✓';
-            color: var(--primary);
-            font-weight: bold;
+        /* CTA Section */
+        .cta-section {
+            padding: 6rem 0;
+            text-align: center;
         }
-
-        /* How It Works */
-        #how-it-works {
-            background: var(--dark-lighter);
-        }
-
-        .steps {
-            display: flex;
-            flex-direction: column;
-            gap: 0;
-            position: relative;
+        .cta-box {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.2), rgba(118, 75, 162, 0.2));
+            border: 1px solid rgba(102, 126, 234, 0.3);
+            border-radius: 24px;
+            padding: 4rem 2rem;
             max-width: 800px;
             margin: 0 auto;
         }
-
-        .steps::before {
-            content: '';
-            position: absolute;
-            left: 30px;
-            top: 60px;
-            bottom: 60px;
-            width: 2px;
-            background: linear-gradient(180deg, var(--primary), var(--secondary), var(--accent));
-        }
-
-        .step {
-            display: flex;
-            gap: 2rem;
-            padding: 2rem 0;
-        }
-
-        .step-number {
-            width: 60px; height: 60px;
-            min-width: 60px;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--dark);
-            position: relative;
-            z-index: 1;
-        }
-
-        .step-content h3 {
-            font-size: 1.3rem;
-            margin-bottom: 0.75rem;
-        }
-
-        .step-content p {
-            color: var(--text-muted);
-            line-height: 1.7;
-        }
-
-        /* User Protection Section */
-        #user-protection {
-            background: linear-gradient(180deg, var(--dark-lighter), var(--dark));
-            position: relative;
-            overflow: hidden;
-        }
-
-        #user-protection::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, var(--primary), transparent);
-        }
-
-        .protection-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 3rem;
-            align-items: stretch;
-        }
-
-        .protection-problem {
-            padding: 2.5rem;
-            background: rgba(255, 71, 87, 0.08);
-            border: 1px solid rgba(255, 71, 87, 0.25);
-            border-radius: 20px;
-        }
-
-        .protection-problem h3 {
-            color: var(--danger);
-            font-size: 1.4rem;
-            margin-bottom: 1rem;
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-        }
-
-        .protection-problem p {
-            color: var(--text-muted);
-            line-height: 1.8;
-            margin-bottom: 1rem;
-        }
-
-        .protection-solution {
-            padding: 2.5rem;
-            background: var(--dark-card);
-            border: 1px solid rgba(0, 255, 136, 0.2);
-            border-radius: 20px;
-        }
-
-        .protection-solution h3 {
-            color: var(--primary);
-            font-size: 1.4rem;
-            margin-bottom: 1rem;
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-        }
-
-        .protection-solution p {
-            color: var(--text-muted);
-            line-height: 1.8;
-            margin-bottom: 1.5rem;
-        }
-
-        .protection-checks {
-            list-style: none;
-            margin-bottom: 1.5rem;
-        }
-
-        .protection-checks li {
-            display: flex;
-            align-items: flex-start;
-            gap: 0.75rem;
-            padding: 0.75rem 0;
-            color: var(--text);
-            font-size: 1rem;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-        }
-
-        .protection-checks li:last-child { border-bottom: none; }
-
-        .protection-tagline {
-            background: var(--primary-dim);
-            padding: 1rem 1.5rem;
-            border-radius: 12px;
-            border-left: 4px solid var(--primary);
-        }
-
-        .protection-tagline p {
-            margin: 0;
-            color: var(--text);
-            font-weight: 500;
-        }
-
-        .flow-comparison {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 2rem;
-            margin-top: 3rem;
-        }
-
-        .flow-card {
-            padding: 2rem;
-            border-radius: 16px;
-            background: var(--dark-card);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .flow-card.others { border-color: rgba(255, 71, 87, 0.3); }
-        .flow-card.validify { border-color: rgba(0, 255, 136, 0.3); }
-
-        .flow-card h4 {
-            font-size: 1.1rem;
-            margin-bottom: 1.5rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .flow-card.others h4 { color: var(--danger); }
-        .flow-card.validify h4 { color: var(--primary); }
-
-        .flow-steps { list-style: none; }
-
-        .flow-steps li {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            padding: 0.75rem 0;
-            color: var(--text-muted);
-            font-size: 0.95rem;
-        }
-
-        .flow-steps li .step-num {
-            width: 28px; height: 28px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.8rem;
-            font-weight: 600;
-            flex-shrink: 0;
-        }
-
-        .flow-card.others .step-num {
-            background: rgba(255, 71, 87, 0.2);
-            color: var(--danger);
-        }
-
-        .flow-card.validify .step-num {
-            background: var(--primary-dim);
-            color: var(--primary);
-        }
-
-        .flow-steps li.danger { color: var(--danger); }
-        .flow-steps li.success { color: var(--primary); }
-
-        /* Ecosystem Section */
-        #ecosystem {
-            background: linear-gradient(180deg, var(--dark), var(--dark-lighter));
-        }
-
-        .ecosystem-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-        }
-
-        .ecosystem-card {
-            background: var(--dark-card);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 20px;
-            padding: 2rem;
-            text-align: center;
-            transition: all 0.3s ease;
-            position: relative;
-        }
-
-        .ecosystem-card:hover {
-            transform: translateY(-5px);
-            border-color: var(--primary);
-        }
-
-        .ecosystem-card.featured {
-            border: 2px solid var(--primary);
-        }
-
-        .ecosystem-card.featured::before {
-            content: 'KEY DIFFERENTIATOR';
-            position: absolute;
-            top: 0; right: 0;
-            background: var(--primary);
-            color: var(--dark);
-            font-size: 0.65rem;
-            font-weight: 700;
-            padding: 0.3rem 0.75rem;
-            border-radius: 0 18px 0 8px;
-        }
-
-        .ecosystem-icon {
-            width: 70px; height: 70px;
-            background: var(--primary-dim);
-            border-radius: 16px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+        .cta-box h2 {
+            font-family: 'Orbitron', sans-serif;
             font-size: 2rem;
-            margin: 0 auto 1.5rem;
-        }
-
-        .ecosystem-phase {
-            font-size: 0.8rem;
-            color: var(--secondary);
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 0.5rem;
-        }
-
-        .ecosystem-card h3 {
-            font-size: 1.3rem;
             margin-bottom: 1rem;
         }
-
-        .ecosystem-card p {
-            color: var(--text-muted);
-            line-height: 1.7;
-            margin-bottom: 1.5rem;
-        }
-
-        .ecosystem-features {
-            list-style: none;
-            text-align: left;
-            margin-bottom: 1.5rem;
-        }
-
-        .ecosystem-features li {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            padding: 0.5rem 0;
-            color: var(--text-muted);
-            font-size: 0.95rem;
-        }
-
-        .ecosystem-features li::before {
-            content: '✓';
-            color: var(--primary);
-            font-weight: bold;
-        }
-
-        .ecosystem-status {
-            display: inline-block;
-            background: var(--primary-dim);
-            color: var(--primary);
-            padding: 0.4rem 1rem;
-            border-radius: 50px;
-            font-size: 0.85rem;
-            font-weight: 500;
-        }
-
-        .ecosystem-status.building {
-            background: rgba(0, 212, 255, 0.15);
-            color: var(--secondary);
-        }
-
-        /* FAQ Section */
-        #faq { background: var(--dark); }
-
-        .faq-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
-            gap: 1.5rem;
-        }
-
-        .faq-item {
-            background: var(--dark-card);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 16px;
-            overflow: hidden;
-            transition: all 0.3s ease;
-        }
-
-        .faq-item:hover { border-color: rgba(0, 255, 136, 0.3); }
-
-        .faq-question {
-            padding: 1.5rem;
-            cursor: pointer;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-weight: 600;
-            font-size: 1.05rem;
-        }
-
-        .faq-question::after {
-            content: '+';
-            font-size: 1.5rem;
-            color: var(--primary);
-            transition: transform 0.3s ease;
-        }
-
-        .faq-item.open .faq-question::after { transform: rotate(45deg); }
-
-        .faq-answer {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.3s ease;
-        }
-
-        .faq-item.open .faq-answer { max-height: 500px; }
-
-        .faq-answer-content {
-            padding: 0 1.5rem 1.5rem;
-            color: var(--text-muted);
-            line-height: 1.7;
-        }
-
-        .faq-answer-content ul {
-            list-style: none;
-            margin: 1rem 0;
-            padding-left: 0;
-        }
-
-        .faq-answer-content ul li {
-            display: flex;
-            align-items: flex-start;
-            gap: 0.5rem;
-            padding: 0.5rem 0;
-        }
-
-        .faq-answer-content ul li::before {
-            content: '✓';
-            color: var(--primary);
-            font-weight: bold;
-        }
-
-        .faq-highlight {
-            background: var(--primary-dim);
-            padding: 1rem;
-            border-radius: 8px;
-            border-left: 3px solid var(--primary);
-            margin-top: 1rem;
-        }
-
-        /* Early Access Section */
-        #early-access {
-            background: linear-gradient(180deg, var(--dark), var(--dark-lighter));
-        }
-
-        .early-access-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 4rem;
-            align-items: start;
-        }
-
-        .benefits-list {
-            list-style: none;
-        }
-
-        .benefits-list li {
-            display: flex;
-            align-items: flex-start;
-            gap: 0.75rem;
-            padding: 0.75rem 0;
-            color: var(--text);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-        }
-
-        .benefits-list li::before {
-            content: '✓';
-            color: var(--primary);
-            font-weight: bold;
-            margin-top: 2px;
-        }
-
-        .form-card {
-            background: var(--dark-card);
-            border: 1px solid rgba(0, 255, 136, 0.2);
-            border-radius: 20px;
-            padding: 2.5rem;
-        }
-
-        .form-card h4 {
-            font-size: 1.3rem;
-            margin-bottom: 1.5rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .form-group {
-            margin-bottom: 1.5rem;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 0.5rem;
-            font-weight: 500;
-            color: var(--text-muted);
-        }
-
-        .form-group input,
-        .form-group textarea,
-        .form-group select {
-            width: 100%;
-            padding: 1rem;
-            background: var(--dark);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
-            color: var(--text);
-            font-family: inherit;
-            font-size: 1rem;
-            transition: all 0.3s ease;
-        }
-
-        .form-group input:focus,
-        .form-group textarea:focus,
-        .form-group select:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px var(--primary-dim);
-        }
-
-        .form-group textarea {
-            resize: vertical;
-            min-height: 100px;
-        }
-
-        /* Roadmap Section */
-        #roadmap {
-            background: linear-gradient(180deg, transparent, rgba(102, 126, 234, 0.05), transparent);
-        }
-
-        .roadmap-timeline {
-            position: relative;
-            max-width: 900px;
-            margin: 0 auto;
-        }
-
-        .roadmap-timeline::before {
-            content: '';
-            position: absolute;
-            left: 50%;
-            transform: translateX(-50%);
-            top: 0; bottom: 0;
-            width: 2px;
-            background: linear-gradient(180deg, var(--primary), var(--secondary), var(--accent), var(--accent-2));
-        }
-
-        .roadmap-item {
-            display: flex;
-            margin-bottom: 3rem;
-            position: relative;
-        }
-
-        .roadmap-item:nth-child(odd) { flex-direction: row-reverse; }
-
-        .roadmap-item:nth-child(odd) .roadmap-content {
-            text-align: right;
-            padding-right: 3rem;
-            padding-left: 0;
-        }
-
-        .roadmap-item:nth-child(even) .roadmap-content { padding-left: 3rem; }
-
-        .roadmap-content { width: 50%; }
-
-        .roadmap-marker {
-            position: absolute;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 20px; height: 20px;
-            background: var(--dark);
-            border: 3px solid var(--primary);
-            border-radius: 50%;
-            z-index: 2;
-        }
-
-        .roadmap-item:nth-child(2) .roadmap-marker { border-color: var(--secondary); }
-        .roadmap-item:nth-child(3) .roadmap-marker { border-color: var(--accent); }
-        .roadmap-item:nth-child(4) .roadmap-marker { border-color: var(--accent-2); }
-
-        .roadmap-quarter {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.85rem;
-            color: var(--primary);
-            font-weight: 600;
-            letter-spacing: 1px;
-            margin-bottom: 0.5rem;
-        }
-
-        .roadmap-item:nth-child(2) .roadmap-quarter { color: var(--secondary); }
-        .roadmap-item:nth-child(3) .roadmap-quarter { color: var(--accent); }
-        .roadmap-item:nth-child(4) .roadmap-quarter { color: var(--accent-2); }
-
-        .roadmap-phase {
-            font-size: 1.5rem;
-            font-weight: 700;
-            margin-bottom: 1rem;
-        }
-
-        .roadmap-items { list-style: none; }
-
-        .roadmap-items li {
-            color: var(--text);
-            padding: 0.4rem 0;
-            font-size: 0.9rem;
-            display: flex;
-            align-items: flex-start;
-            gap: 0.5rem;
-        }
-
-        .roadmap-item:nth-child(odd) .roadmap-items li { justify-content: flex-end; }
-
-        .roadmap-items li::before {
-            content: '→';
-            color: var(--primary);
-            flex-shrink: 0;
-        }
-
-        .roadmap-item:nth-child(odd) .roadmap-items li::before {
-            order: 2;
-            content: '←';
-        }
-
-        .roadmap-item:nth-child(2) .roadmap-items li::before { color: var(--secondary); }
-        .roadmap-item:nth-child(3) .roadmap-items li::before { color: var(--accent); }
-        .roadmap-item:nth-child(4) .roadmap-items li::before { color: var(--accent-2); }
-
-        /* White Paper Section */
-        #whitepaper { background: var(--dark-lighter); }
-
-        .whitepaper-container {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 4rem;
-            align-items: start;
-        }
-
-        .whitepaper-content h3 {
-            font-size: 1.5rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .whitepaper-content p {
-            color: var(--text-muted);
-            line-height: 1.8;
-            margin-bottom: 1.5rem;
-        }
-
-        .whitepaper-topics {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 0.75rem;
-        }
-
-        .whitepaper-topic {
-            background: var(--primary-dim);
-            padding: 0.75rem 1rem;
-            border-radius: 8px;
-            font-size: 0.9rem;
-            color: var(--text);
-        }
-
-        .whitepaper-preview {
-            background: var(--dark-card);
-            border: 1px solid rgba(0, 255, 136, 0.2);
-            border-radius: 20px;
-            padding: 2rem;
-        }
-
-        .whitepaper-preview-header {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            margin-bottom: 1.5rem;
-            padding-bottom: 1.5rem;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .whitepaper-icon {
-            width: 50px; height: 50px;
-            background: var(--primary-dim);
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-        }
-
-        .whitepaper-meta h4 {
-            font-size: 1.1rem;
-            margin-bottom: 0.25rem;
-        }
-
-        .whitepaper-meta span {
-            font-size: 0.85rem;
-            color: var(--text-muted);
-        }
-
-        .whitepaper-toc {
-            list-style: none;
-            margin-bottom: 1.5rem;
-        }
-
-        .whitepaper-toc li {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            padding: 0.6rem 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-            color: var(--text-muted);
-            font-size: 0.9rem;
-        }
-
-        .whitepaper-toc li span {
-            width: 24px; height: 24px;
-            background: var(--primary-dim);
-            border-radius: 6px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.75rem;
-            color: var(--primary);
-            font-weight: 600;
-        }
-
-        .btn-download {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.5rem;
-            width: 100%;
-            padding: 1rem;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: var(--dark);
-            font-weight: 600;
-            border-radius: 12px;
-            text-decoration: none;
-            transition: all 0.3s ease;
-        }
-
-        .btn-download:hover {
-            box-shadow: var(--glow);
-            transform: translateY(-2px);
-        }
-
-        /* Contact Section */
-        #contact { background: var(--dark); }
-
-        .contact-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 4rem;
-        }
-
-        .contact-info h3 {
-            font-size: 1.5rem;
-            margin-bottom: 1rem;
-        }
-
-        .contact-info p {
+        .cta-box p {
             color: var(--text-muted);
             margin-bottom: 2rem;
-            line-height: 1.7;
-        }
-
-        .contact-methods {
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-        }
-
-        .contact-method {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            padding: 1rem;
-            background: var(--dark-card);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 12px;
-            color: var(--text);
-            text-decoration: none;
-            transition: all 0.3s ease;
-        }
-
-        .contact-method:hover {
-            border-color: var(--primary);
-            background: var(--primary-dim);
-        }
-
-        .contact-method-icon {
-            width: 45px; height: 45px;
-            background: var(--primary-dim);
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.25rem;
-        }
-
-        .contact-form {
-            background: var(--dark-card);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 20px;
-            padding: 2.5rem;
+            font-size: 1.1rem;
         }
 
         /* Footer */
         footer {
-            background: var(--dark);
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 4rem 2rem 2rem;
             position: relative;
-            z-index: 1;
+            z-index: 10;
+            padding: 4rem 2rem;
+            background: rgba(10, 10, 15, 0.95);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
         }
-
-        .footer-grid {
+        .footer-content {
             max-width: 1200px;
             margin: 0 auto;
-            display: grid;
-            grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
             gap: 2rem;
-            margin-bottom: 3rem;
         }
-
-        .footer-brand p {
-            color: var(--text-muted);
-            line-height: 1.7;
-            margin-top: 1rem;
-            max-width: 300px;
+        .footer-links {
+            display: flex;
+            gap: 2rem;
         }
-
-        .footer-column h4 {
-            color: var(--text);
-            font-weight: 600;
-            margin-bottom: 1.25rem;
-        }
-
-        .footer-links { list-style: none; }
-
-        .footer-links li { margin-bottom: 0.75rem; }
-
         .footer-links a {
             color: var(--text-muted);
             text-decoration: none;
             transition: color 0.3s ease;
         }
-
         .footer-links a:hover { color: var(--primary); }
-
-        .footer-bottom {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding-top: 2rem;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 1rem;
-        }
-
-        .footer-bottom p {
+        .footer-copy {
             color: var(--text-muted);
             font-size: 0.9rem;
         }
 
-        .footer-socials {
-            display: flex;
-            gap: 1rem;
+        /* Mobile */
+        @media (max-width: 900px) {
+            .cursor, .cursor-dot { display: none; }
+            body { cursor: auto; }
+            .nav-links { display: none; }
+            .planet, .planet-ring { display: none; }
+            .hero h1 { font-size: 2rem; }
+            .hero-stats { gap: 1rem; }
+            .stat { min-width: 120px; padding: 1rem; }
         }
 
-        .footer-socials a {
-            width: 40px; height: 40px;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--text-muted);
-            text-decoration: none;
-            transition: all 0.3s ease;
+        /* Ripple */
+        .ripple {
+            position: fixed;
+            border-radius: 50%;
+            background: rgba(0, 255, 136, 0.3);
+            transform: scale(0);
+            animation: ripple 0.6s linear;
+            pointer-events: none;
+            z-index: 9999;
         }
-
-        .footer-socials a:hover {
-            background: var(--primary-dim);
-            color: var(--primary);
-        }
-
-        /* Responsive */
-        @media (max-width: 1024px) {
-            .footer-grid { grid-template-columns: 1fr 1fr; }
-        }
-
-        @media (max-width: 768px) {
-            .nav-links {
-                display: none;
-                position: absolute;
-                top: 100%; left: 0; right: 0;
-                background: var(--dark-card);
-                flex-direction: column;
-                padding: 1rem;
-                border-bottom: 1px solid rgba(0, 255, 136, 0.1);
-            }
-
-            .nav-links.open { display: flex; }
-            .mobile-toggle { display: flex; }
-
-            .hero h1 { font-size: 2.5rem; }
-            .hero-stats { flex-direction: column; gap: 1.5rem; }
-
-            .early-access-grid,
-            .contact-grid,
-            .whitepaper-container,
-            .protection-grid { grid-template-columns: 1fr; }
-
-            .flow-comparison { grid-template-columns: 1fr; }
-
-            .faq-grid { grid-template-columns: 1fr; }
-
-            .problem-card.wide { grid-column: span 1; }
-
-            .roadmap-timeline::before { left: 10px; }
-
-            .roadmap-item,
-            .roadmap-item:nth-child(odd) { flex-direction: column; }
-
-            .roadmap-content,
-            .roadmap-item:nth-child(odd) .roadmap-content {
-                width: 100%;
-                text-align: left;
-                padding-left: 2.5rem;
-                padding-right: 0;
-            }
-
-            .roadmap-marker { left: 10px; }
-
-            .roadmap-item:nth-child(odd) .roadmap-items li { justify-content: flex-start; }
-            .roadmap-item:nth-child(odd) .roadmap-items li::before {
-                order: 0;
-                content: '→';
-            }
-
-            .footer-grid { grid-template-columns: 1fr; gap: 2rem; }
+        @keyframes ripple {
+            to { transform: scale(4); opacity: 0; }
         }
     </style>
 </head>
 <body>
-    <!-- Background Effects -->
-    <div class="bg-grid"></div>
-    <div class="bg-orb bg-orb-1"></div>
-    <div class="bg-orb bg-orb-2"></div>
+    <div class="cursor"></div>
+    <div class="cursor-dot"></div>
 
-    <!-- Navigation -->
+    <div class="space-bg"></div>
+    <div class="deep-space"></div>
+    <div class="stars"></div>
+    <div class="stars2"></div>
+    <div class="stars3"></div>
+    <div class="aurora"></div>
+    
+    <div class="nebula nebula-1"></div>
+    <div class="nebula nebula-2"></div>
+    <div class="nebula nebula-3"></div>
+    
+    <div class="shooting-star"></div>
+    <div class="shooting-star"></div>
+    <div class="shooting-star"></div>
+    
+    <div class="planet"></div>
+    <div class="planet-ring"></div>
+    
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+
     <nav>
         <div class="nav-container">
-            <a href="#home" class="logo">
+            <a href="index.html" class="logo">
                 <div class="logo-icon">
                     <svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
                         <defs>
-                            <linearGradient id="crystalGrad1" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <linearGradient id="logoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
                                 <stop offset="0%" style="stop-color:#00ff88"/>
                                 <stop offset="50%" style="stop-color:#00d4ff"/>
                                 <stop offset="100%" style="stop-color:#667eea"/>
                             </linearGradient>
-                            <linearGradient id="crystalGrad2" x1="100%" y1="0%" x2="0%" y2="100%">
-                                <stop offset="0%" style="stop-color:#667eea"/>
-                                <stop offset="100%" style="stop-color:#00ff88"/>
-                            </linearGradient>
                         </defs>
-                        <path d="M30 4 L50 17 L46 43 L30 54 L14 43 L10 17 Z" fill="none" stroke="url(#crystalGrad1)" stroke-width="2.5"/>
-                        <path d="M30 4 L30 28 L10 17 Z" fill="url(#crystalGrad2)" opacity="0.3"/>
-                        <path d="M30 4 L50 17 L30 28 Z" fill="url(#crystalGrad1)" opacity="0.4"/>
-                        <path d="M30 28 L14 43 L10 17 Z" fill="url(#crystalGrad2)" opacity="0.2"/>
-                        <path d="M30 28 L46 43 L50 17 Z" fill="url(#crystalGrad1)" opacity="0.25"/>
-                        <line x1="30" y1="28" x2="30" y2="54" stroke="url(#crystalGrad1)" stroke-width="1.5" opacity="0.5"/>
+                        <path d="M30 4 L50 17 L46 43 L30 54 L14 43 L10 17 Z" fill="none" stroke="url(#logoGrad)" stroke-width="2.5"/>
                         <path d="M22 22 L30 36 L38 22" fill="none" stroke="#ffffff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
                     </svg>
                 </div>
                 <span class="logo-text">VALIDIFY</span>
             </a>
-
             <ul class="nav-links">
-                <li><a href="#home">Home</a></li>
-                <li class="dropdown">
-                    <a href="#protocol" class="dropdown-toggle">Protocol</a>
-                    <div class="dropdown-menu">
-                        <a href="#protocol">
-                            <div class="dropdown-icon">🔐</div>
-                            <div>
-                                <strong>Multi-Sig Verification</strong>
-                                <small style="display:block; color:var(--text-muted);">Cryptographic approval layer</small>
-                            </div>
-                        </a>
-                        <a href="#protocol">
-                            <div class="dropdown-icon">⛓️</div>
-                            <div>
-                                <strong>On-Chain Attestations</strong>
-                                <small style="display:block; color:var(--text-muted);">Immutable security records</small>
-                            </div>
-                        </a>
-                        <a href="#user-protection">
-                            <div class="dropdown-icon">
-                                <svg viewBox="0 0 60 60" style="width: 20px; height: 20px;">
-                                    <defs>
-                                        <linearGradient id="navGrad1" x1="0%" y1="0%" x2="100%" y2="100%">
-                                            <stop offset="0%" style="stop-color:#00ff88"/>
-                                            <stop offset="50%" style="stop-color:#00d4ff"/>
-                                            <stop offset="100%" style="stop-color:#667eea"/>
-                                        </linearGradient>
-                                    </defs>
-                                    <path d="M30 4 L50 17 L46 43 L30 54 L14 43 L10 17 Z" fill="none" stroke="url(#navGrad1)" stroke-width="3"/>
-                                    <path d="M22 22 L30 36 L38 22" fill="none" stroke="#ffffff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-                                </svg>
-                            </div>
-                            <div>
-                                <strong>Browser Extension</strong>
-                                <small style="display:block; color:var(--text-muted);">End-to-end user protection</small>
-                            </div>
-                        </a>
-                        <a href="discord-bot.html">
-                            <div class="dropdown-icon">🤖</div>
-                            <div>
-                                <strong>Discord Bot</strong>
-                                <small style="display:block; color:var(--text-muted);">Setup & features guide</small>
-                            </div>
-                        </a>
-                        <a href="security-ecosystem.html">
-                            <div class="dropdown-icon">📊</div>
-                            <div>
-                                <strong>Security Architecture</strong>
-                                <small style="display:block; color:var(--text-muted);">Technical documentation</small>
-                            </div>
-                        </a>
-                    </div>
-                </li>
-                <li><a href="#ecosystem">Ecosystem</a></li>
-                <li><a href="#roadmap">Roadmap</a></li>
-                <li><a href="#whitepaper">White Paper</a></li>
-                <li><a href="#faq">FAQ</a></li>
-                <li><a href="#early-access" class="nav-cta">Request Access</a></li>
+                <li><a href="index.html" class="active">Home</a></li>
+                <li><a href="protocol.html">Protocol</a></li>
+                <li><a href="ecosystem.html">Ecosystem</a></li>
+                <li><a href="roadmap.html">Roadmap</a></li>
+                <li><a href="resources.html">Resources</a></li>
+                <li><a href="resources.html#early-access" class="nav-cta">Request Access</a></li>
             </ul>
-
-            <div class="mobile-toggle" onclick="toggleMobileMenu()">
-                <span></span>
-                <span></span>
-                <span></span>
-            </div>
         </div>
     </nav>
 
-    <!-- Hero Section -->
-    <section id="home" class="hero">
-        <div class="hero-content">
-            <div class="hero-badge">
-                <span>🔗</span>
-                <span>Protocol Launching Q1 2026</span>
-            </div>
-            <h1>Verify Before <span>Publication</span></h1>
-            <p class="hero-subtitle">
-                The security layer Web3 never had. Multi-signature verification for community announcements, 
-                on-chain attestations, and cross-platform threat intelligence. Stop attacks at the source.
-            </p>
-            <div class="hero-buttons">
-                <a href="#early-access" class="btn btn-primary">
-                    Request Early Access
-                </a>
-                <a href="#whitepaper" class="btn btn-secondary">
-                    Read White Paper
-                </a>
-            </div>
-            <div class="hero-stats">
-                <div class="stat">
-                    <div class="stat-value">$2.5B</div>
-                    <div class="stat-label">Web3 Losses in 2024</div>
+    <main>
+        <!-- Hero -->
+        <section class="hero">
+            <div class="hero-content">
+                <div class="hero-badge">
+                    <span>✅</span>
+                    <span>Core Protocol Live & Deployed</span>
                 </div>
-                <div class="stat">
-                    <div class="stat-value">$494M</div>
-                    <div class="stat-label">Phishing Attacks Alone</div>
-                </div>
-                <div class="stat">
-                    <div class="stat-value">0</div>
-                    <div class="stat-label">Proactive Solutions Exist</div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Problem Section -->
-    <section id="problem">
-        <div class="section-container">
-            <div class="section-header">
-                <div class="section-label">The Problem</div>
-                <h2 class="section-title">Web3 Communities Are Under Attack</h2>
-                <p class="section-subtitle">
-                    Every solution detects threats after publication. By then, wallets are already drained.
+                <h1>Verify Before <span>Publication</span></h1>
+                <p class="hero-subtitle">
+                    The security layer Web3 never had. Multi-signature verification for community announcements, 
+                    on-chain attestations, and cross-platform threat intelligence. Stop attacks at the source.
                 </p>
-            </div>
-
-            <div class="problem-grid">
-                <div class="problem-card">
-                    <div class="problem-icon">💀</div>
-                    <div class="problem-stat">$494M</div>
-                    <h3>Phishing in 2024</h3>
-                    <p>A 67% increase year-over-year. Attackers are winning because defenses are fundamentally reactive.</p>
+                <div class="hero-ctas">
+                    <a href="protocol.html" class="btn btn-primary">See What's Live</a>
+                    <a href="resources.html#whitepaper" class="btn btn-secondary">Read White Paper</a>
                 </div>
-                <div class="problem-card">
-                    <div class="problem-icon">🎯</div>
-                    <h3>The Attack Pattern</h3>
-                    <p>Compromise one admin account. Post one malicious link. Drain hundreds of wallets. Current tools detect nothing until it's over.</p>
-                </div>
-                <div class="problem-card">
-                    <div class="problem-icon">⚡</div>
-                    <h3>Blocklists Don't Work</h3>
-                    <p>Attackers generate fresh domains for each attack. By definition, new phishing links aren't on any blocklist.</p>
-                </div>
-                <div class="problem-card">
-                    <div class="problem-icon">🔓</div>
-                    <h3>Isolated Defenses</h3>
-                    <p>When one community is attacked, thousands remain unaware. Threat intelligence dies with each incident.</p>
-                </div>
-                <div class="problem-card wide">
-                    <div class="problem-icon">🔒</div>
-                    <h3>Server Protection Isn't Enough</h3>
-                    <p>Current security bots protect your Discord server. But wallet drains happen AFTER users leave Discord—in their browser. Protection must follow users to the transaction. Discord bots end at the server boundary. Validify follows users all the way to their wallet.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Core Protocol Section -->
-    <section id="protocol">
-        <div class="section-container">
-            <div class="section-header">
-                <div class="section-label">Core Protocol</div>
-                <h2 class="section-title">Three Layers of Defense</h2>
-                <p class="section-subtitle">
-                    Not a product. Infrastructure. The verification layer Web3 communities build on.
-                </p>
-            </div>
-
-            <div class="protocol-grid">
-                <div class="protocol-card">
-                    <div class="protocol-icon">🔐</div>
-                    <h3>Multi-Signature Verification</h3>
-                    <p>Cryptographic approval from multiple administrators before any link-containing announcement is published. A single compromised account can never authorize malicious content.</p>
-                    <ul class="protocol-features">
-                        <li>Configurable approval thresholds</li>
-                        <li>Time-limited verification windows</li>
-                        <li>Unique cryptographic codes per approver</li>
-                        <li>Urgency is the red flag—friction is the feature</li>
-                    </ul>
-                </div>
-                <div class="protocol-card">
-                    <div class="protocol-icon">⛓️</div>
-                    <h3>On-Chain Attestation Layer</h3>
-                    <p>Every security event recorded on Ethereum. Immutable proof of approvals, rejections, and detected threats. The data substrate for cross-community intelligence.</p>
-                    <ul class="protocol-features">
-                        <li>Verifiable security history via EAS</li>
-                        <li>Privacy-preserving hashed identifiers</li>
-                        <li>AI training data for pattern recognition</li>
-                        <li>Dispute resolution evidence</li>
-                    </ul>
-                </div>
-                <div class="protocol-card">
-                    <div class="protocol-icon">🌐</div>
-                    <h3>Threat Intelligence Network</h3>
-                    <p>When one community encounters a threat, every community is protected. Shared defense that gets stronger with each participant. The immune system Web3 never had.</p>
-                    <ul class="protocol-features">
-                        <li>Real-time cross-community alerts</li>
-                        <li>Behavioral pattern recognition</li>
-                        <li>Predictive risk scoring</li>
-                        <li>Network effects: more data = better defense</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- How It Works Section -->
-    <section id="how-it-works">
-        <div class="section-container">
-            <div class="section-header">
-                <div class="section-label">How It Works</div>
-                <h2 class="section-title">The Verification Flow</h2>
-                <p class="section-subtitle">
-                    From submission to publication. Every step verified, every action recorded.
-                </p>
-            </div>
-
-            <div class="steps">
-                <div class="step">
-                    <div class="step-number">1</div>
-                    <div class="step-content">
-                        <h3>Admin Submits Announcement</h3>
-                        <p>An administrator attempts to post a link-containing message to a protected channel. Validify intercepts and holds the content.</p>
+                <div class="hero-stats">
+                    <div class="stat">
+                        <div class="stat-value">$494M</div>
+                        <div class="stat-label">Lost to Phishing (2024)</div>
                     </div>
-                </div>
-                <div class="step">
-                    <div class="step-number">2</div>
-                    <div class="step-content">
-                        <h3>Approvers Notified</h3>
-                        <p>Designated approvers receive the message preview and a unique cryptographic verification code. Each code is single-use and time-limited.</p>
+                    <div class="stat">
+                        <div class="stat-value">67%</div>
+                        <div class="stat-label">YoY Increase</div>
                     </div>
-                </div>
-                <div class="step">
-                    <div class="step-number">3</div>
-                    <div class="step-content">
-                        <h3>Threshold Reached</h3>
-                        <p>Once the configured number of approvers submit their codes (e.g., 3 of 5), the verification threshold is satisfied. If the window expires, the message is rejected.</p>
-                    </div>
-                </div>
-                <div class="step">
-                    <div class="step-number">4</div>
-                    <div class="step-content">
-                        <h3>Published & Attested</h3>
-                        <p>The verified message is published with a Validify badge. Approval signatures are recorded on-chain, creating an immutable audit trail.</p>
-                    </div>
-                </div>
-                <div class="step">
-                    <div class="step-number">5</div>
-                    <div class="step-content">
-                        <h3>User Verifies in Browser</h3>
-                        <p>When a community member clicks the verified link, the Validify browser extension automatically checks: Does this link match an attested announcement? Is the contract address verified? Are there any threat indicators? Users see a clear trust badge before connecting their wallet.</p>
+                    <div class="stat stat-highlight">
+                        <div class="stat-value">1</div>
+                        <div class="stat-label">Proactive Solution</div>
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- User Protection Section -->
-    <section id="user-protection">
-        <div class="section-container">
-            <div class="section-header">
-                <div style="display: flex; justify-content: center; margin-bottom: 1.5rem;">
-                    <svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg" style="width: 60px; height: 60px;">
-                        <defs>
-                            <linearGradient id="protectionGrad1" x1="0%" y1="0%" x2="100%" y2="100%">
-                                <stop offset="0%" style="stop-color:#00ff88"/>
-                                <stop offset="50%" style="stop-color:#00d4ff"/>
-                                <stop offset="100%" style="stop-color:#667eea"/>
-                            </linearGradient>
-                            <linearGradient id="protectionGrad2" x1="100%" y1="0%" x2="0%" y2="100%">
-                                <stop offset="0%" style="stop-color:#667eea"/>
-                                <stop offset="100%" style="stop-color:#00ff88"/>
-                            </linearGradient>
-                        </defs>
-                        <path d="M30 4 L50 17 L46 43 L30 54 L14 43 L10 17 Z" fill="none" stroke="url(#protectionGrad1)" stroke-width="2.5"/>
-                        <path d="M30 4 L30 28 L10 17 Z" fill="url(#protectionGrad2)" opacity="0.3"/>
-                        <path d="M30 4 L50 17 L30 28 Z" fill="url(#protectionGrad1)" opacity="0.4"/>
-                        <path d="M30 28 L14 43 L10 17 Z" fill="url(#protectionGrad2)" opacity="0.2"/>
-                        <path d="M30 28 L46 43 L50 17 Z" fill="url(#protectionGrad1)" opacity="0.25"/>
-                        <line x1="30" y1="28" x2="30" y2="54" stroke="url(#protectionGrad1)" stroke-width="1.5" opacity="0.5"/>
-                        <path d="M22 22 L30 36 L38 22" fill="none" stroke="#ffffff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
+        <!-- Live Now -->
+        <section class="live-section">
+            <div class="section-container">
+                <div class="section-header">
+                    <div class="section-label">🟢 Live Now</div>
+                    <h2 class="section-title">Deployed & Operational</h2>
+                    <p class="section-subtitle">Not a roadmap promise. Working infrastructure you can use today.</p>
                 </div>
-                <div class="section-label">User Protection</div>
-                <h2 class="section-title">Protection Beyond Discord</h2>
-                <p class="section-subtitle">
-                    Discord bots protect servers. <strong style="color: var(--primary);">Validify protects users.</strong>
-                </p>
-            </div>
-
-            <div class="protection-grid">
-                <div class="protection-problem">
-                    <h3>⚠️ The Gap in Current Security</h3>
-                    <p>
-                        When you click a link from a Discord announcement, existing security ends. 
-                        The actual wallet drain happens in your browser—not Discord. 
-                    </p>
-                    <p>
-                        Current security bots can detect a malicious link <em>after</em> it's posted. 
-                        But they can't follow you to the fake mint site. They can't warn you before you connect your wallet. 
-                        <strong style="color: var(--danger);">That's where the money is actually lost.</strong>
-                    </p>
-                </div>
-
-                <div class="protection-solution">
-                    <h3>
-                        <svg viewBox="0 0 60 60" style="width: 28px; height: 28px;">
-                            <defs>
-                                <linearGradient id="solGrad1" x1="0%" y1="0%" x2="100%" y2="100%">
-                                    <stop offset="0%" style="stop-color:#00ff88"/>
-                                    <stop offset="50%" style="stop-color:#00d4ff"/>
-                                    <stop offset="100%" style="stop-color:#667eea"/>
-                                </linearGradient>
-                            </defs>
-                            <path d="M30 4 L50 17 L46 43 L30 54 L14 43 L10 17 Z" fill="none" stroke="url(#solGrad1)" stroke-width="3"/>
-                            <path d="M22 22 L30 36 L38 22" fill="none" stroke="#ffffff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
-                        Validify Browser Extension
-                    </h3>
-                    <p>Our browser extension verifies links at the point of wallet connection:</p>
-                    <ul class="protection-checks">
-                        <li>
-                            <span style="color: var(--primary);">✓</span>
-                            <span>"This link was approved by 3/5 admins of [Project]"</span>
-                        </li>
-                        <li>
-                            <span style="color: var(--primary);">✓</span>
-                            <span>"This mint contract matches what [Project] registered"</span>
-                        </li>
-                        <li>
-                            <span style="color: var(--warning);">⚠</span>
-                            <span>"Warning: This link has no Validify attestation"</span>
-                        </li>
-                    </ul>
-                    <div class="protection-tagline">
-                        <p>End-to-end verification. From announcement to wallet connection.</p>
+                <div class="feature-grid">
+                    <div class="feature-card live">
+                        <div class="feature-icon">🔐</div>
+                        <h3>Multi-Sig Verification <span class="live-badge">LIVE</span></h3>
+                        <p>Require multiple admin approvals before any link-containing announcement is published. Single compromised account can never authorize malicious content.</p>
+                    </div>
+                    <div class="feature-card live">
+                        <div class="feature-icon">🔑</div>
+                        <h3>Hardware Wallet Binding <span class="live-badge">LIVE</span></h3>
+                        <p>Cryptographic proof of admin identity. Even if Discord is compromised, attackers can't approve without physical wallet access.</p>
+                    </div>
+                    <div class="feature-card live">
+                        <div class="feature-icon">👁️</div>
+                        <h3>Admin Monitoring <span class="live-badge">LIVE</span></h3>
+                        <p>Real-time alerts for role changes, bot additions, permission modifications. Know immediately when something changes.</p>
+                    </div>
+                    <div class="feature-card live">
+                        <div class="feature-icon">🚨</div>
+                        <h3>Security Alerts <span class="live-badge">LIVE</span></h3>
+                        <p>Instant notifications for suspicious activity. Configurable thresholds and escalation paths.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">⛓️</div>
+                        <h3>On-Chain Attestations <span class="testnet-badge">TESTNET</span></h3>
+                        <p>Every approval recorded on Ethereum via EAS. Immutable proof of security measures for compliance and trust.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🌐</div>
+                        <h3>Browser Extension <span style="background: var(--text-muted); color: var(--dark); font-size: 0.65rem; padding: 0.25rem 0.5rem; border-radius: 4px; font-weight: 700;">Q2 2026</span></h3>
+                        <p>Verify links at the point of wallet connection. Protection follows users beyond Discord.</p>
                     </div>
                 </div>
             </div>
+        </section>
 
-            <div style="margin-top: 3rem;">
-                <h3 style="text-align: center; font-size: 1.5rem; margin-bottom: 2rem;">The Protection Gap</h3>
-                <div class="flow-comparison">
-                    <div class="flow-card others">
-                        <h4>❌ Other Security Bots</h4>
-                        <ul class="flow-steps">
-                            <li>
-                                <span class="step-num">1</span>
-                                Malicious link posted in Discord
-                            </li>
-                            <li>
-                                <span class="step-num">2</span>
-                                User clicks link → leaves Discord
-                            </li>
-                            <li>
-                                <span class="step-num">3</span>
-                                User on fake site (no protection)
-                            </li>
-                            <li class="danger">
-                                <span class="step-num">4</span>
-                                <strong>Wallet drained 💀</strong>
-                            </li>
-                        </ul>
+        <!-- Problem -->
+        <section class="problem-section">
+            <div class="section-container">
+                <div class="section-header">
+                    <div class="section-label">The Problem</div>
+                    <h2 class="section-title">Web3 Security is Broken</h2>
+                    <p class="section-subtitle">Current solutions detect threats after damage is done. We prevent them.</p>
+                </div>
+                <div class="problem-grid">
+                    <div class="problem-card">
+                        <div class="problem-icon">💀</div>
+                        <h3>Compromised Admins</h3>
+                        <p>One phished admin = entire community at risk. Current tools can't prevent authorized accounts from posting malicious links.</p>
                     </div>
-
-                    <div class="flow-card validify">
-                        <h4>
-                            <svg viewBox="0 0 60 60" style="width: 22px; height: 22px;">
-                                <defs>
-                                    <linearGradient id="flowGrad1" x1="0%" y1="0%" x2="100%" y2="100%">
-                                        <stop offset="0%" style="stop-color:#00ff88"/>
-                                        <stop offset="50%" style="stop-color:#00d4ff"/>
-                                        <stop offset="100%" style="stop-color:#667eea"/>
-                                    </linearGradient>
-                                </defs>
-                                <path d="M30 4 L50 17 L46 43 L30 54 L14 43 L10 17 Z" fill="none" stroke="url(#flowGrad1)" stroke-width="3"/>
-                                <path d="M22 22 L30 36 L38 22" fill="none" stroke="#ffffff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-                            </svg>
-                            Validify End-to-End
-                        </h4>
-                        <ul class="flow-steps">
-                            <li>
-                                <span class="step-num">1</span>
-                                Multi-sig blocks unauthorized links
-                            </li>
-                            <li>
-                                <span class="step-num">2</span>
-                                Verified link posted with attestation
-                            </li>
-                            <li>
-                                <span class="step-num">3</span>
-                                Extension verifies before wallet connect
-                            </li>
-                            <li class="success">
-                                <span class="step-num">4</span>
-                                <strong>User protected ✓</strong>
-                            </li>
-                        </ul>
+                    <div class="problem-card">
+                        <div class="problem-icon">⏰</div>
+                        <h3>Reactive Detection</h3>
+                        <p>Security bots detect threats after posting. By then, the fastest clickers have already connected wallets and lost funds.</p>
+                    </div>
+                    <div class="problem-card">
+                        <div class="problem-icon">🔓</div>
+                        <h3>No Verification Layer</h3>
+                        <p>Users have no way to verify if an announcement is legitimate. They're trained to trust admin posts implicitly.</p>
+                    </div>
+                    <div class="problem-card">
+                        <div class="problem-icon">🏝️</div>
+                        <h3>Siloed Intelligence</h3>
+                        <p>Each community fights alone. Attackers move freely between servers while defenders can't share threat data.</p>
                     </div>
                 </div>
             </div>
+        </section>
 
-            <div style="text-align: center; margin-top: 4rem;">
-                <a href="#early-access" class="btn btn-primary" style="gap: 0.75rem;">
-                    <svg viewBox="0 0 60 60" style="width: 24px; height: 24px;">
-                        <path d="M30 4 L50 17 L46 43 L30 54 L14 43 L10 17 Z" fill="none" stroke="#0a0a0f" stroke-width="3"/>
-                        <path d="M22 22 L30 36 L38 22" fill="none" stroke="#0a0a0f" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                    Get Early Access
-                </a>
-                <p style="color: var(--text-muted); margin-top: 1rem; font-size: 0.9rem;">
-                    Browser extension launches Q2 2026. Be first to protect your community.
-                </p>
-            </div>
-        </div>
-    </section>
-
-    <!-- Ecosystem Section -->
-    <section id="ecosystem">
-        <div class="section-container">
-            <div class="section-header">
-                <div class="section-label">Ecosystem</div>
-                <h2 class="section-title">Beyond Discord</h2>
-                <p class="section-subtitle">
-                    Discord is where we start. It's not where we stop. The Validify protocol expands to protect Web3 communication everywhere.
-                </p>
-            </div>
-
-            <div class="ecosystem-grid">
-                <div class="ecosystem-card">
-                    <div class="ecosystem-icon">💬</div>
-                    <div class="ecosystem-phase">PHASE 1 • Q1 2026</div>
-                    <h3>Discord Integration</h3>
-                    <p>Multi-sig verification, admin monitoring, and threat detection for Discord servers.</p>
-                    <span class="ecosystem-status building">Building Now</span>
-                </div>
-
-                <div class="ecosystem-card featured">
-                    <div class="ecosystem-icon" style="border: 1px solid var(--primary);">
-                        <svg viewBox="0 0 60 60" style="width: 40px; height: 40px;">
-                            <defs>
-                                <linearGradient id="ecoGrad1" x1="0%" y1="0%" x2="100%" y2="100%">
-                                    <stop offset="0%" style="stop-color:#00ff88"/>
-                                    <stop offset="50%" style="stop-color:#00d4ff"/>
-                                    <stop offset="100%" style="stop-color:#667eea"/>
-                                </linearGradient>
-                            </defs>
-                            <path d="M30 4 L50 17 L46 43 L30 54 L14 43 L10 17 Z" fill="none" stroke="url(#ecoGrad1)" stroke-width="2.5"/>
-                            <path d="M22 22 L30 36 L38 22" fill="none" stroke="#ffffff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
-                    </div>
-                    <div class="ecosystem-phase">PHASE 1.5 • Q2 2026</div>
-                    <h3>Browser Extension</h3>
-                    <p>Verify links before you connect your wallet. See which announcements are Validify-attested before you sign anything.</p>
-                    <ul class="ecosystem-features">
-                        <li>Verify link attestation status</li>
-                        <li>Contract address verification</li>
-                        <li>Threat indicator warnings</li>
-                        <li>Trust badges for verified projects</li>
-                    </ul>
-                    <span class="ecosystem-status">Q2 2026</span>
-                </div>
-
-                <div class="ecosystem-card">
-                    <div class="ecosystem-icon">✈️</div>
-                    <div class="ecosystem-phase">PHASE 2 • Q2 2026</div>
-                    <h3>Telegram Expansion</h3>
-                    <p>Protocol extension to Telegram groups and channels. Same security model, new platform.</p>
-                    <span class="ecosystem-status">Q2 2026</span>
-                </div>
-
-                <div class="ecosystem-card">
-                    <div class="ecosystem-icon">🔌</div>
-                    <div class="ecosystem-phase">PHASE 3 • Q3 2026</div>
-                    <h3>Public API & SDK</h3>
-                    <p>Open infrastructure for third-party integrations. Any platform can implement Validify verification.</p>
-                    <span class="ecosystem-status">Q3 2026</span>
-                </div>
-
-                <div class="ecosystem-card">
-                    <div class="ecosystem-icon">🤖</div>
-                    <div class="ecosystem-phase">PHASE 4 • Q4 2026</div>
-                    <h3>Predictive Intelligence</h3>
-                    <p>AI-driven anomaly detection. Pattern recognition across the entire network. Predict attacks before they happen.</p>
-                    <span class="ecosystem-status">Q4 2026</span>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- FAQ Section -->
-    <section id="faq">
-        <div class="section-container">
-            <div class="section-header">
-                <div class="section-label">FAQ</div>
-                <h2 class="section-title">Frequently Asked Questions</h2>
-            </div>
-
-            <div class="faq-grid">
-                <div class="faq-item">
-                    <div class="faq-question">Will Validify ever ask for my seed phrase?</div>
-                    <div class="faq-answer">
-                        <div class="faq-answer-content">
-                            <strong>NEVER.</strong> Validify only uses wallet signature verification. 
-                            We never ask for, store, or have access to your private keys or seed phrases. 
-                            If anyone claiming to be from Validify asks for this information, it's a scam.
-                        </div>
-                    </div>
-                </div>
-
-                <div class="faq-item">
-                    <div class="faq-question">How does multi-signature verification work?</div>
-                    <div class="faq-answer">
-                        <div class="faq-answer-content">
-                            When an admin submits a link-containing announcement, Validify intercepts and holds it. 
-                            Designated approvers receive unique cryptographic codes. Each approver has a time-limited 
-                            window to verify. Only when your threshold (e.g., 3 of 5 admins) is met does the message 
-                            publish. All approvals are recorded on-chain.
-                        </div>
-                    </div>
-                </div>
-
-                <div class="faq-item">
-                    <div class="faq-question">How is Validify different from existing security bots?</div>
-                    <div class="faq-answer">
-                        <div class="faq-answer-content">
-                            <p><strong>Existing security bots protect Discord servers.</strong> They detect threats after posting, and their protection ends when users click a link and leave Discord.</p>
-                            
-                            <p style="margin-top: 1rem;"><strong>Validify protects the entire journey:</strong></p>
-                            <ul>
-                                <li><strong>Server-side:</strong> Multi-signature verification BEFORE any link is posted</li>
-                                <li><strong>Browser-side:</strong> Extension verifies links at point of wallet connection</li>
-                                <li><strong>Identity:</strong> Hardware wallet binding proves admin legitimacy</li>
-                                <li><strong>Audit trail:</strong> On-chain attestations for every approval</li>
-                            </ul>
-                            
-                            <div class="faq-highlight">
-                                Discord bots protect servers. <strong style="color: var(--primary);">Validify protects users—from announcement to transaction.</strong>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="faq-item">
-                    <div class="faq-question">What is the Validify browser extension?</div>
-                    <div class="faq-answer">
-                        <div class="faq-answer-content">
-                            <p>The Validify browser extension is <strong>free protection for Web3 users</strong>. When you visit a link that claims to be from a Web3 project, the extension checks:</p>
-                            
-                            <ul>
-                                <li>Was this link approved through Validify's multi-sig verification?</li>
-                                <li>Does the smart contract match what the project registered?</li>
-                                <li>Are there any known threat indicators?</li>
-                            </ul>
-                            
-                            <p style="margin-top: 1rem;">You'll see a clear trust indicator before you connect your wallet:</p>
-                            <p>🟢 <strong>Green</strong> = Verified by Validify</p>
-                            <p>🟡 <strong>Yellow</strong> = Not verified (proceed with caution)</p>
-                            <p>🔴 <strong>Red</strong> = Known threat detected</p>
-                            
-                            <p style="margin-top: 1rem;">The extension launches <strong>Q2 2026</strong>.</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="faq-item">
-                    <div class="faq-question">What platforms does Validify support?</div>
-                    <div class="faq-answer">
-                        <div class="faq-answer-content">
-                            Discord integration launches with the protocol in Q1 2026. Browser extension and Telegram expansion follow in Q2 2026. 
-                            Our public API and SDK (Q3 2026) will enable integration with any platform. We're building 
-                            infrastructure, not just a single-platform tool.
-                        </div>
-                    </div>
-                </div>
-
-                <div class="faq-item">
-                    <div class="faq-question">Will there be a token?</div>
-                    <div class="faq-answer">
-                        <div class="faq-answer-content">
-                            Token utility is planned for 2027, after the core protocol proves value. We're focused on 
-                            building real security infrastructure first. Token design will be informed by actual usage 
-                            patterns, not speculation. Details will be published in the 2027 roadmap.
-                        </div>
-                    </div>
-                </div>
-
-                <div class="faq-item">
-                    <div class="faq-question">When does Validify launch?</div>
-                    <div class="faq-answer">
-                        <div class="faq-answer-content">
-                            Protocol launches Q1 2026 with Discord integration, multi-sig verification, and on-chain 
-                            attestations. We're currently onboarding founding communities for early access.
-                        </div>
-                    </div>
-                </div>
-
-                <div class="faq-item">
-                    <div class="faq-question">How much will Validify cost?</div>
-                    <div class="faq-answer">
-                        <div class="faq-answer-content">
-                            Pricing will be announced closer to launch. Founding communities in our early access program 
-                            receive extended free protection periods. We're designing pricing tiers that scale with community 
-                            size and protection needs—serious security shouldn't be limited to projects with massive budgets. 
-                            The browser extension is free for users.
-                        </div>
+        <!-- CTA -->
+        <section class="cta-section">
+            <div class="section-container">
+                <div class="cta-box">
+                    <h2>Ready to Secure Your Community?</h2>
+                    <p>Join our beta program and be among the first to implement proactive security infrastructure.</p>
+                    <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+                        <a href="resources.html#early-access" class="btn btn-primary">Request Early Access</a>
+                        <a href="resources.html#whitepaper" class="btn btn-secondary">Read White Paper</a>
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
+    </main>
 
-    <!-- Early Access Section -->
-    <section id="early-access">
-        <div class="section-container">
-            <div class="section-header">
-                <div class="section-label">Join the Protocol</div>
-                <h2 class="section-title">Request Early Access</h2>
-                <p class="section-subtitle">
-                    We're onboarding founding communities for Q1 2026 launch.
-                </p>
-            </div>
-
-            <div class="early-access-grid">
-                <div>
-                    <h3 style="font-size: 1.5rem; margin-bottom: 1.5rem;">Founding Community Benefits</h3>
-                    <p style="color: var(--text-muted); line-height: 1.8; margin-bottom: 2rem;">
-                        Early access communities shape the protocol. Your feedback directly influences development priorities, 
-                        and you'll be protected from day one of mainnet launch.
-                    </p>
-                    <ul class="benefits-list">
-                        <li>Priority onboarding when protocol launches</li>
-                        <li>Direct input on feature development</li>
-                        <li>Founding community badge and recognition</li>
-                        <li>Extended free protection period</li>
-                        <li>Private channel with core team</li>
-                        <li>Early access to browser extension beta</li>
-                    </ul>
-                </div>
-
-                <div class="form-card">
-                    <h4>📝 Apply for Early Access</h4>
-                    <p style="color: var(--text-muted); margin-bottom: 1.5rem;">
-                        Tell us about your community. We're prioritizing active Web3 projects with real security needs.
-                    </p>
-                    <form id="earlyAccessForm">
-                        <div class="form-group">
-                            <label for="projectName">Project / Community Name</label>
-                            <input type="text" id="projectName" name="projectName" placeholder="Your Project Name" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="communitySize">Discord Community Size</label>
-                            <select id="communitySize" name="communitySize" required>
-                                <option value="">Select size...</option>
-                                <option value="<1000">&lt; 1,000 members</option>
-                                <option value="1000-5000">1,000 - 5,000 members</option>
-                                <option value="5000-10000">5,000 - 10,000 members</option>
-                                <option value="10000-50000">10,000 - 50,000 members</option>
-                                <option value="50000+">50,000+ members</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="email">Contact Email</label>
-                            <input type="email" id="email" name="email" placeholder="you@project.com" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="projectType">Project Type</label>
-                            <select id="projectType" name="projectType" required>
-                                <option value="">Select type...</option>
-                                <option value="nft">NFT Collection</option>
-                                <option value="defi">DeFi Protocol</option>
-                                <option value="dao">DAO</option>
-                                <option value="gaming">Gaming / GameFi</option>
-                                <option value="infrastructure">Infrastructure</option>
-                                <option value="other">Other</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="reason">Why do you need Validify?</label>
-                            <textarea id="reason" name="reason" placeholder="Tell us about your security concerns..." rows="3"></textarea>
-                        </div>
-                        <button type="submit" class="btn btn-primary" style="width: 100%;">Submit Application</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Roadmap Section -->
-    <section id="roadmap">
-        <div class="section-container">
-            <div class="section-header">
-                <div class="section-label">Roadmap</div>
-                <h2 class="section-title">2026 Protocol Development</h2>
-                <p class="section-subtitle">
-                    From foundation to prediction. Building the security infrastructure Web3 needs.
-                </p>
-            </div>
-
-            <div class="roadmap-timeline">
-                <div class="roadmap-item">
-                    <div class="roadmap-content">
-                        <div class="roadmap-quarter">Q1 2026</div>
-                        <h3 class="roadmap-phase">Foundation</h3>
-                        <ul class="roadmap-items">
-                            <li>Deploy multi-signature verification protocol to Ethereum mainnet</li>
-                            <li>Launch Discord integration with admin action monitoring</li>
-                            <li>Complete third-party smart contract security audit</li>
-                            <li>Begin onboarding founding communities</li>
-                        </ul>
-                    </div>
-                    <div class="roadmap-marker"></div>
-                </div>
-
-                <div class="roadmap-item">
-                    <div class="roadmap-content">
-                        <div class="roadmap-quarter">Q2 2026</div>
-                        <h3 class="roadmap-phase">Intelligence</h3>
-                        <ul class="roadmap-items">
-                            <li>Launch Validify browser extension (Chrome)</li>
-                            <li>Activate cross-community threat intelligence network</li>
-                            <li>Launch on-chain attestation layer via EAS</li>
-                            <li>Expand protocol to Telegram ecosystem</li>
-                        </ul>
-                    </div>
-                    <div class="roadmap-marker"></div>
-                </div>
-
-                <div class="roadmap-item">
-                    <div class="roadmap-content">
-                        <div class="roadmap-quarter">Q3 2026</div>
-                        <h3 class="roadmap-phase">Expansion</h3>
-                        <ul class="roadmap-items">
-                            <li>Release public API and developer SDK</li>
-                            <li>Launch Project Trust Score with on-chain verification badges</li>
-                            <li>Establish security researcher partnership program</li>
-                            <li>Complete first third-party platform integration</li>
-                        </ul>
-                    </div>
-                    <div class="roadmap-marker"></div>
-                </div>
-
-                <div class="roadmap-item">
-                    <div class="roadmap-content">
-                        <div class="roadmap-quarter">Q4 2026</div>
-                        <h3 class="roadmap-phase">Prediction</h3>
-                        <ul class="roadmap-items">
-                            <li>Deploy AI-driven anomaly detection</li>
-                            <li>Introduce predictive risk scoring for pending announcements</li>
-                            <li>Launch DAO governance for protocol standards</li>
-                            <li>Publish 2027 roadmap including token utility framework</li>
-                        </ul>
-                    </div>
-                    <div class="roadmap-marker"></div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- White Paper Section -->
-    <section id="whitepaper">
-        <div class="section-container">
-            <div class="section-header">
-                <div class="section-label">Documentation</div>
-                <h2 class="section-title">White Paper</h2>
-                <p class="section-subtitle">
-                    Deep dive into the Validify protocol architecture, threat model, and vision.
-                </p>
-            </div>
-
-            <div class="whitepaper-container">
-                <div class="whitepaper-content">
-                    <h3>Protocol Architecture & Vision</h3>
-                    <p>
-                        The Validify white paper details our multi-signature verification system, on-chain attestation layer, 
-                        browser extension, and cross-community threat intelligence network. Understand how we're building the 
-                        security infrastructure Web3 communities deserve.
-                    </p>
-                    <p>
-                        From the fundamental problem of compromised admin accounts to our predictive security roadmap, 
-                        this document covers everything you need to evaluate and implement Validify protection.
-                    </p>
-                    
-                    <div class="whitepaper-topics">
-                        <div class="whitepaper-topic">Multi-Sig Verification</div>
-                        <div class="whitepaper-topic">Browser Extension</div>
-                        <div class="whitepaper-topic">On-Chain Attestations</div>
-                        <div class="whitepaper-topic">Threat Intelligence</div>
-                        <div class="whitepaper-topic">Two-Sided Network</div>
-                        <div class="whitepaper-topic">2026 Roadmap</div>
-                    </div>
-                </div>
-
-                <div class="whitepaper-preview">
-                    <div class="whitepaper-preview-header">
-                        <div class="whitepaper-icon">📄</div>
-                        <div class="whitepaper-meta">
-                            <h4>Validify White Paper v2.0</h4>
-                            <span>PDF • December 2025</span>
-                        </div>
-                    </div>
-                    
-                    <ul class="whitepaper-toc">
-                        <li><span>01</span> Executive Summary</li>
-                        <li><span>02</span> The Problem: Compromised Trust</li>
-                        <li><span>03</span> The Validify Solution</li>
-                        <li><span>04</span> Two-Sided Network Effect</li>
-                        <li><span>05</span> Technical Architecture</li>
-                        <li><span>06</span> 2026 Roadmap</li>
-                        <li><span>07</span> Token Economics</li>
-                        <li><span>08</span> Conclusion</li>
-                    </ul>
-                    
-                    <a href="Validify_White_Paper.pdf" class="btn-download" target="_blank">
-                        📥 Download White Paper
-                    </a>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Contact Section -->
-    <section id="contact">
-        <div class="section-container">
-            <div class="section-header">
-                <div class="section-label">Contact</div>
-                <h2 class="section-title">Get In Touch</h2>
-                <p class="section-subtitle">
-                    Questions? Partnership inquiries? We'd love to hear from you.
-                </p>
-            </div>
-
-            <div class="contact-grid">
-                <div class="contact-info">
-                    <h3>Let's Talk Security</h3>
-                    <p>
-                        Whether you're a project founder looking to protect your community, 
-                        an investor wanting to verify a project's security, or just curious 
-                        about how Validify works — we're here to help.
-                    </p>
-
-                    <div class="contact-methods">
-                        <a href="https://discord.gg/validify" class="contact-method" target="_blank">
-                            <div class="contact-method-icon">💬</div>
-                            <div>
-                                <strong>Discord</strong>
-                                <div style="color: var(--text-muted); font-size: 0.9rem;">Join our community server</div>
-                            </div>
-                        </a>
-                        <a href="https://twitter.com/validifyprotocol" class="contact-method" target="_blank">
-                            <div class="contact-method-icon">🐦</div>
-                            <div>
-                                <strong>Twitter</strong>
-                                <div style="color: var(--text-muted); font-size: 0.9rem;">@validifyprotocol</div>
-                            </div>
-                        </a>
-                        <a href="mailto:contact@validifyprotocol.com" class="contact-method">
-                            <div class="contact-method-icon">📧</div>
-                            <div>
-                                <strong>Email</strong>
-                                <div style="color: var(--text-muted); font-size: 0.9rem;">contact@validifyprotocol.com</div>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-
-                <div class="contact-form">
-                    <form id="contactForm">
-                        <div class="form-group">
-                            <label for="name">Your Name</label>
-                            <input type="text" id="name" name="name" placeholder="John Doe" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="contactEmail">Email Address</label>
-                            <input type="email" id="contactEmail" name="contactEmail" placeholder="you@example.com" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="subject">Subject</label>
-                            <input type="text" id="subject" name="subject" placeholder="Partnership Inquiry">
-                        </div>
-                        <div class="form-group">
-                            <label for="message">Message</label>
-                            <textarea id="message" name="message" placeholder="Tell us about your project..." required></textarea>
-                        </div>
-                        <button type="submit" class="btn btn-primary" style="width: 100%;">Send Message</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Footer -->
     <footer>
-        <div class="footer-grid">
-            <div class="footer-brand">
-                <a href="#home" class="logo">
-                    <div class="logo-icon">
-                        <svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
-                            <defs>
-                                <linearGradient id="crystalGradF1" x1="0%" y1="0%" x2="100%" y2="100%">
-                                    <stop offset="0%" style="stop-color:#00ff88"/>
-                                    <stop offset="50%" style="stop-color:#00d4ff"/>
-                                    <stop offset="100%" style="stop-color:#667eea"/>
-                                </linearGradient>
-                                <linearGradient id="crystalGradF2" x1="100%" y1="0%" x2="0%" y2="100%">
-                                    <stop offset="0%" style="stop-color:#667eea"/>
-                                    <stop offset="100%" style="stop-color:#00ff88"/>
-                                </linearGradient>
-                            </defs>
-                            <path d="M30 4 L50 17 L46 43 L30 54 L14 43 L10 17 Z" fill="none" stroke="url(#crystalGradF1)" stroke-width="2.5"/>
-                            <path d="M30 4 L30 28 L10 17 Z" fill="url(#crystalGradF2)" opacity="0.3"/>
-                            <path d="M30 4 L50 17 L30 28 Z" fill="url(#crystalGradF1)" opacity="0.4"/>
-                            <path d="M30 28 L14 43 L10 17 Z" fill="url(#crystalGradF2)" opacity="0.2"/>
-                            <path d="M30 28 L46 43 L50 17 Z" fill="url(#crystalGradF1)" opacity="0.25"/>
-                            <line x1="30" y1="28" x2="30" y2="54" stroke="url(#crystalGradF1)" stroke-width="1.5" opacity="0.5"/>
-                            <path d="M22 22 L30 36 L38 22" fill="none" stroke="#ffffff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
-                    </div>
-                    <span class="logo-text">VALIDIFY</span>
-                </a>
-                <p>
-                    The security layer Web3 never had. Multi-signature verification, 
-                    on-chain attestations, and cross-community threat intelligence.
-                </p>
+        <div class="footer-content">
+            <div class="footer-links">
+                <a href="index.html">Home</a>
+                <a href="protocol.html">Protocol</a>
+                <a href="ecosystem.html">Ecosystem</a>
+                <a href="roadmap.html">Roadmap</a>
+                <a href="resources.html">Resources</a>
             </div>
-
-            <div class="footer-column">
-                <h4>Protocol</h4>
-                <ul class="footer-links">
-                    <li><a href="#protocol">Core Protocol</a></li>
-                    <li><a href="#user-protection">Browser Extension</a></li>
-                    <li><a href="discord-bot.html">Discord Bot</a></li>
-                    <li><a href="#how-it-works">How It Works</a></li>
-                    <li><a href="#faq">FAQ</a></li>
-                </ul>
-            </div>
-
-            <div class="footer-column">
-                <h4>Resources</h4>
-                <ul class="footer-links">
-                    <li><a href="#whitepaper">White Paper</a></li>
-                    <li><a href="Validify_White_Paper.pdf" target="_blank">Download PDF</a></li>
-                    <li><a href="security-ecosystem.html">Security Architecture</a></li>
-                    <li><a href="#">API Reference</a></li>
-                </ul>
-            </div>
-
-            <div class="footer-column">
-                <h4>Community</h4>
-                <ul class="footer-links">
-                    <li><a href="#early-access">Request Access</a></li>
-                    <li><a href="#ecosystem">Ecosystem</a></li>
-                    <li><a href="#roadmap">Roadmap</a></li>
-                    <li><a href="#contact">Contact</a></li>
-                </ul>
-            </div>
-
-            <div class="footer-column">
-                <h4>Legal</h4>
-                <ul class="footer-links">
-                    <li><a href="#">Privacy Policy</a></li>
-                    <li><a href="#">Terms of Service</a></li>
-                    <li><a href="#">Trust & Safety</a></li>
-                </ul>
-            </div>
-        </div>
-
-        <div class="footer-bottom">
-            <p>© 2025 Validify Protocol. Launching Q1 2026.</p>
-            <div class="footer-socials">
-                <a href="https://discord.gg/validify" target="_blank" title="Discord">💬</a>
-                <a href="https://twitter.com/validifyprotocol" target="_blank" title="Twitter">🐦</a>
-                <a href="https://github.com/validify" target="_blank" title="GitHub">💻</a>
-            </div>
+            <div class="footer-copy">© 2025 Validify Protocol. Building security infrastructure for Web3.</div>
         </div>
     </footer>
 
     <script>
-        // Navbar scroll effect
-        window.addEventListener('scroll', () => {
-            const nav = document.querySelector('nav');
-            if (window.scrollY > 50) {
-                nav.classList.add('scrolled');
-            } else {
-                nav.classList.remove('scrolled');
-            }
+        // Custom cursor
+        const cursor = document.querySelector('.cursor');
+        const cursorDot = document.querySelector('.cursor-dot');
+        let cursorX = 0, cursorY = 0, dotX = 0, dotY = 0;
+
+        document.addEventListener('mousemove', (e) => {
+            cursorX = e.clientX;
+            cursorY = e.clientY;
         });
 
-        // Mobile menu toggle
-        function toggleMobileMenu() {
-            const navLinks = document.querySelector('.nav-links');
-            navLinks.classList.toggle('open');
+        function animateCursor() {
+            dotX += (cursorX - dotX) * 0.2;
+            dotY += (cursorY - dotY) * 0.2;
+            cursor.style.left = cursorX + 'px';
+            cursor.style.top = cursorY + 'px';
+            cursorDot.style.left = dotX + 'px';
+            cursorDot.style.top = dotY + 'px';
+            requestAnimationFrame(animateCursor);
         }
+        animateCursor();
 
-        // FAQ accordion
-        document.querySelectorAll('.faq-question').forEach(question => {
-            question.addEventListener('click', () => {
-                const item = question.parentElement;
-                const wasOpen = item.classList.contains('open');
-                
-                document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
-                
-                if (!wasOpen) {
-                    item.classList.add('open');
-                }
+        document.querySelectorAll('a, button, .feature-card, .stat, .problem-card').forEach(el => {
+            el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
+            el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
+        });
+
+        document.addEventListener('click', (e) => {
+            const ripple = document.createElement('div');
+            ripple.className = 'ripple';
+            ripple.style.left = e.clientX + 'px';
+            ripple.style.top = e.clientY + 'px';
+            ripple.style.width = '20px';
+            ripple.style.height = '20px';
+            document.body.appendChild(ripple);
+            setTimeout(() => ripple.remove(), 600);
+        });
+
+        // Parallax
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            document.querySelectorAll('.nebula').forEach((n, i) => {
+                n.style.transform = `translateY(${scrolled * (0.05 + i * 0.02)}px)`;
             });
-        });
-
-        // Smooth scroll for anchor links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function(e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
-                    document.querySelector('.nav-links').classList.remove('open');
-                }
-            });
-        });
-
-        // Form submissions
-        document.getElementById('earlyAccessForm')?.addEventListener('submit', function(e) {
-            e.preventDefault();
-            alert('Thank you for your application! We\'ll be in touch soon.');
-            this.reset();
-        });
-
-        document.getElementById('contactForm')?.addEventListener('submit', function(e) {
-            e.preventDefault();
-            alert('Message sent! We\'ll get back to you shortly.');
-            this.reset();
         });
     </script>
 </body>

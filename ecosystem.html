@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ecosystem | Validify</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Orbitron:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root { --primary: #00ff88; --primary-dim: rgba(0, 255, 136, 0.15); --secondary: #00d4ff; --accent: #667eea; --accent-2: #764ba2; --dark: #0a0a0f; --text: #ffffff; --text-muted: #a0a0b0; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body { font-family: 'Space Grotesk', sans-serif; background: #000; color: var(--text); min-height: 100vh; overflow-x: hidden; cursor: none; }
+
+        .cursor { width: 20px; height: 20px; border: 2px solid var(--primary); border-radius: 50%; position: fixed; pointer-events: none; z-index: 9999; transition: transform 0.1s ease, background 0.2s ease; mix-blend-mode: difference; }
+        .cursor-dot { width: 4px; height: 4px; background: var(--primary); border-radius: 50%; position: fixed; pointer-events: none; z-index: 9999; }
+        .cursor.hover { transform: scale(2); background: rgba(0, 255, 136, 0.2); }
+
+        .space-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(ellipse at center, #0a0a1a 0%, #000 100%); z-index: 0; }
+        .deep-space { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(ellipse at 20% 80%, rgba(102, 126, 234, 0.1) 0%, transparent 50%), radial-gradient(ellipse at 80% 20%, rgba(118, 75, 162, 0.1) 0%, transparent 50%); z-index: 1; }
+        .stars, .stars2, .stars3 { position: fixed; top: 0; left: 0; width: 200%; height: 200%; pointer-events: none; }
+        .stars { background-image: radial-gradient(1px 1px at 100px 50px, #fff, transparent), radial-gradient(1.5px 1.5px at 300px 250px, var(--primary), transparent), radial-gradient(1.5px 1.5px at 500px 100px, var(--secondary), transparent), radial-gradient(2px 2px at 250px 400px, var(--accent), transparent); background-size: 550px 450px; animation: moveStars 60s linear infinite; opacity: 0.8; }
+        .stars2 { background-image: radial-gradient(1.5px 1.5px at 50px 100px, var(--primary), transparent), radial-gradient(2px 2px at 150px 250px, var(--secondary), transparent), radial-gradient(2px 2px at 400px 300px, var(--accent-2), transparent); background-size: 450px 450px; animation: moveStars 90s linear infinite reverse; opacity: 0.6; }
+        @keyframes moveStars { from { transform: translateY(0) translateX(0); } to { transform: translateY(-50%) translateX(-50%); } }
+        .aurora { position: fixed; top: 0; left: 0; width: 100%; height: 50%; background: linear-gradient(180deg, transparent 0%, rgba(0, 255, 136, 0.03) 20%, rgba(0, 212, 255, 0.05) 40%, transparent 100%); filter: blur(50px); animation: aurora 15s ease-in-out infinite; z-index: 2; pointer-events: none; }
+        @keyframes aurora { 0%, 100% { transform: translateX(-10%) skewX(-5deg); opacity: 0.5; } 50% { transform: translateX(10%) skewX(5deg); opacity: 0.8; } }
+        .nebula { position: fixed; border-radius: 50%; filter: blur(80px); pointer-events: none; z-index: 1; }
+        .nebula-1 { width: 800px; height: 800px; background: radial-gradient(circle, rgba(102, 126, 234, 0.4) 0%, transparent 70%); top: -200px; right: -200px; animation: nebulaPulse 12s ease-in-out infinite; }
+        .nebula-2 { width: 600px; height: 600px; background: radial-gradient(circle, rgba(118, 75, 162, 0.35) 0%, transparent 70%); bottom: 10%; left: -150px; animation: nebulaPulse 15s ease-in-out infinite reverse; }
+        @keyframes nebulaPulse { 0%, 100% { transform: scale(1); opacity: 0.5; } 50% { transform: scale(1.2); opacity: 0.8; } }
+        .shooting-star { position: fixed; height: 2px; background: linear-gradient(90deg, var(--primary), var(--secondary), transparent); animation: shoot 2s linear infinite; opacity: 0; z-index: 3; }
+        .shooting-star:nth-child(1) { width: 150px; top: 10%; left: 10%; }
+        .shooting-star:nth-child(2) { width: 100px; top: 30%; left: 50%; animation-delay: 3s; }
+        @keyframes shoot { 0% { transform: translateX(0) translateY(0) rotate(-45deg); opacity: 0; } 5% { opacity: 1; } 100% { transform: translateX(800px) translateY(800px) rotate(-45deg); opacity: 0; } }
+        .planet { position: fixed; width: 350px; height: 350px; border-radius: 50%; background: radial-gradient(circle at 30% 30%, #2a2a4e 0%, #1a1a3e 40%, #0a0a1a 100%); box-shadow: inset -40px -40px 80px rgba(0,0,0,0.9), 0 0 100px rgba(102, 126, 234, 0.4); bottom: -120px; left: -120px; z-index: 1; animation: planetFloat 20s ease-in-out infinite; }
+        @keyframes planetFloat { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-30px); } }
+        .particle { position: fixed; border-radius: 50%; pointer-events: none; z-index: 5; animation: particleFloat 25s infinite linear; }
+        .particle:nth-child(1) { width: 4px; height: 4px; background: var(--primary); left: 10%; }
+        .particle:nth-child(2) { width: 5px; height: 5px; background: var(--secondary); left: 30%; animation-delay: 3s; }
+        .particle:nth-child(3) { width: 3px; height: 3px; background: var(--accent); left: 60%; animation-delay: 6s; }
+        .particle:nth-child(4) { width: 4px; height: 4px; background: var(--accent-2); left: 80%; animation-delay: 2s; }
+        @keyframes particleFloat { 0% { transform: translateY(100vh); opacity: 0; } 10% { opacity: 0.8; } 90% { opacity: 0.8; } 100% { transform: translateY(-100vh); opacity: 0; } }
+
+        nav { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; padding: 1rem 2rem; background: rgba(10, 10, 15, 0.7); backdrop-filter: blur(30px); border-bottom: 1px solid rgba(0, 255, 136, 0.2); }
+        .nav-container { max-width: 1400px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
+        .logo { display: flex; align-items: center; gap: 0.75rem; text-decoration: none; color: var(--text); }
+        .logo-icon { width: 50px; height: 50px; }
+        .logo-text { font-family: 'Orbitron', sans-serif; background: linear-gradient(90deg, var(--primary), var(--secondary), var(--primary)); background-size: 200% auto; -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-size: 1.5rem; font-weight: 700; letter-spacing: 3px; animation: textShine 3s linear infinite; }
+        @keyframes textShine { to { background-position: 200% center; } }
+        .nav-links { display: flex; gap: 0.5rem; list-style: none; }
+        .nav-links a { color: var(--text-muted); text-decoration: none; padding: 0.5rem 1rem; border-radius: 8px; transition: all 0.3s ease; font-weight: 500; }
+        .nav-links a:hover, .nav-links a.active { color: var(--text); background: var(--primary-dim); }
+        .nav-cta { background: linear-gradient(135deg, var(--primary), var(--secondary)) !important; color: var(--dark) !important; }
+
+        main { position: relative; z-index: 10; padding-top: 100px; }
+        .section-container { max-width: 1200px; margin: 0 auto; padding: 0 2rem; }
+        .page-hero { text-align: center; padding: 4rem 0 6rem; }
+        .page-hero h1 { font-family: 'Orbitron', sans-serif; font-size: clamp(2.5rem, 7vw, 4rem); font-weight: 900; margin-bottom: 1rem; background: linear-gradient(135deg, #fff 0%, var(--primary) 50%, var(--secondary) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; letter-spacing: 3px; }
+        .page-hero p { font-size: 1.2rem; color: var(--text-muted); max-width: 700px; margin: 0 auto; }
+
+        .section { padding: 5rem 0; }
+        .section-header { text-align: center; margin-bottom: 3rem; }
+        .section-label { font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; color: var(--primary); letter-spacing: 3px; text-transform: uppercase; margin-bottom: 1rem; }
+        .section-title { font-family: 'Orbitron', sans-serif; font-size: clamp(1.8rem, 4vw, 2.5rem); font-weight: 700; margin-bottom: 1rem; }
+        .section-subtitle { color: var(--text-muted); font-size: 1.1rem; max-width: 600px; margin: 0 auto; }
+
+        /* Timeline */
+        .phase-timeline { display: flex; justify-content: center; gap: 0; margin: 3rem 0; flex-wrap: wrap; }
+        .phase-item { display: flex; align-items: center; }
+        .phase-node { padding: 1rem 2rem; background: rgba(20, 20, 35, 0.8); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; text-align: center; transition: all 0.3s ease; }
+        .phase-node:hover { border-color: var(--primary); transform: translateY(-5px); }
+        .phase-node.active { border-color: var(--primary); background: rgba(0, 255, 136, 0.1); }
+        .phase-node h4 { font-family: 'Orbitron', sans-serif; font-size: 0.9rem; margin-bottom: 0.25rem; }
+        .phase-node span { font-size: 0.75rem; color: var(--text-muted); }
+        .phase-node.active span { color: var(--primary); }
+        .phase-connector { width: 50px; height: 2px; background: linear-gradient(90deg, var(--primary), var(--secondary)); margin: 0 -1px; }
+
+        /* Platform Cards */
+        .platform-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; }
+        .platform-card { background: rgba(20, 20, 35, 0.9); border: 1px solid rgba(255,255,255,0.1); border-radius: 24px; padding: 2.5rem; transition: all 0.4s ease; position: relative; overflow: hidden; }
+        .platform-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(135deg, rgba(0, 255, 136, 0.1), transparent); opacity: 0; transition: opacity 0.4s ease; }
+        .platform-card:hover::before { opacity: 1; }
+        .platform-card:hover { border-color: var(--primary); transform: translateY(-10px); box-shadow: 0 30px 60px rgba(0,0,0,0.4), 0 0 40px rgba(0, 255, 136, 0.15); }
+        .platform-card.discord { border-color: #5865F2; }
+        .platform-card.discord:hover { box-shadow: 0 30px 60px rgba(0,0,0,0.4), 0 0 40px rgba(88, 101, 242, 0.3); }
+        .platform-card.browser { border-color: var(--secondary); }
+        .platform-card.browser:hover { box-shadow: 0 30px 60px rgba(0,0,0,0.4), 0 0 40px rgba(0, 212, 255, 0.3); }
+        .platform-card.telegram { border-color: #0088cc; }
+        .platform-card.telegram:hover { box-shadow: 0 30px 60px rgba(0,0,0,0.4), 0 0 40px rgba(0, 136, 204, 0.3); }
+        .platform-card.api { border-color: var(--accent); }
+        .platform-card.api:hover { box-shadow: 0 30px 60px rgba(0,0,0,0.4), 0 0 40px rgba(102, 126, 234, 0.3); }
+        .platform-icon { font-size: 3rem; margin-bottom: 1.5rem; }
+        .platform-card h3 { font-family: 'Orbitron', sans-serif; font-size: 1.3rem; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.75rem; }
+        .platform-card .status { font-size: 0.65rem; padding: 0.25rem 0.75rem; border-radius: 20px; font-weight: 700; }
+        .status.live { background: var(--primary); color: var(--dark); }
+        .status.coming { background: var(--text-muted); color: var(--dark); }
+        .platform-card p { color: var(--text-muted); line-height: 1.7; margin-bottom: 1.5rem; }
+        .platform-features { list-style: none; }
+        .platform-features li { padding: 0.5rem 0; color: var(--text-muted); font-size: 0.9rem; display: flex; align-items: center; gap: 0.75rem; }
+        .platform-features li::before { content: '✓'; color: var(--primary); font-weight: bold; }
+        .platform-card.discord .platform-features li::before { color: #5865F2; }
+        .platform-card.browser .platform-features li::before { color: var(--secondary); }
+        .platform-card.telegram .platform-features li::before { color: #0088cc; }
+        .platform-card.api .platform-features li::before { color: var(--accent); }
+
+        /* Network Effect */
+        .network-section { background: rgba(102, 126, 234, 0.05); border-top: 1px solid rgba(102, 126, 234, 0.2); padding: 5rem 0; }
+        .network-visual { display: flex; justify-content: center; align-items: center; margin: 3rem 0; }
+        .network-hub { width: 120px; height: 120px; background: linear-gradient(135deg, var(--primary), var(--secondary)); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: 'Orbitron', sans-serif; font-weight: 700; color: var(--dark); font-size: 0.9rem; text-align: center; box-shadow: 0 0 50px rgba(0, 255, 136, 0.5); animation: hubPulse 3s ease-in-out infinite; }
+        @keyframes hubPulse { 0%, 100% { box-shadow: 0 0 50px rgba(0, 255, 136, 0.5); } 50% { box-shadow: 0 0 80px rgba(0, 255, 136, 0.7); } }
+        .network-nodes { display: flex; flex-direction: column; gap: 1rem; margin-left: 3rem; }
+        .network-node { display: flex; align-items: center; gap: 1rem; }
+        .node-line { width: 60px; height: 2px; background: linear-gradient(90deg, var(--primary), transparent); }
+        .node-dot { width: 40px; height: 40px; background: rgba(20, 20, 35, 0.9); border: 2px solid var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1rem; }
+        .node-label { font-size: 0.9rem; color: var(--text-muted); }
+
+        footer { position: relative; z-index: 10; padding: 4rem 2rem; background: rgba(10, 10, 15, 0.95); border-top: 1px solid rgba(255,255,255,0.1); margin-top: 4rem; }
+        .footer-content { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 2rem; }
+        .footer-links { display: flex; gap: 2rem; }
+        .footer-links a { color: var(--text-muted); text-decoration: none; transition: color 0.3s ease; }
+        .footer-links a:hover { color: var(--primary); }
+        .footer-copy { color: var(--text-muted); font-size: 0.9rem; }
+
+        @media (max-width: 900px) {
+            .cursor, .cursor-dot { display: none; }
+            body { cursor: auto; }
+            .nav-links { display: none; }
+            .planet { display: none; }
+            .phase-timeline { flex-direction: column; align-items: center; }
+            .phase-connector { width: 2px; height: 30px; }
+            .network-visual { flex-direction: column; }
+            .network-nodes { margin-left: 0; margin-top: 2rem; }
+            .node-line { display: none; }
+        }
+        .ripple { position: fixed; border-radius: 50%; background: rgba(0, 255, 136, 0.3); transform: scale(0); animation: ripple 0.6s linear; pointer-events: none; z-index: 9999; }
+        @keyframes ripple { to { transform: scale(4); opacity: 0; } }
+    </style>
+</head>
+<body>
+    <div class="cursor"></div>
+    <div class="cursor-dot"></div>
+    <div class="space-bg"></div>
+    <div class="deep-space"></div>
+    <div class="stars"></div>
+    <div class="stars2"></div>
+    <div class="aurora"></div>
+    <div class="nebula nebula-1"></div>
+    <div class="nebula nebula-2"></div>
+    <div class="shooting-star"></div>
+    <div class="shooting-star"></div>
+    <div class="planet"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+
+    <nav>
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <div class="logo-icon">
+                    <svg viewBox="0 0 60 60"><defs><linearGradient id="logoGrad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#00ff88"/><stop offset="50%" style="stop-color:#00d4ff"/><stop offset="100%" style="stop-color:#667eea"/></linearGradient></defs><path d="M30 4 L50 17 L46 43 L30 54 L14 43 L10 17 Z" fill="none" stroke="url(#logoGrad)" stroke-width="2.5"/><path d="M22 22 L30 36 L38 22" fill="none" stroke="#ffffff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </div>
+                <span class="logo-text">VALIDIFY</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="protocol.html">Protocol</a></li>
+                <li><a href="ecosystem.html" class="active">Ecosystem</a></li>
+                <li><a href="roadmap.html">Roadmap</a></li>
+                <li><a href="resources.html">Resources</a></li>
+                <li><a href="resources.html#early-access" class="nav-cta">Request Access</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main>
+        <div class="section-container">
+            <div class="page-hero">
+                <h1>Platform Ecosystem</h1>
+                <p>One protocol, multiple platforms. Security infrastructure that follows users everywhere.</p>
+            </div>
+
+            <!-- Phase Timeline -->
+            <div class="phase-timeline">
+                <div class="phase-item">
+                    <div class="phase-node active">
+                        <h4>Discord</h4>
+                        <span>🟢 LIVE</span>
+                    </div>
+                </div>
+                <div class="phase-connector"></div>
+                <div class="phase-item">
+                    <div class="phase-node">
+                        <h4>Browser</h4>
+                        <span>Q2 2026</span>
+                    </div>
+                </div>
+                <div class="phase-connector"></div>
+                <div class="phase-item">
+                    <div class="phase-node">
+                        <h4>Telegram</h4>
+                        <span>Q3 2026</span>
+                    </div>
+                </div>
+                <div class="phase-connector"></div>
+                <div class="phase-item">
+                    <div class="phase-node">
+                        <h4>API</h4>
+                        <span>Q3 2026</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Platforms -->
+        <section class="section">
+            <div class="section-container">
+                <div class="section-header">
+                    <div class="section-label">Platforms</div>
+                    <h2 class="section-title">Multi-Platform Security</h2>
+                    <p class="section-subtitle">Same security guarantees, wherever your community lives.</p>
+                </div>
+                <div class="platform-grid">
+                    <div class="platform-card discord">
+                        <div class="platform-icon">💬</div>
+                        <h3>Discord Bot <span class="status live">LIVE</span></h3>
+                        <p>Full-featured security bot with multi-signature verification, hardware wallet binding, and real-time monitoring.</p>
+                        <ul class="platform-features">
+                            <li>Multi-sig link verification</li>
+                            <li>Hardware wallet admin binding</li>
+                            <li>Role & permission monitoring</li>
+                            <li>Configurable alert channels</li>
+                            <li>Audit log integration</li>
+                        </ul>
+                    </div>
+                    <div class="platform-card browser">
+                        <div class="platform-icon">🌐</div>
+                        <h3>Browser Extension <span class="status coming">Q2 2026</span></h3>
+                        <p>Verify links at the point of wallet connection. Protection follows users beyond Discord.</p>
+                        <ul class="platform-features">
+                            <li>Real-time attestation lookup</li>
+                            <li>Contract address verification</li>
+                            <li>Threat indicator warnings</li>
+                            <li>MetaMask & Rainbow support</li>
+                            <li>Visual trust badges</li>
+                        </ul>
+                    </div>
+                    <div class="platform-card telegram">
+                        <div class="platform-icon">✈️</div>
+                        <h3>Telegram Bot <span class="status coming">Q3 2026</span></h3>
+                        <p>Same multi-signature verification for Telegram communities. Shared attestations across platforms.</p>
+                        <ul class="platform-features">
+                            <li>Multi-sig verification</li>
+                            <li>Cross-platform attestations</li>
+                            <li>Admin wallet binding</li>
+                            <li>Unified threat intelligence</li>
+                        </ul>
+                    </div>
+                    <div class="platform-card api">
+                        <div class="platform-icon">⚡</div>
+                        <h3>Developer API <span class="status coming">Q3 2026</span></h3>
+                        <p>Build custom integrations with Validify's verification infrastructure.</p>
+                        <ul class="platform-features">
+                            <li>Attestation queries</li>
+                            <li>Threat feed access</li>
+                            <li>Webhook notifications</li>
+                            <li>Custom verification flows</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Network Effects -->
+        <section class="network-section">
+            <div class="section-container">
+                <div class="section-header">
+                    <div class="section-label">Network Effects</div>
+                    <h2 class="section-title">Stronger Together</h2>
+                    <p class="section-subtitle">Every community that joins makes the network more valuable for everyone.</p>
+                </div>
+                <div class="network-visual">
+                    <div class="network-hub">VALIDIFY<br>PROTOCOL</div>
+                    <div class="network-nodes">
+                        <div class="network-node">
+                            <div class="node-line"></div>
+                            <div class="node-dot">💬</div>
+                            <span class="node-label">Discord Communities</span>
+                        </div>
+                        <div class="network-node">
+                            <div class="node-line"></div>
+                            <div class="node-dot">🌐</div>
+                            <span class="node-label">Browser Users</span>
+                        </div>
+                        <div class="network-node">
+                            <div class="node-line"></div>
+                            <div class="node-dot">✈️</div>
+                            <span class="node-label">Telegram Groups</span>
+                        </div>
+                        <div class="network-node">
+                            <div class="node-line"></div>
+                            <div class="node-dot">⚡</div>
+                            <span class="node-label">API Partners</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-links">
+                <a href="index.html">Home</a>
+                <a href="protocol.html">Protocol</a>
+                <a href="ecosystem.html">Ecosystem</a>
+                <a href="roadmap.html">Roadmap</a>
+                <a href="resources.html">Resources</a>
+            </div>
+            <div class="footer-copy">© 2025 Validify Protocol. Building security infrastructure for Web3.</div>
+        </div>
+    </footer>
+
+    <script>
+        const cursor = document.querySelector('.cursor'), cursorDot = document.querySelector('.cursor-dot');
+        let cursorX = 0, cursorY = 0, dotX = 0, dotY = 0;
+        document.addEventListener('mousemove', (e) => { cursorX = e.clientX; cursorY = e.clientY; });
+        function animateCursor() { dotX += (cursorX - dotX) * 0.2; dotY += (cursorY - dotY) * 0.2; cursor.style.left = cursorX + 'px'; cursor.style.top = cursorY + 'px'; cursorDot.style.left = dotX + 'px'; cursorDot.style.top = dotY + 'px'; requestAnimationFrame(animateCursor); }
+        animateCursor();
+        document.querySelectorAll('a, button, .platform-card, .phase-node').forEach(el => { el.addEventListener('mouseenter', () => cursor.classList.add('hover')); el.addEventListener('mouseleave', () => cursor.classList.remove('hover')); });
+        document.addEventListener('click', (e) => { const ripple = document.createElement('div'); ripple.className = 'ripple'; ripple.style.left = e.clientX + 'px'; ripple.style.top = e.clientY + 'px'; ripple.style.width = '20px'; ripple.style.height = '20px'; document.body.appendChild(ripple); setTimeout(() => ripple.remove(), 600); });
+        window.addEventListener('scroll', () => { const scrolled = window.pageYOffset; document.querySelectorAll('.nebula').forEach((n, i) => { n.style.transform = `translateY(${scrolled * (0.05 + i * 0.02)}px)`; }); });
+    </script>
+</body>
+</html>

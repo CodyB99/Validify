@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Protocol | Validify</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Orbitron:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #00ff88;
+            --primary-dim: rgba(0, 255, 136, 0.15);
+            --secondary: #00d4ff;
+            --accent: #667eea;
+            --accent-2: #764ba2;
+            --dark: #0a0a0f;
+            --dark-card: rgba(10, 10, 15, 0.85);
+            --text: #ffffff;
+            --text-muted: #a0a0b0;
+            --warning: #ffa502;
+            --danger: #ff4757;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background: #000;
+            color: var(--text);
+            min-height: 100vh;
+            overflow-x: hidden;
+            cursor: none;
+        }
+
+        /* Cursor */
+        .cursor { width: 20px; height: 20px; border: 2px solid var(--primary); border-radius: 50%; position: fixed; pointer-events: none; z-index: 9999; transition: transform 0.1s ease, background 0.2s ease; mix-blend-mode: difference; }
+        .cursor-dot { width: 4px; height: 4px; background: var(--primary); border-radius: 50%; position: fixed; pointer-events: none; z-index: 9999; }
+        .cursor.hover { transform: scale(2); background: rgba(0, 255, 136, 0.2); }
+
+        /* Space Background */
+        .space-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(ellipse at center, #0a0a1a 0%, #000 100%); z-index: 0; }
+        .deep-space { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(ellipse at 20% 80%, rgba(102, 126, 234, 0.1) 0%, transparent 50%), radial-gradient(ellipse at 80% 20%, rgba(118, 75, 162, 0.1) 0%, transparent 50%), radial-gradient(ellipse at 50% 50%, rgba(0, 255, 136, 0.05) 0%, transparent 70%); z-index: 1; }
+        .stars, .stars2, .stars3 { position: fixed; top: 0; left: 0; width: 200%; height: 200%; pointer-events: none; }
+        .stars { background-image: radial-gradient(1px 1px at 100px 50px, #fff, transparent), radial-gradient(1px 1px at 200px 150px, #fff, transparent), radial-gradient(1.5px 1.5px at 300px 250px, var(--primary), transparent), radial-gradient(1px 1px at 400px 350px, #fff, transparent), radial-gradient(1.5px 1.5px at 500px 100px, var(--secondary), transparent), radial-gradient(1px 1px at 50px 200px, #fff, transparent), radial-gradient(2px 2px at 250px 400px, var(--accent), transparent); background-size: 550px 450px; animation: moveStars 60s linear infinite; opacity: 0.8; }
+        .stars2 { background-image: radial-gradient(1.5px 1.5px at 50px 100px, var(--primary), transparent), radial-gradient(2px 2px at 150px 250px, var(--secondary), transparent), radial-gradient(1.5px 1.5px at 300px 50px, var(--accent), transparent), radial-gradient(2px 2px at 400px 300px, var(--accent-2), transparent); background-size: 450px 450px; animation: moveStars 90s linear infinite reverse; opacity: 0.6; }
+        .stars3 { background-image: radial-gradient(2px 2px at 100px 100px, #fff, transparent), radial-gradient(3px 3px at 300px 300px, #fff, transparent); background-size: 600px 400px; animation: twinkle 8s ease-in-out infinite, moveStars 120s linear infinite; opacity: 0.4; }
+        @keyframes moveStars { from { transform: translateY(0) translateX(0); } to { transform: translateY(-50%) translateX(-50%); } }
+        @keyframes twinkle { 0%, 100% { opacity: 0.2; } 50% { opacity: 0.6; } }
+        .aurora { position: fixed; top: 0; left: 0; width: 100%; height: 50%; background: linear-gradient(180deg, transparent 0%, rgba(0, 255, 136, 0.03) 20%, rgba(0, 212, 255, 0.05) 40%, rgba(102, 126, 234, 0.03) 60%, transparent 100%); filter: blur(50px); animation: aurora 15s ease-in-out infinite; z-index: 2; pointer-events: none; }
+        @keyframes aurora { 0%, 100% { transform: translateX(-10%) skewX(-5deg); opacity: 0.5; } 50% { transform: translateX(10%) skewX(5deg); opacity: 0.8; } }
+        .nebula { position: fixed; border-radius: 50%; filter: blur(80px); pointer-events: none; z-index: 1; }
+        .nebula-1 { width: 800px; height: 800px; background: radial-gradient(circle, rgba(102, 126, 234, 0.4) 0%, transparent 70%); top: -200px; right: -200px; animation: nebulaPulse 12s ease-in-out infinite; }
+        .nebula-2 { width: 600px; height: 600px; background: radial-gradient(circle, rgba(118, 75, 162, 0.35) 0%, transparent 70%); bottom: 10%; left: -150px; animation: nebulaPulse 15s ease-in-out infinite reverse; }
+        .nebula-3 { width: 500px; height: 500px; background: radial-gradient(circle, rgba(0, 255, 136, 0.2) 0%, transparent 70%); top: 40%; right: 10%; animation: nebulaPulse 10s ease-in-out infinite 2s; }
+        @keyframes nebulaPulse { 0%, 100% { transform: scale(1); opacity: 0.5; } 50% { transform: scale(1.2); opacity: 0.8; } }
+        .shooting-star { position: fixed; height: 2px; background: linear-gradient(90deg, var(--primary), var(--secondary), transparent); border-radius: 50%; animation: shoot 2s linear infinite; opacity: 0; z-index: 3; }
+        .shooting-star:nth-child(1) { width: 150px; top: 10%; left: 10%; animation-delay: 0s; }
+        .shooting-star:nth-child(2) { width: 100px; top: 20%; left: 60%; animation-delay: 2s; }
+        .shooting-star:nth-child(3) { width: 120px; top: 40%; left: 20%; animation-delay: 4s; }
+        @keyframes shoot { 0% { transform: translateX(0) translateY(0) rotate(-45deg); opacity: 0; } 5% { opacity: 1; } 100% { transform: translateX(800px) translateY(800px) rotate(-45deg); opacity: 0; } }
+        .planet { position: fixed; width: 350px; height: 350px; border-radius: 50%; background: radial-gradient(circle at 30% 30%, #2a2a4e 0%, #1a1a3e 40%, #0a0a1a 100%); box-shadow: inset -40px -40px 80px rgba(0,0,0,0.9), inset 20px 20px 60px rgba(102, 126, 234, 0.3), 0 0 100px rgba(102, 126, 234, 0.4); bottom: -120px; left: -120px; z-index: 1; animation: planetFloat 20s ease-in-out infinite; }
+        .planet-ring { position: fixed; width: 500px; height: 100px; border: 3px solid rgba(102, 126, 234, 0.3); border-radius: 50%; bottom: 20px; left: -180px; transform: rotateX(75deg) rotateZ(-15deg); z-index: 0; }
+        @keyframes planetFloat { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-30px); } }
+        .particle { position: fixed; border-radius: 50%; pointer-events: none; z-index: 5; animation: particleFloat 20s infinite linear; }
+        .particle:nth-child(1) { width: 4px; height: 4px; background: var(--primary); left: 5%; animation-duration: 25s; }
+        .particle:nth-child(2) { width: 6px; height: 6px; background: var(--secondary); left: 15%; animation-duration: 30s; animation-delay: 2s; }
+        .particle:nth-child(3) { width: 3px; height: 3px; background: var(--accent); left: 35%; animation-duration: 20s; animation-delay: 5s; }
+        .particle:nth-child(4) { width: 5px; height: 5px; background: var(--accent-2); left: 55%; animation-duration: 28s; animation-delay: 3s; }
+        .particle:nth-child(5) { width: 4px; height: 4px; background: #f093fb; left: 75%; animation-duration: 22s; animation-delay: 7s; }
+        .particle:nth-child(6) { width: 3px; height: 3px; background: var(--primary); left: 85%; animation-duration: 35s; }
+        @keyframes particleFloat { 0% { transform: translateY(100vh) scale(0); opacity: 0; } 10% { opacity: 0.8; transform: scale(1); } 90% { opacity: 0.8; } 100% { transform: translateY(-100vh) scale(0.5); opacity: 0; } }
+
+        /* Navigation */
+        nav { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; padding: 1rem 2rem; background: rgba(10, 10, 15, 0.7); backdrop-filter: blur(30px); border-bottom: 1px solid rgba(0, 255, 136, 0.2); }
+        .nav-container { max-width: 1400px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
+        .logo { display: flex; align-items: center; gap: 0.75rem; text-decoration: none; color: var(--text); }
+        .logo-icon { width: 50px; height: 50px; }
+        .logo-text { font-family: 'Orbitron', sans-serif; background: linear-gradient(90deg, var(--primary), var(--secondary), var(--primary)); background-size: 200% auto; -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; font-size: 1.5rem; font-weight: 700; letter-spacing: 3px; animation: textShine 3s linear infinite; }
+        @keyframes textShine { to { background-position: 200% center; } }
+        .nav-links { display: flex; gap: 0.5rem; list-style: none; }
+        .nav-links a { color: var(--text-muted); text-decoration: none; padding: 0.5rem 1rem; border-radius: 8px; transition: all 0.3s ease; font-weight: 500; }
+        .nav-links a:hover, .nav-links a.active { color: var(--text); background: var(--primary-dim); }
+        .nav-cta { background: linear-gradient(135deg, var(--primary), var(--secondary)) !important; color: var(--dark) !important; font-weight: 600 !important; }
+
+        /* Main */
+        main { position: relative; z-index: 10; padding-top: 100px; }
+        .section-container { max-width: 1200px; margin: 0 auto; padding: 0 2rem; }
+
+        /* Hero */
+        .page-hero { text-align: center; padding: 4rem 0 6rem; }
+        .page-hero h1 { font-family: 'Orbitron', sans-serif; font-size: clamp(2.5rem, 7vw, 4rem); font-weight: 900; margin-bottom: 1rem; background: linear-gradient(135deg, #fff 0%, var(--primary) 50%, var(--secondary) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; letter-spacing: 3px; }
+        .page-hero p { font-size: 1.2rem; color: var(--text-muted); max-width: 700px; margin: 0 auto; }
+
+        /* Section Styles */
+        .section { padding: 5rem 0; }
+        .section-header { text-align: center; margin-bottom: 3rem; }
+        .section-label { font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; color: var(--primary); letter-spacing: 3px; text-transform: uppercase; margin-bottom: 1rem; }
+        .section-title { font-family: 'Orbitron', sans-serif; font-size: clamp(1.8rem, 4vw, 2.5rem); font-weight: 700; margin-bottom: 1rem; }
+        .section-subtitle { color: var(--text-muted); font-size: 1.1rem; max-width: 600px; margin: 0 auto; }
+
+        /* Protocol Cards */
+        .protocol-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; }
+        .protocol-card { background: rgba(20, 20, 35, 0.9); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 24px; padding: 2.5rem; transition: all 0.4s ease; position: relative; overflow: hidden; }
+        .protocol-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(135deg, rgba(0, 255, 136, 0.1), transparent); opacity: 0; transition: opacity 0.4s ease; }
+        .protocol-card:hover::before { opacity: 1; }
+        .protocol-card:hover { border-color: var(--primary); transform: translateY(-10px); box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4), 0 0 40px rgba(0, 255, 136, 0.15); }
+        .protocol-card.highlight { border: 2px solid var(--primary); }
+        .protocol-card .badge { position: absolute; top: 0; right: 0; background: var(--primary); color: var(--dark); font-size: 0.7rem; font-weight: 700; padding: 0.5rem 1rem; border-radius: 0 24px 0 12px; }
+        .protocol-icon { font-size: 3rem; margin-bottom: 1.5rem; }
+        .protocol-card h3 { font-family: 'Orbitron', sans-serif; font-size: 1.3rem; margin-bottom: 1rem; }
+        .protocol-card > p { color: var(--text-muted); line-height: 1.7; margin-bottom: 1.5rem; }
+        .protocol-features { list-style: none; }
+        .protocol-features li { padding: 0.5rem 0; color: var(--text-muted); font-size: 0.9rem; display: flex; align-items: center; gap: 0.75rem; }
+        .protocol-features li::before { content: '→'; color: var(--primary); font-weight: bold; }
+
+        /* How It Works */
+        .steps { max-width: 800px; margin: 0 auto; }
+        .step { display: flex; gap: 2rem; margin-bottom: 3rem; align-items: flex-start; }
+        .step-number { width: 60px; height: 60px; min-width: 60px; background: linear-gradient(135deg, var(--primary), var(--secondary)); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: 'Orbitron', sans-serif; font-size: 1.5rem; font-weight: 900; color: var(--dark); box-shadow: 0 0 30px rgba(0, 255, 136, 0.4); }
+        .step-content h3 { font-size: 1.2rem; margin-bottom: 0.5rem; }
+        .step-content p { color: var(--text-muted); line-height: 1.7; }
+
+        /* Browser Extension Section */
+        .extension-section { background: linear-gradient(180deg, rgba(0, 212, 255, 0.05), transparent); border-top: 1px solid rgba(0, 212, 255, 0.2); padding: 5rem 0; }
+        .extension-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; }
+        .extension-content h3 { font-family: 'Orbitron', sans-serif; font-size: 1.8rem; margin-bottom: 1rem; color: var(--secondary); }
+        .extension-content p { color: var(--text-muted); line-height: 1.8; margin-bottom: 1.5rem; }
+        .extension-features { list-style: none; }
+        .extension-features li { padding: 0.75rem 0; display: flex; align-items: center; gap: 1rem; }
+        .extension-features li::before { content: '✓'; color: var(--secondary); font-weight: bold; font-size: 1.2rem; }
+        .extension-preview { background: rgba(20, 20, 35, 0.8); border: 1px solid rgba(0, 212, 255, 0.3); border-radius: 20px; padding: 2rem; text-align: center; }
+        .extension-preview .mockup { background: var(--dark); border-radius: 12px; padding: 1.5rem; margin-top: 1rem; }
+        .mockup-bar { display: flex; gap: 0.5rem; margin-bottom: 1rem; }
+        .mockup-dot { width: 12px; height: 12px; border-radius: 50%; background: var(--text-muted); }
+        .mockup-dot.red { background: #ff5f56; }
+        .mockup-dot.yellow { background: #ffbd2e; }
+        .mockup-dot.green { background: #27c93f; }
+        .mockup-content { background: rgba(255, 255, 255, 0.05); border-radius: 8px; padding: 1.5rem; }
+        .verified-badge { display: inline-flex; align-items: center; gap: 0.5rem; background: rgba(0, 255, 136, 0.2); border: 1px solid var(--primary); padding: 0.5rem 1rem; border-radius: 8px; color: var(--primary); font-weight: 600; margin-top: 1rem; }
+
+        /* Footer */
+        footer { position: relative; z-index: 10; padding: 4rem 2rem; background: rgba(10, 10, 15, 0.95); border-top: 1px solid rgba(255, 255, 255, 0.1); margin-top: 4rem; }
+        .footer-content { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 2rem; }
+        .footer-links { display: flex; gap: 2rem; }
+        .footer-links a { color: var(--text-muted); text-decoration: none; transition: color 0.3s ease; }
+        .footer-links a:hover { color: var(--primary); }
+        .footer-copy { color: var(--text-muted); font-size: 0.9rem; }
+
+        /* Mobile */
+        @media (max-width: 900px) {
+            .cursor, .cursor-dot { display: none; }
+            body { cursor: auto; }
+            .nav-links { display: none; }
+            .planet, .planet-ring { display: none; }
+            .extension-grid { grid-template-columns: 1fr; }
+            .step { flex-direction: column; text-align: center; }
+            .step-number { margin: 0 auto; }
+        }
+
+        .ripple { position: fixed; border-radius: 50%; background: rgba(0, 255, 136, 0.3); transform: scale(0); animation: ripple 0.6s linear; pointer-events: none; z-index: 9999; }
+        @keyframes ripple { to { transform: scale(4); opacity: 0; } }
+    </style>
+</head>
+<body>
+    <div class="cursor"></div>
+    <div class="cursor-dot"></div>
+    <div class="space-bg"></div>
+    <div class="deep-space"></div>
+    <div class="stars"></div>
+    <div class="stars2"></div>
+    <div class="stars3"></div>
+    <div class="aurora"></div>
+    <div class="nebula nebula-1"></div>
+    <div class="nebula nebula-2"></div>
+    <div class="nebula nebula-3"></div>
+    <div class="shooting-star"></div>
+    <div class="shooting-star"></div>
+    <div class="shooting-star"></div>
+    <div class="planet"></div>
+    <div class="planet-ring"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+
+    <nav>
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <div class="logo-icon">
+                    <svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
+                        <defs><linearGradient id="logoGrad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#00ff88"/><stop offset="50%" style="stop-color:#00d4ff"/><stop offset="100%" style="stop-color:#667eea"/></linearGradient></defs>
+                        <path d="M30 4 L50 17 L46 43 L30 54 L14 43 L10 17 Z" fill="none" stroke="url(#logoGrad)" stroke-width="2.5"/>
+                        <path d="M22 22 L30 36 L38 22" fill="none" stroke="#ffffff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
+                <span class="logo-text">VALIDIFY</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="protocol.html" class="active">Protocol</a></li>
+                <li><a href="ecosystem.html">Ecosystem</a></li>
+                <li><a href="roadmap.html">Roadmap</a></li>
+                <li><a href="resources.html">Resources</a></li>
+                <li><a href="resources.html#early-access" class="nav-cta">Request Access</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main>
+        <div class="section-container">
+            <div class="page-hero">
+                <h1>Four Layers of Defense</h1>
+                <p>Not a product. Infrastructure. The verification layer Web3 communities build on.</p>
+            </div>
+        </div>
+
+        <!-- Core Protocol -->
+        <section class="section">
+            <div class="section-container">
+                <div class="section-header">
+                    <div class="section-label">Core Protocol</div>
+                    <h2 class="section-title">Security Architecture</h2>
+                </div>
+                <div class="protocol-grid">
+                    <div class="protocol-card">
+                        <div class="protocol-icon">🔐</div>
+                        <h3>Multi-Signature Verification</h3>
+                        <p>Cryptographic approval from multiple administrators before any link-containing announcement is published.</p>
+                        <ul class="protocol-features">
+                            <li>Configurable approval thresholds (2-of-3, 3-of-5, etc.)</li>
+                            <li>Time-limited verification windows</li>
+                            <li>Unique cryptographic codes per approver</li>
+                            <li>Urgency is the red flag—friction is the feature</li>
+                        </ul>
+                    </div>
+                    <div class="protocol-card highlight">
+                        <div class="badge">KEY DIFFERENTIATOR</div>
+                        <div class="protocol-icon">🔑</div>
+                        <h3>Hardware Wallet Binding</h3>
+                        <p>Cryptographic proof of admin identity. Even if a Discord account is compromised, attackers cannot approve without physical wallet access.</p>
+                        <ul class="protocol-features">
+                            <li>Server owner wallet registration</li>
+                            <li>Admin approver wallet binding</li>
+                            <li>Signature verification for sensitive actions</li>
+                            <li>Nation-state level security requirement</li>
+                        </ul>
+                    </div>
+                    <div class="protocol-card">
+                        <div class="protocol-icon">⛓️</div>
+                        <h3>On-Chain Attestations</h3>
+                        <p>Every security event recorded on Ethereum via EAS. Immutable proof of approvals, rejections, and detected threats.</p>
+                        <ul class="protocol-features">
+                            <li>Verifiable security history</li>
+                            <li>Privacy-preserving hashed identifiers</li>
+                            <li>AI training data for pattern recognition</li>
+                            <li>Dispute resolution evidence</li>
+                        </ul>
+                    </div>
+                    <div class="protocol-card">
+                        <div class="protocol-icon">🌐</div>
+                        <h3>Threat Intelligence Network</h3>
+                        <p>When one community encounters a threat, every community is protected. Shared defense that gets stronger with each participant.</p>
+                        <ul class="protocol-features">
+                            <li>Real-time cross-community alerts</li>
+                            <li>Behavioral pattern recognition</li>
+                            <li>Predictive risk scoring</li>
+                            <li>Network effects: more data = better defense</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- How It Works -->
+        <section class="section" style="background: rgba(255,255,255,0.02);">
+            <div class="section-container">
+                <div class="section-header">
+                    <div class="section-label">How It Works</div>
+                    <h2 class="section-title">The Verification Flow</h2>
+                    <p class="section-subtitle">From submission to publication. Every step verified, every action recorded.</p>
+                </div>
+                <div class="steps">
+                    <div class="step">
+                        <div class="step-number">1</div>
+                        <div class="step-content">
+                            <h3>Admin Submits Announcement</h3>
+                            <p>An administrator attempts to post a link-containing message to a protected channel. Validify intercepts and holds the content.</p>
+                        </div>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">2</div>
+                        <div class="step-content">
+                            <h3>Approvers Notified</h3>
+                            <p>Designated approvers receive the message preview and a unique cryptographic verification code. Each code is single-use and time-limited.</p>
+                        </div>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">3</div>
+                        <div class="step-content">
+                            <h3>Threshold Reached</h3>
+                            <p>Once the configured number of approvers submit their codes (e.g., 3 of 5), the verification threshold is satisfied. If the window expires, the message is rejected.</p>
+                        </div>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">4</div>
+                        <div class="step-content">
+                            <h3>Published & Attested</h3>
+                            <p>The verified message is published with a Validify badge. Approval signatures are recorded on-chain, creating an immutable audit trail.</p>
+                        </div>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">5</div>
+                        <div class="step-content">
+                            <h3>User Verifies in Browser</h3>
+                            <p>When a community member clicks the verified link, the Validify browser extension checks: Does this link match an attested announcement? Users see a clear trust badge before connecting their wallet.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Browser Extension -->
+        <section class="extension-section" id="user-protection">
+            <div class="section-container">
+                <div class="section-header">
+                    <div class="section-label">User Protection</div>
+                    <h2 class="section-title">Protection Beyond Discord</h2>
+                    <p class="section-subtitle">Discord bots protect servers. <strong style="color: var(--primary);">Validify protects users.</strong></p>
+                </div>
+                <div class="extension-grid">
+                    <div class="extension-content">
+                        <h3>Validify Browser Extension</h3>
+                        <p>When you click a link from Discord, existing security ends. The actual wallet drain happens in your browser. Our extension verifies links at the point of wallet connection.</p>
+                        <ul class="extension-features">
+                            <li>Real-time attestation lookup before signing</li>
+                            <li>Contract address verification</li>
+                            <li>Threat indicator warnings</li>
+                            <li>Clear trust badges for verified links</li>
+                            <li>Works with MetaMask, Rainbow, and more</li>
+                        </ul>
+                    </div>
+                    <div class="extension-preview">
+                        <span style="color: var(--text-muted); font-size: 0.9rem;">BROWSER EXTENSION PREVIEW</span>
+                        <div class="mockup">
+                            <div class="mockup-bar">
+                                <div class="mockup-dot red"></div>
+                                <div class="mockup-dot yellow"></div>
+                                <div class="mockup-dot green"></div>
+                            </div>
+                            <div class="mockup-content">
+                                <div style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 1rem;">mint.projectname.xyz wants to connect</div>
+                                <div class="verified-badge">
+                                    <span>✓</span>
+                                    <span>Verified by Validify</span>
+                                </div>
+                                <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 1rem;">
+                                    Attested: 3 mins ago<br>
+                                    Approvers: 3/3 confirmed<br>
+                                    Community: Project Name Official
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-links">
+                <a href="index.html">Home</a>
+                <a href="protocol.html">Protocol</a>
+                <a href="ecosystem.html">Ecosystem</a>
+                <a href="roadmap.html">Roadmap</a>
+                <a href="resources.html">Resources</a>
+            </div>
+            <div class="footer-copy">© 2025 Validify Protocol. Building security infrastructure for Web3.</div>
+        </div>
+    </footer>
+
+    <script>
+        const cursor = document.querySelector('.cursor');
+        const cursorDot = document.querySelector('.cursor-dot');
+        let cursorX = 0, cursorY = 0, dotX = 0, dotY = 0;
+        document.addEventListener('mousemove', (e) => { cursorX = e.clientX; cursorY = e.clientY; });
+        function animateCursor() {
+            dotX += (cursorX - dotX) * 0.2;
+            dotY += (cursorY - dotY) * 0.2;
+            cursor.style.left = cursorX + 'px';
+            cursor.style.top = cursorY + 'px';
+            cursorDot.style.left = dotX + 'px';
+            cursorDot.style.top = dotY + 'px';
+            requestAnimationFrame(animateCursor);
+        }
+        animateCursor();
+        document.querySelectorAll('a, button, .protocol-card').forEach(el => {
+            el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
+            el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
+        });
+        document.addEventListener('click', (e) => {
+            const ripple = document.createElement('div');
+            ripple.className = 'ripple';
+            ripple.style.left = e.clientX + 'px';
+            ripple.style.top = e.clientY + 'px';
+            ripple.style.width = '20px';
+            ripple.style.height = '20px';
+            document.body.appendChild(ripple);
+            setTimeout(() => ripple.remove(), 600);
+        });
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            document.querySelectorAll('.nebula').forEach((n, i) => { n.style.transform = `translateY(${scrolled * (0.05 + i * 0.02)}px)`; });
+        });
+    </script>
+</body>
+</html>

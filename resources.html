@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resources | Validify</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Orbitron:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root { --primary: #00ff88; --primary-dim: rgba(0, 255, 136, 0.15); --secondary: #00d4ff; --accent: #667eea; --accent-2: #764ba2; --dark: #0a0a0f; --text: #ffffff; --text-muted: #a0a0b0; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body { font-family: 'Space Grotesk', sans-serif; background: #000; color: var(--text); min-height: 100vh; overflow-x: hidden; cursor: none; }
+
+        .cursor { width: 20px; height: 20px; border: 2px solid var(--primary); border-radius: 50%; position: fixed; pointer-events: none; z-index: 9999; transition: transform 0.1s ease, background 0.2s ease; mix-blend-mode: difference; }
+        .cursor-dot { width: 4px; height: 4px; background: var(--primary); border-radius: 50%; position: fixed; pointer-events: none; z-index: 9999; }
+        .cursor.hover { transform: scale(2); background: rgba(0, 255, 136, 0.2); }
+
+        .space-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(ellipse at center, #0a0a1a 0%, #000 100%); z-index: 0; }
+        .deep-space { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(ellipse at 20% 80%, rgba(102, 126, 234, 0.1) 0%, transparent 50%), radial-gradient(ellipse at 80% 20%, rgba(118, 75, 162, 0.1) 0%, transparent 50%); z-index: 1; }
+        .stars { position: fixed; top: 0; left: 0; width: 200%; height: 200%; background-image: radial-gradient(1px 1px at 100px 50px, #fff, transparent), radial-gradient(1.5px 1.5px at 300px 250px, var(--primary), transparent), radial-gradient(1.5px 1.5px at 500px 100px, var(--secondary), transparent), radial-gradient(2px 2px at 250px 400px, var(--accent), transparent); background-size: 550px 450px; animation: moveStars 60s linear infinite; opacity: 0.8; pointer-events: none; }
+        @keyframes moveStars { from { transform: translateY(0) translateX(0); } to { transform: translateY(-50%) translateX(-50%); } }
+        .aurora { position: fixed; top: 0; left: 0; width: 100%; height: 50%; background: linear-gradient(180deg, transparent 0%, rgba(0, 255, 136, 0.03) 20%, rgba(0, 212, 255, 0.05) 40%, transparent 100%); filter: blur(50px); animation: aurora 15s ease-in-out infinite; z-index: 2; pointer-events: none; }
+        @keyframes aurora { 0%, 100% { transform: translateX(-10%) skewX(-5deg); opacity: 0.5; } 50% { transform: translateX(10%) skewX(5deg); opacity: 0.8; } }
+        .nebula { position: fixed; border-radius: 50%; filter: blur(80px); pointer-events: none; z-index: 1; }
+        .nebula-1 { width: 800px; height: 800px; background: radial-gradient(circle, rgba(102, 126, 234, 0.4) 0%, transparent 70%); top: -200px; right: -200px; animation: nebulaPulse 12s ease-in-out infinite; }
+        .nebula-2 { width: 600px; height: 600px; background: radial-gradient(circle, rgba(118, 75, 162, 0.35) 0%, transparent 70%); bottom: 10%; left: -150px; animation: nebulaPulse 15s ease-in-out infinite reverse; }
+        @keyframes nebulaPulse { 0%, 100% { transform: scale(1); opacity: 0.5; } 50% { transform: scale(1.2); opacity: 0.8; } }
+        .shooting-star { position: fixed; height: 2px; width: 120px; background: linear-gradient(90deg, var(--primary), transparent); animation: shoot 2s linear infinite; opacity: 0; z-index: 3; top: 15%; left: 20%; }
+        @keyframes shoot { 0% { transform: translateX(0) translateY(0) rotate(-45deg); opacity: 0; } 5% { opacity: 1; } 100% { transform: translateX(800px) translateY(800px) rotate(-45deg); opacity: 0; } }
+        .planet { position: fixed; width: 350px; height: 350px; border-radius: 50%; background: radial-gradient(circle at 30% 30%, #2a2a4e 0%, #1a1a3e 40%, #0a0a1a 100%); box-shadow: inset -40px -40px 80px rgba(0,0,0,0.9), 0 0 100px rgba(102, 126, 234, 0.4); bottom: -120px; left: -120px; z-index: 1; animation: planetFloat 20s ease-in-out infinite; }
+        @keyframes planetFloat { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-30px); } }
+        .particle { position: fixed; border-radius: 50%; pointer-events: none; z-index: 5; animation: particleFloat 25s infinite linear; }
+        .particle:nth-child(1) { width: 4px; height: 4px; background: var(--primary); left: 10%; }
+        .particle:nth-child(2) { width: 5px; height: 5px; background: var(--secondary); left: 40%; animation-delay: 3s; }
+        .particle:nth-child(3) { width: 3px; height: 3px; background: var(--accent); left: 70%; animation-delay: 6s; }
+        @keyframes particleFloat { 0% { transform: translateY(100vh); opacity: 0; } 10% { opacity: 0.8; } 90% { opacity: 0.8; } 100% { transform: translateY(-100vh); opacity: 0; } }
+
+        nav { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; padding: 1rem 2rem; background: rgba(10, 10, 15, 0.7); backdrop-filter: blur(30px); border-bottom: 1px solid rgba(0, 255, 136, 0.2); }
+        .nav-container { max-width: 1400px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
+        .logo { display: flex; align-items: center; gap: 0.75rem; text-decoration: none; color: var(--text); }
+        .logo-icon { width: 50px; height: 50px; }
+        .logo-text { font-family: 'Orbitron', sans-serif; background: linear-gradient(90deg, var(--primary), var(--secondary), var(--primary)); background-size: 200% auto; -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-size: 1.5rem; font-weight: 700; letter-spacing: 3px; animation: textShine 3s linear infinite; }
+        @keyframes textShine { to { background-position: 200% center; } }
+        .nav-links { display: flex; gap: 0.5rem; list-style: none; }
+        .nav-links a { color: var(--text-muted); text-decoration: none; padding: 0.5rem 1rem; border-radius: 8px; transition: all 0.3s ease; font-weight: 500; }
+        .nav-links a:hover, .nav-links a.active { color: var(--text); background: var(--primary-dim); }
+        .nav-cta { background: linear-gradient(135deg, var(--primary), var(--secondary)) !important; color: var(--dark) !important; }
+
+        main { position: relative; z-index: 10; padding-top: 100px; }
+        .section-container { max-width: 1200px; margin: 0 auto; padding: 0 2rem; }
+        .page-hero { text-align: center; padding: 4rem 0 3rem; }
+        .page-hero h1 { font-family: 'Orbitron', sans-serif; font-size: clamp(2.5rem, 7vw, 4rem); font-weight: 900; margin-bottom: 1rem; background: linear-gradient(135deg, #fff 0%, var(--primary) 50%, var(--secondary) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; letter-spacing: 3px; }
+        .page-hero p { font-size: 1.2rem; color: var(--text-muted); max-width: 700px; margin: 0 auto; }
+
+        /* Quick Links */
+        .quick-links { display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap; margin: 2rem 0 4rem; }
+        .quick-link { padding: 0.75rem 1.5rem; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.1); border-radius: 50px; color: var(--text-muted); text-decoration: none; transition: all 0.3s ease; font-size: 0.9rem; }
+        .quick-link:hover { border-color: var(--primary); color: var(--primary); transform: translateY(-2px); }
+
+        .section { padding: 4rem 0; }
+        .section-header { text-align: center; margin-bottom: 3rem; }
+        .section-label { font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; color: var(--primary); letter-spacing: 3px; text-transform: uppercase; margin-bottom: 1rem; }
+        .section-title { font-family: 'Orbitron', sans-serif; font-size: clamp(1.8rem, 4vw, 2.5rem); font-weight: 700; margin-bottom: 1rem; }
+        .section-subtitle { color: var(--text-muted); font-size: 1.1rem; max-width: 600px; margin: 0 auto; }
+
+        /* Whitepaper */
+        .whitepaper-card { background: rgba(20, 20, 35, 0.9); border: 1px solid rgba(0, 255, 136, 0.3); border-radius: 24px; padding: 3rem; max-width: 600px; margin: 0 auto; text-align: center; transition: all 0.3s ease; }
+        .whitepaper-card:hover { border-color: var(--primary); transform: translateY(-5px); box-shadow: 0 20px 40px rgba(0,0,0,0.3), 0 0 40px rgba(0, 255, 136, 0.15); }
+        .whitepaper-icon { font-size: 4rem; margin-bottom: 1.5rem; }
+        .whitepaper-card h3 { font-family: 'Orbitron', sans-serif; font-size: 1.5rem; margin-bottom: 1rem; }
+        .whitepaper-card p { color: var(--text-muted); margin-bottom: 2rem; line-height: 1.7; }
+        .btn { padding: 1rem 2rem; border-radius: 12px; font-weight: 600; text-decoration: none; transition: all 0.3s ease; display: inline-block; }
+        .btn-primary { background: linear-gradient(135deg, var(--primary), var(--secondary)); color: var(--dark); }
+        .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 0 30px rgba(0, 255, 136, 0.5); }
+
+        /* FAQ */
+        .faq-section { background: rgba(255,255,255,0.02); }
+        .faq-grid { max-width: 800px; margin: 0 auto; }
+        .faq-item { background: rgba(20, 20, 35, 0.8); border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; margin-bottom: 1rem; overflow: hidden; transition: all 0.3s ease; }
+        .faq-item:hover { border-color: rgba(0, 255, 136, 0.3); }
+        .faq-question { padding: 1.5rem; cursor: pointer; display: flex; justify-content: space-between; align-items: center; font-weight: 600; }
+        .faq-question::after { content: '+'; font-size: 1.5rem; color: var(--primary); transition: transform 0.3s ease; }
+        .faq-item.open .faq-question::after { transform: rotate(45deg); }
+        .faq-answer { padding: 0 1.5rem; max-height: 0; overflow: hidden; transition: all 0.3s ease; }
+        .faq-item.open .faq-answer { padding: 0 1.5rem 1.5rem; max-height: 500px; }
+        .faq-answer p { color: var(--text-muted); line-height: 1.7; }
+
+        /* Early Access */
+        .early-access-section { background: linear-gradient(180deg, rgba(102, 126, 234, 0.05), transparent); border-top: 1px solid rgba(102, 126, 234, 0.2); }
+        .form-container { max-width: 600px; margin: 0 auto; background: rgba(20, 20, 35, 0.9); border: 1px solid rgba(255,255,255,0.1); border-radius: 24px; padding: 3rem; }
+        .form-group { margin-bottom: 1.5rem; }
+        .form-group label { display: block; margin-bottom: 0.5rem; font-weight: 500; color: var(--text-muted); }
+        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 1rem; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; color: var(--text); font-family: inherit; font-size: 1rem; transition: all 0.3s ease; }
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 20px rgba(0, 255, 136, 0.2); }
+        .form-group textarea { min-height: 120px; resize: vertical; }
+        .form-group select { cursor: pointer; }
+        .form-group select option { background: var(--dark); }
+        .submit-btn { width: 100%; padding: 1.25rem; background: linear-gradient(135deg, var(--primary), var(--secondary)); color: var(--dark); border: none; border-radius: 12px; font-family: inherit; font-size: 1rem; font-weight: 700; cursor: pointer; transition: all 0.3s ease; }
+        .submit-btn:hover { transform: translateY(-3px); box-shadow: 0 0 30px rgba(0, 255, 136, 0.5); }
+
+        /* Contact */
+        .contact-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; max-width: 800px; margin: 0 auto; }
+        .contact-card { background: rgba(20, 20, 35, 0.8); border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; padding: 2rem; text-align: center; transition: all 0.3s ease; text-decoration: none; color: var(--text); display: block; }
+        .contact-card:hover { border-color: var(--primary); transform: translateY(-5px); }
+        .contact-icon { font-size: 2.5rem; margin-bottom: 1rem; }
+        .contact-card h3 { margin-bottom: 0.5rem; }
+        .contact-card p { color: var(--text-muted); font-size: 0.9rem; }
+
+        footer { position: relative; z-index: 10; padding: 4rem 2rem; background: rgba(10, 10, 15, 0.95); border-top: 1px solid rgba(255,255,255,0.1); margin-top: 4rem; }
+        .footer-content { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 2rem; }
+        .footer-links { display: flex; gap: 2rem; }
+        .footer-links a { color: var(--text-muted); text-decoration: none; transition: color 0.3s ease; }
+        .footer-links a:hover { color: var(--primary); }
+        .footer-copy { color: var(--text-muted); font-size: 0.9rem; }
+
+        @media (max-width: 900px) { .cursor, .cursor-dot { display: none; } body { cursor: auto; } .nav-links { display: none; } .planet { display: none; } }
+        .ripple { position: fixed; border-radius: 50%; background: rgba(0, 255, 136, 0.3); transform: scale(0); animation: ripple 0.6s linear; pointer-events: none; z-index: 9999; }
+        @keyframes ripple { to { transform: scale(4); opacity: 0; } }
+    </style>
+</head>
+<body>
+    <div class="cursor"></div>
+    <div class="cursor-dot"></div>
+    <div class="space-bg"></div>
+    <div class="deep-space"></div>
+    <div class="stars"></div>
+    <div class="aurora"></div>
+    <div class="nebula nebula-1"></div>
+    <div class="nebula nebula-2"></div>
+    <div class="shooting-star"></div>
+    <div class="planet"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+
+    <nav>
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <div class="logo-icon">
+                    <svg viewBox="0 0 60 60"><defs><linearGradient id="logoGrad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#00ff88"/><stop offset="50%" style="stop-color:#00d4ff"/><stop offset="100%" style="stop-color:#667eea"/></linearGradient></defs><path d="M30 4 L50 17 L46 43 L30 54 L14 43 L10 17 Z" fill="none" stroke="url(#logoGrad)" stroke-width="2.5"/><path d="M22 22 L30 36 L38 22" fill="none" stroke="#ffffff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </div>
+                <span class="logo-text">VALIDIFY</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="protocol.html">Protocol</a></li>
+                <li><a href="ecosystem.html">Ecosystem</a></li>
+                <li><a href="roadmap.html">Roadmap</a></li>
+                <li><a href="resources.html" class="active">Resources</a></li>
+                <li><a href="#early-access" class="nav-cta">Request Access</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main>
+        <div class="section-container">
+            <div class="page-hero">
+                <h1>Resources</h1>
+                <p>Documentation, FAQ, and everything you need to get started with Validify.</p>
+            </div>
+            <div class="quick-links">
+                <a href="#whitepaper" class="quick-link">📄 White Paper</a>
+                <a href="#faq" class="quick-link">❓ FAQ</a>
+                <a href="#early-access" class="quick-link">🚀 Early Access</a>
+                <a href="#contact" class="quick-link">💬 Contact</a>
+            </div>
+        </div>
+
+        <!-- Whitepaper -->
+        <section class="section" id="whitepaper">
+            <div class="section-container">
+                <div class="section-header">
+                    <div class="section-label">Documentation</div>
+                    <h2 class="section-title">White Paper</h2>
+                </div>
+                <div class="whitepaper-card">
+                    <div class="whitepaper-icon">📄</div>
+                    <h3>Validify Protocol White Paper v2</h3>
+                    <p>Complete technical documentation covering the protocol architecture, security model, attestation system, and roadmap. Learn how multi-signature verification and on-chain attestations create a new standard for Web3 community security.</p>
+                    <a href="Validify_White_Paper_v3.pdf" class="btn btn-primary" download>Download PDF</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- FAQ -->
+        <section class="section faq-section" id="faq">
+            <div class="section-container">
+                <div class="section-header">
+                    <div class="section-label">FAQ</div>
+                    <h2 class="section-title">Frequently Asked Questions</h2>
+                </div>
+                <div class="faq-grid">
+                    <div class="faq-item">
+                        <div class="faq-question">What is Validify?</div>
+                        <div class="faq-answer"><p>Validify is a Web3 security protocol that prevents phishing attacks by requiring multi-signature verification before link-containing announcements are published. Unlike reactive tools that detect threats after posting, Validify stops attacks at the source.</p></div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question">How is this different from existing security bots?</div>
+                        <div class="faq-answer"><p>Existing bots scan for known malicious links after they're posted. Validify requires multiple admins to cryptographically approve announcements before publication. Even if one admin is compromised, they cannot post malicious links alone. Plus, our hardware wallet binding means attackers can't approve even with a stolen Discord account.</p></div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question">Is Validify live?</div>
+                        <div class="faq-answer"><p>Yes. Our Discord bot is deployed and operational with multi-signature verification, hardware wallet binding, admin monitoring, and security alerts. On-chain attestations are live on Sepolia testnet, with mainnet deployment planned for Q1 2026.</p></div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question">What if an admin loses their hardware wallet?</div>
+                        <div class="faq-answer"><p>The server owner can unbind the lost wallet and bind a new one. This requires the server owner's wallet signature, ensuring only authorized personnel can make this change. We recommend having backup recovery procedures documented.</p></div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question">Which wallets are supported?</div>
+                        <div class="faq-answer"><p>Any Ethereum-compatible wallet that can sign messages works with Validify. This includes hardware wallets like Ledger and Trezor, as well as software wallets like MetaMask and Rainbow.</p></div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question">Does this slow down legitimate announcements?</div>
+                        <div class="faq-answer"><p>Slightly, by design. The friction is the feature. Attackers exploit urgency—"Mint NOW before it's gone!" Validify forces a verification step that legitimate announcements can easily pass but attackers cannot bypass. Most verifications complete in under 2 minutes.</p></div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question">How much does Validify cost?</div>
+                        <div class="faq-answer"><p>We're currently in beta with founding partner communities. Pricing tiers will be announced at public launch in Q1 2026. Early access partners receive preferential pricing and input on feature development.</p></div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question">Is there a token?</div>
+                        <div class="faq-answer"><p>Not currently. We're focused on building working infrastructure first. Our Q4 2026 roadmap includes exploration of token utility frameworks, but only if they add genuine value to the protocol rather than speculation.</p></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Early Access -->
+        <section class="section early-access-section" id="early-access">
+            <div class="section-container">
+                <div class="section-header">
+                    <div class="section-label">Beta Program</div>
+                    <h2 class="section-title">Request Early Access</h2>
+                    <p class="section-subtitle">Join our founding partner program and help shape the future of Web3 security.</p>
+                </div>
+                <div class="form-container">
+                    <form action="https://formspree.io/f/your-form-id" method="POST">
+                        <div class="form-group">
+                            <label for="projectName">Community / Project Name *</label>
+                            <input type="text" id="projectName" name="projectName" required placeholder="Your project name">
+                        </div>
+                        <div class="form-group">
+                            <label for="communitySize">Community Size *</label>
+                            <select id="communitySize" name="communitySize" required>
+                                <option value="">Select size...</option>
+                                <option value="<1000">&lt; 1,000 members</option>
+                                <option value="1000-5000">1,000 - 5,000 members</option>
+                                <option value="5000-25000">5,000 - 25,000 members</option>
+                                <option value="25000-100000">25,000 - 100,000 members</option>
+                                <option value=">100000">&gt; 100,000 members</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Contact Email *</label>
+                            <input type="email" id="email" name="email" required placeholder="you@project.xyz">
+                        </div>
+                        <div class="form-group">
+                            <label for="projectType">Project Type *</label>
+                            <select id="projectType" name="projectType" required>
+                                <option value="">Select type...</option>
+                                <option value="nft">NFT Project</option>
+                                <option value="defi">DeFi Protocol</option>
+                                <option value="dao">DAO</option>
+                                <option value="gaming">Gaming / Metaverse</option>
+                                <option value="infrastructure">Infrastructure</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="reason">Why are you interested in Validify?</label>
+                            <textarea id="reason" name="reason" placeholder="Tell us about your security concerns or what drew you to Validify..."></textarea>
+                        </div>
+                        <button type="submit" class="submit-btn">Request Access</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact -->
+        <section class="section" id="contact">
+            <div class="section-container">
+                <div class="section-header">
+                    <div class="section-label">Contact</div>
+                    <h2 class="section-title">Get in Touch</h2>
+                </div>
+                <div class="contact-grid">
+                    <a href="https://discord.gg/validify" class="contact-card" target="_blank">
+                        <div class="contact-icon">💬</div>
+                        <h3>Discord</h3>
+                        <p>Join our community server</p>
+                    </a>
+                    <a href="https://twitter.com/ValidifyProtocol" class="contact-card" target="_blank">
+                        <div class="contact-icon">🐦</div>
+                        <h3>Twitter</h3>
+                        <p>@ValidifyProtocol</p>
+                    </a>
+                    <a href="mailto:contact@validifyprotocol.com" class="contact-card">
+                        <div class="contact-icon">📧</div>
+                        <h3>Email</h3>
+                        <p>contact@validifyprotocol.com</p>
+                    </a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-links">
+                <a href="index.html">Home</a>
+                <a href="protocol.html">Protocol</a>
+                <a href="ecosystem.html">Ecosystem</a>
+                <a href="roadmap.html">Roadmap</a>
+                <a href="resources.html">Resources</a>
+            </div>
+            <div class="footer-copy">© 2025 Validify Protocol. Building security infrastructure for Web3.</div>
+        </div>
+    </footer>
+
+    <script>
+        const cursor = document.querySelector('.cursor'), cursorDot = document.querySelector('.cursor-dot');
+        let cursorX = 0, cursorY = 0, dotX = 0, dotY = 0;
+        document.addEventListener('mousemove', (e) => { cursorX = e.clientX; cursorY = e.clientY; });
+        function animateCursor() { dotX += (cursorX - dotX) * 0.2; dotY += (cursorY - dotY) * 0.2; cursor.style.left = cursorX + 'px'; cursor.style.top = cursorY + 'px'; cursorDot.style.left = dotX + 'px'; cursorDot.style.top = dotY + 'px'; requestAnimationFrame(animateCursor); }
+        animateCursor();
+        document.querySelectorAll('a, button, .faq-item, .contact-card, .whitepaper-card, input, select, textarea').forEach(el => { el.addEventListener('mouseenter', () => cursor.classList.add('hover')); el.addEventListener('mouseleave', () => cursor.classList.remove('hover')); });
+        document.addEventListener('click', (e) => { const ripple = document.createElement('div'); ripple.className = 'ripple'; ripple.style.left = e.clientX + 'px'; ripple.style.top = e.clientY + 'px'; ripple.style.width = '20px'; ripple.style.height = '20px'; document.body.appendChild(ripple); setTimeout(() => ripple.remove(), 600); });
+        
+        // FAQ Accordion
+        document.querySelectorAll('.faq-question').forEach(q => {
+            q.addEventListener('click', () => {
+                const item = q.parentElement;
+                document.querySelectorAll('.faq-item').forEach(i => { if (i !== item) i.classList.remove('open'); });
+                item.classList.toggle('open');
+            });
+        });
+
+        window.addEventListener('scroll', () => { const scrolled = window.pageYOffset; document.querySelectorAll('.nebula').forEach((n, i) => { n.style.transform = `translateY(${scrolled * (0.05 + i * 0.02)}px)`; }); });
+    </script>
+</body>
+</html>
